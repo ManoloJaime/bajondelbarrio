@@ -1,0 +1,45 @@
+BAJÓN DEL BARRIO - PÁGINA WEB INDEPENDIENTE
+============================================
+
+Contenido de esta carpeta
+- index.html   La página completa (menú, promociones, contacto, vinilo, rapero, lluvia de comida).
+- musica/      Las canciones (.mp3) y sus miniaturas (.png).
+- LEEME.txt    Este archivo.
+
+Importante: index.html y la carpeta musica deben quedarse juntos. Si los separas, las canciones no sonarán.
+
+
+1) CÓMO PROBARLA EN TU COMPUTADORA
+Abre index.html con doble clic. Se abre en tu navegador. Necesitas internet para que se cargue la tipografía.
+
+
+2) CÓMO PUBLICARLA
+Sube la carpeta completa a un hosting de páginas estáticas. Algunas opciones, casi todas con plan gratuito:
+- Netlify: en app.netlify.com/drop arrastras la carpeta y te da un enlace público.
+- Cloudflare Pages: subida directa de la carpeta.
+- GitHub Pages: sube los archivos a un repositorio y activa Pages.
+Después, si quieres un dominio propio (por ejemplo bajondelbarrio.com), lo compras en un registrador y lo apuntas a tu hosting siguiendo las instrucciones del servicio. El dominio suele tener un costo anual.
+Cuando tengas tu dirección definitiva, genera un código QR nuevo con ella. El QR anterior apuntaba a claude.ai.
+
+
+3) CÓMO CAMBIAR EL MENÚ, LAS PROMOCIONES Y EL CONTACTO
+Abre index.html con un editor de texto (Bloc de notas, VS Code, etc.) y busca estas secciones:
+- id="menu"       Menú. Cada platillo es un bloque <div class="item"> con nombre (<b>), descripción (<p>) y precio (<span class="price">).
+- id="promos"     Promociones. Cada una es un bloque <div class="promo">.
+- id="contacto"   Dirección, teléfono, horario e Instagram.
+Cambia solo el texto entre las etiquetas. Para agregar un platillo, copia un bloque <div class="item"> completo y pégalo debajo.
+Guarda el archivo y vuelve a subirlo a tu hosting.
+
+Datos pendientes de cambiar: dirección, teléfono, horario e Instagram son de ejemplo (el Instagram dice @beatandbun).
+
+
+4) CÓMO CAMBIAR O AGREGAR CANCIONES
+1. Copia tus archivos a la carpeta musica: la canción en .mp3 y su miniatura en .png o .jpg.
+2. En index.html busca id="tracks". Ahí hay una lista con este formato:
+   {"t":"Título","a":"musica/archivo.mp3","i":"musica/miniatura.png","s":"enlace de Spotify (opcional)"}
+3. Agrega o cambia las líneas, separadas por comas. Las canciones suenan en el orden de la lista.
+El enlace de Spotify es opcional: si lo dejas vacío ("s":""), no aparece el botón.
+
+
+5) SOBRE LA MÚSICA
+Si publicas la página, cualquier persona podrá escuchar las canciones completas. Usa solo música tuya, con licencia o libre de derechos.

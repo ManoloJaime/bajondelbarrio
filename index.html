@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bajón del Barrio – Hamburguesas y rap</title>
+<meta name="description" content="Bajón del Barrio: hamburguesas, hot dogs y rap.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Ctext y=%27.9em%27 font-size=%2790%27%3E%F0%9F%8D%94%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Work+Sans:wght@400;600&display=swap">
+<style>
+:root{--red:#d62828;--white:#f7f3ee;--black:#0a0a0a;--brown:#4a2c1a;--brown2:#2a1710;color-scheme:dark;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:inherit}
+html,body{height:100%;margin:0}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{background:radial-gradient(ellipse at 30% 40%,var(--brown2),var(--black) 70%);color:var(--white);font-family:'Work Sans',system-ui,sans-serif;overflow:hidden}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--black)}
+h1,h2,h3{font-family:Anton,Impact,'Arial Narrow',sans-serif;font-weight:400;letter-spacing:.02em;margin:0}
+nav{position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;display:flex;justify-content:space-between;align-items:center;padding:14px clamp(16px,4vw,40px);z-index:5}
+.logo{font-family:Anton,Impact,sans-serif;font-size:1.5rem;color:var(--white);text-decoration:none}
+.logo span{color:var(--red)}
+nav ul{display:flex;gap:6px;list-style:none;margin:0;padding:0}
+nav button{background:none;border:2px solid transparent;color:var(--white);font:600 .95rem 'Work Sans',sans-serif;padding:8px 14px;border-radius:999px;cursor:pointer}
+nav button:hover{border-color:var(--brown)}
+nav button[aria-current="true"]{background:var(--red);border-color:var(--red)}
+button:focus-visible,a:focus-visible{outline:3px solid var(--white);outline-offset:2px}
+.stage{position:relative;height:100%}
+.deck{position:absolute;top:52%;left:50%;transform:translate(-50%,-50%);width:min(60vh,86vw,420px);transition:left .7s cubic-bezier(.7,0,.2,1),top .7s cubic-bezier(.7,0,.2,1),width .7s}
+.vinyl{position:relative;aspect-ratio:1;border-radius:50%;cursor:pointer;border:0;padding:0;display:block;width:100%;
+background:repeating-radial-gradient(circle,#111 0 2px,#050505 2px 4px),#0a0a0a;box-shadow:0 20px 60px rgba(0,0,0,.7),0 0 0 6px #1b1b1b,0 0 80px rgba(214,40,40,.25);touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab}
+.vinyl.grabbing{cursor:grabbing}
+.vinyl::before{content:"";position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 20deg,transparent 0 20%,rgba(255,255,255,.14) 25%,transparent 32% 70%,rgba(255,255,255,.1) 75%,transparent 82%)}
+.label{position:absolute;inset:34%;border-radius:50%;background:radial-gradient(circle at 50% 50%,var(--black) 0 7%,var(--red) 8%);display:grid;place-items:center;text-align:center;font-family:Anton,Impact,sans-serif;font-size:clamp(.6rem,2.2vw,1rem);line-height:1.1;color:var(--white);padding-top:34%}
+@keyframes spin{to{transform:rotate(360deg)}}
+.player{margin-top:22px;border-radius:14px;overflow:hidden;background:var(--black);border:2px solid var(--brown);min-height:80px}
+.player iframe{display:block;width:100%;height:152px;border:0}
+.player a{display:block;text-align:center;padding:10px;color:var(--white);font-size:.85rem}
+.hint{text-align:center;font-size:.85rem;opacity:.7;margin:10px 0 0}
+.panel{position:absolute;top:0;bottom:0;right:0;width:52%;padding:96px clamp(16px,4vw,48px) 32px 0;overflow-y:auto;opacity:0;pointer-events:none;transform:translateX(40px);transition:opacity .45s .25s,transform .55s .25s}
+.panel.on{opacity:1;pointer-events:auto;transform:none}
+.panel h2{font-size:clamp(2.2rem,5vw,3.6rem);color:var(--red);margin-bottom:6px}
+.panel .sub{margin:0 0 22px;opacity:.75;max-width:46ch}
+.panel h3{font-size:1.2rem;margin:22px 0 10px;padding-bottom:6px;border-bottom:2px solid var(--brown)}
+.item{display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px dashed var(--brown)}
+.item b{font-family:Anton,Impact,sans-serif;font-weight:400;font-size:1.25rem;letter-spacing:.02em}
+.item p{margin:3px 0 0;font-size:.9rem;opacity:.8;max-width:42ch}
+.price{font-family:Anton,Impact,sans-serif;font-size:1.3rem;color:var(--red);white-space:nowrap}
+.promo{background:var(--brown);border-left:6px solid var(--red);padding:14px 16px;margin-bottom:12px;border-radius:4px}
+.promo b{font-family:Anton,Impact,sans-serif;font-weight:400;font-size:1.3rem}
+.promo p{margin:4px 0 0;font-size:.92rem}
+.contact p{margin:0 0 14px;font-size:1.05rem}
+.contact span{display:block;font-size:.8rem;opacity:.6}
+.contact a{color:var(--white)}
+.open .deck{left:26%;top:46%;width:min(46vh,36vw,380px)}
+.open .hint{display:none}
+@media (max-width:760px){
+ body{overflow-y:auto}
+ .open .deck{left:50%;top:150px;width:170px}
+ .open .player,.open .hint{display:none}
+ .panel{width:100%;padding:290px 18px 40px;transform:translateY(30px)}
+ nav ul{gap:0}nav button{padding:8px 10px;font-size:.85rem}
+ .logo{font-size:1.2rem}
+}
+.ed{position:fixed;inset:0;z-index:20;background:var(--black);overflow:auto;padding:calc(env(safe-area-inset-top,0px) + 20px) 16px 40px}
+.edw{max-width:720px;margin:0 auto}
+.edw h2{color:var(--red);font-size:2rem;margin-bottom:12px}
+.edw h3{font-size:1.3rem;margin:26px 0 10px;padding-bottom:6px;border-bottom:2px solid var(--brown)}
+.eg{margin-bottom:18px}
+.ei{background:var(--brown2);border:1px solid var(--brown);border-radius:8px;padding:10px;display:grid;gap:8px;margin-bottom:10px}
+.edw label{display:grid;gap:3px;font-size:.8rem}
+.edw input{background:var(--black);color:var(--white);border:1px solid var(--brown);border-radius:6px;padding:9px;font:inherit;font-size:1rem;width:100%}
+.edw button{background:var(--brown);color:var(--white);border:0;border-radius:6px;padding:9px 14px;font:600 .9rem 'Work Sans',sans-serif;cursor:pointer;justify-self:start}
+.edw button.go{background:var(--red)}
+.edw button.del{background:none;border:1px solid var(--brown)}
+#rain{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
+.disc{position:relative}
+.rapper{position:absolute;left:-17%;bottom:-3%;width:28%;pointer-events:none;overflow:visible}
+.rapper .ar{transition:transform .55s cubic-bezier(.3,1.5,.5,1)}
+.rapper .al{transform-origin:28px 100px}
+.rapper .arr{transform-origin:72px 100px}
+.rapper .ut{opacity:0;transition:opacity .25s}
+.rapper.eat .al{transform:rotate(125deg)}
+.rapper.eat .arr{transform:rotate(-125deg)}
+.rapper.eat .ut{opacity:1;transition-delay:.25s}
+.rapper .hd{transform-origin:50px 80px}
+.rapper.bob .hd{animation:nod .66s ease-in-out infinite}
+.rapper.bob .bd{animation:hop .66s ease-in-out infinite}
+@keyframes nod{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(6px) rotate(3deg)}}
+@keyframes hop{0%,100%{transform:translateY(0)}50%{transform:translateY(2px)}}
+@media (max-width:760px){.rapper{width:max(28%,72px)}}
+@media (prefers-reduced-motion:reduce){.rapper .hd,.rapper .bd{animation:none!important}.rapper .ar{transition:none}}
+.player{padding:12px}
+.np{display:flex;gap:10px;align-items:center;margin-bottom:10px;min-height:44px}
+.np img{width:44px;height:44px;object-fit:cover;border-radius:6px;border:2px solid var(--brown)}
+#tt{font-family:Anton,Impact,sans-serif;font-size:1.05rem;letter-spacing:.02em}
+.ctl{display:flex;gap:8px}
+.ctl button{flex:1;background:var(--brown);color:var(--white);border:0;border-radius:6px;padding:9px;font:600 .85rem 'Work Sans',sans-serif;cursor:pointer}
+.ctl #pp{background:var(--red)}
+.mv{display:flex;gap:8px}
+.edw button:disabled{opacity:.35;cursor:default}
+.bar{display:flex;gap:10px;align-items:center;margin-top:24px;flex-wrap:wrap}
+@media (max-width:760px){
+ nav{flex-direction:column;gap:2px;padding:10px 12px 8px;background:rgba(10,10,10,.95)}
+ .logo{font-size:1.5rem}
+ .open .deck{top:120px;width:150px}
+ .panel{padding-top:300px}
+ .deck{top:112px;width:min(70vw,300px);transform:translate(-50%,calc(0px - var(--sy,0px)))}
+}
+@media (prefers-reduced-motion:reduce){.vinyl{animation:none}.deck,.panel{transition:none}}
+</style>
+</head>
+<body>
+<canvas id="rain" aria-hidden="true"></canvas>
+<nav>
+ <a class="logo" href="#" id="home">BAJÓN <span>DEL</span> BARRIO</a>
+ <ul>
+  <li><button data-p="menu" aria-current="false">Menú</button></li>
+  <li><button data-p="promos" aria-current="false">Promociones</button></li>
+  <li><button data-p="contacto" aria-current="false">Contacto</button></li>
+ </ul>
+</nav>
+
+<main class="stage" id="stage">
+ <div class="deck">
+  <div class="disc"><button class="vinyl" id="vinyl" aria-label="Pausar o reanudar el giro del disco"><span class="label">BAJÓN DEL<br>BARRIO</span></button>
+   <svg class="rapper" id="rapper" viewBox="0 0 100 150" aria-hidden="true"><g class="bd"><rect x="44" y="72" width="12" height="20" fill="#a0643c"></rect><path d="M20 150Q22 92 50 88Q78 92 80 150Z" fill="#f7f3ee"></path><path d="M38 94Q50 114 62 94" fill="none" stroke="#e0b030" stroke-width="2.5"></path><circle cx="50" cy="109" r="4.5" fill="#e0b030"></circle><g class="hd"><circle cx="50" cy="56" r="21" fill="#a0643c"></circle><path d="M29 52Q29 30 50 30Q71 30 71 52Z" fill="#d62828"></path><path d="M60 50L90 54Q92 58 88 59L60 57Z" fill="#8f1a1a"></path><rect x="33" y="53" width="15" height="9" rx="3" fill="#0a0a0a"></rect><rect x="52" y="53" width="15" height="9" rx="3" fill="#0a0a0a"></rect><line x1="48" y1="57" x2="52" y2="57" stroke="#0a0a0a" stroke-width="2"></line><path d="M44 70Q50 74 56 70" fill="none" stroke="#4a2c1a" stroke-width="2" stroke-linecap="round"></path></g><g class="ar al"><line x1="28" y1="100" x2="14" y2="128" stroke="#f7f3ee" stroke-width="11" stroke-linecap="round"></line><circle cx="14" cy="130" r="5.5" fill="#a0643c"></circle><g class="ut"><line x1="14" y1="132" x2="7" y2="146" stroke="#ccc" stroke-width="2.5" stroke-linecap="round"></line><path d="M3.4 144.2L10.6 147.8M3.4 144.2l-3 6M7 146l-3 6M10.6 147.8l-3 6" fill="none" stroke="#ccc" stroke-width="2" stroke-linecap="round"></path></g></g><g class="ar arr"><line x1="72" y1="100" x2="86" y2="128" stroke="#f7f3ee" stroke-width="11" stroke-linecap="round"></line><circle cx="86" cy="130" r="5.5" fill="#a0643c"></circle><g class="ut"><line x1="86" y1="132" x2="90" y2="140" stroke="#333" stroke-width="3" stroke-linecap="round"></line><path d="M89 139L98 153L92 154L88 142Z" fill="#ddd"></path></g></g></g></svg>
+  </div>
+  <div class="player" id="player"><div class="np"><img id="thumb" alt="" hidden><span id="tt">Sirena</span></div><div class="ctl"><button type="button" id="prev" aria-label="Canción anterior">Anterior</button><button type="button" id="pp">Reproducir</button><button type="button" id="next" aria-label="Canción siguiente">Siguiente</button></div><a id="sp" href="https://open.spotify.com/track/1vn1nVXez6DxeZ8BY5Wzho?si=897a854153224eb1" target="_blank" rel="noopener">Escuchar en Spotify</a><audio id="au" preload="none"></audio></div><script type="application/json" id="tracks">[{"t": "F.Y.K.M.", "a": "musica/f-y-k-m.mp3", "i": "musica/f-y-k-m.png", "s": ""}, {"t": "Sirena", "a": "musica/sirena.mp3", "i": "musica/sirena.png", "s": ""}]</script>
+  <p class="hint">Arrastra el disco para rifear. Tócalo para pausar o reanudar.</p>
+ </div>
+
+ <section class="panel" id="menu" aria-label="Menú"><h2>Menú</h2><p class="sub">Carne al carbón, pan tostado en mantequilla y salsa de la casa.</p><h3>Hamburguesas</h3><div class="item"><div><b>Doble Rima</b><p>Doble carne, cheddar, tocino crujiente, cebolla caramelizada y salsa BBQ.</p></div><span class="price">$145</span></div><div class="item"><div><b>Brava 808</b><p>Carne, queso pepper jack, jalapeño, aderezo chipotle y cebolla morada.</p></div><span class="price">$135</span></div><div class="item"><div><b>Flow Clásica</b><p>Carne de res, queso americano, lechuga, jitomate y mayonesa de la casa.</p></div><span class="price">$110</span></div><h3>Hot dogs</h3><div class="item"><div><b>Street Dog</b><p>Salchicha, tocino, cebolla caramelizada, mostaza y catsup.</p></div><span class="price">$75</span></div><div class="item"><div><b>El Freestyle</b><p>Salchicha, chili con carne, queso fundido y jalapeños.</p></div><span class="price">$85</span></div></section>
+
+ <section class="panel" id="promos" aria-label="Promociones"><h2>Promociones</h2><p class="sub">Aprovecha antes de que cambie el track.</p><div class="promo"><b>Combo Mic Drop</b><p>Doble Rima + papas + refresco por $185.</p></div><div class="promo"><b>Martes 2x1 en hot dogs</b><p>Pide un Street Dog o un Freestyle y llévate otro gratis.</p></div><div class="promo"><b>Jueves de Brava</b><p>Brava 808 con papas a $120.</p></div></section>
+
+ <section class="panel" id="contacto" aria-label="Contacto"><h2>Contacto</h2><p class="sub">Ven a comer, pide para llevar o escríbenos.</p><p><span>Dirección</span>Calle Ejemplo 123, Zapopan, Jalisco</p><p><span>Teléfono</span><a href="tel:+523300000000">33 0000 0000</a></p><p><span>Horario</span>Martes a domingo, 1:00 p. m. a 11:00 p. m.</p><p><span>Instagram</span>@beatandbun</p></section>
+</main>
+
+<script>
+(function(){
+ var stage=document.getElementById('stage'),btns=document.querySelectorAll('nav button'),panels=document.querySelectorAll('.panel');
+ panels.forEach(function(p){p.addEventListener('scroll',function(){var d=document.querySelector('.deck');if(d)d.style.setProperty('--sy',p.scrollTop+'px')},{passive:true})});
+ function show(id){
+  stage.classList.toggle('open',!!id);
+  panels.forEach(function(p){p.classList.toggle('on',p.id===id)});
+  btns.forEach(function(b){b.setAttribute('aria-current',String(b.dataset.p===id))});
+  var rr=document.getElementById('rapper');if(rr)rr.classList.toggle('eat',id==='menu');
+  panels.forEach(function(p){p.scrollTop=0});var dk=document.querySelector('.deck');if(dk)dk.style.setProperty('--sy','0px');
+ }
+ btns.forEach(function(b){b.addEventListener('click',function(){
+  show(b.getAttribute('aria-current')==='true'?null:b.dataset.p);
+ })});
+ document.getElementById('home').addEventListener('click',function(e){e.preventDefault();show(null)});
+ var v=document.getElementById('vinyl');
+ var au=document.getElementById('au'),AS=null,energy=0,ang=0,base=72,vel=72,drag=false,last=0,lastA=0,moved=0,paused=false,t0=performance.now(),ac,gain,filt,osc,og;
+ if(window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches){base=0;vel=0}
+ function audio(){if(ac)return;try{ac=new (window.AudioContext||window.webkitAudioContext)();var n=ac.sampleRate,buf=ac.createBuffer(1,n,n),d=buf.getChannelData(0);for(var i=0;i<n;i++)d[i]=Math.random()*2-1;var src=ac.createBufferSource();src.buffer=buf;src.loop=true;filt=ac.createBiquadFilter();filt.type='bandpass';filt.Q.value=1.2;gain=ac.createGain();gain.gain.value=0;src.connect(filt);filt.connect(gain);gain.connect(ac.destination);src.start();osc=ac.createOscillator();osc.type='sawtooth';osc.frequency.value=100;var lp=ac.createBiquadFilter();lp.type='lowpass';lp.frequency.value=1800;og=ac.createGain();og.gain.value=0;osc.connect(lp);lp.connect(og);og.connect(ac.destination);osc.start()}catch(e){ac=null}}
+ function ptr(e){var r=v.getBoundingClientRect();return Math.atan2(e.clientY-(r.top+r.height/2),e.clientX-(r.left+r.width/2))*180/Math.PI}
+ function sound(s){if(!ac||!gain)return;var a=Math.min(Math.abs(s)/900,1);gain.gain.setTargetAtTime(drag?a*.25:0,ac.currentTime,.03);filt.frequency.setTargetAtTime(500+Math.min(Math.abs(s),1500)*3,ac.currentTime,.03);if(osc&&og){osc.frequency.setTargetAtTime(90+Math.min(Math.abs(s),1500)*.6,ac.currentTime,.02);og.gain.setTargetAtTime(drag?a*.1:0,ac.currentTime,.03)}}
+ v.addEventListener('pointerdown',function(e){drag=true;moved=0;lastA=ptr(e);last=performance.now();try{v.setPointerCapture(e.pointerId)}catch(x){}v.classList.add('grabbing');audio();if(ac&&ac.state==='suspended')ac.resume()});
+ v.addEventListener('pointermove',function(e){if(!drag)return;var a=ptr(e),da=a-lastA;if(da>180)da-=360;if(da<-180)da+=360;lastA=a;var now=performance.now(),dt=Math.max(now-last,1)/1000;last=now;ang+=da;moved+=Math.abs(da);energy+=Math.abs(da)/360*3;vel=vel*.6+(da/dt)*.4;if(au.src&&!au.paused){au.playbackRate=Math.max(.1,Math.min(3,Math.abs(vel)/72));au.currentTime=Math.max(0,au.currentTime+da/360*1.8)}sound(vel)});
+ function end(){if(!drag)return;drag=false;v.classList.remove('grabbing');sound(0);au.playbackRate=1;if(moved<4&&base){if(T.length){if(au.paused)playCur();else au.pause()}else paused=!paused}}
+ v.addEventListener('pointerup',end);v.addEventListener('pointercancel',end);
+ v.addEventListener('click',function(e){if(e.detail===0&&base)paused=!paused});
+ (function loop(t){var dt=Math.min((t-t0)/1000,.05);t0=t;if(drag){vel*=Math.pow(.001,dt);sound(vel);if(au.src&&!au.paused)au.playbackRate=Math.max(.1,Math.min(3,Math.abs(vel)/72))}else{var target=paused?0:base;vel+=(target-vel)*Math.min(dt*3,1);ang+=vel*dt}v.style.transform='rotate('+ang+'deg)';fadeVol();var rp=document.getElementById('rapper');if(rp)rp.classList.toggle('bob',!paused&&base>0&&Math.abs(vel)>8);requestAnimationFrame(loop)})(t0);
+
+ /* Lluvia de comida al rifear */
+ var cv=document.getElementById('rain'),cx=cv&&cv.getContext('2d'),P=[],last2=performance.now(),acc=0,FOODS=['🍔','🌭'],DPR=Math.min(window.devicePixelRatio||1,2);
+ function fit(){if(!cv)return;cv.width=innerWidth*DPR;cv.height=innerHeight*DPR}
+ fit();addEventListener('resize',fit);
+ (function rain(t){var dt=Math.min((t-last2)/1000,.05);last2=t;
+  if(cx&&base>0){if(drag)energy*=Math.pow(.5,dt/3);else energy=0;acc+=Math.min(70,energy*6)*dt;if(acc>5)acc=5;
+   while(acc>=1&&P.length<40){acc--;P.push({x:Math.random()*innerWidth,y:-40,vy:140+Math.random()*220,s:22+Math.random()*26,r:Math.random()*6.28,vr:(Math.random()-.5)*4,a:1,f:FOODS[Math.random()<.5?0:1]})}
+   cx.setTransform(DPR,0,0,DPR,0,0);cx.clearRect(0,0,innerWidth,innerHeight);
+   for(var i=P.length-1;i>=0;i--){var p=P[i];p.y+=p.vy*dt;p.r+=p.vr*dt;if(p.y>innerHeight+50){P.splice(i,1);continue}
+    cx.save();cx.globalAlpha=p.a;cx.translate(p.x,p.y);cx.rotate(p.r);cx.font=p.s+'px sans-serif';cx.textAlign='center';cx.textBaseline='middle';cx.fillText(p.f,0,0);cx.restore()}}
+  requestAnimationFrame(rain)})(last2);
+
+ /* Reproductor de canciones */
+ var T=[],cur=0,pp=document.getElementById('pp'),tt=document.getElementById('tt'),th=document.getElementById('thumb'),sp=document.getElementById('sp');
+ try{T=JSON.parse(document.getElementById('tracks').textContent)||[]}catch(e){T=[]}
+ function info(n){if(!T.length){tt.textContent='Aún no hay canciones';th.hidden=true;sp.hidden=true;return}cur=(n+T.length)%T.length;var k=T[cur];tt.textContent=k.t||'Sin título';th.hidden=!k.i;if(k.i)th.src=k.i;var ok=/^https:\/\/(open\.spotify\.com|spotify\.link)\//.test(k.s||'');sp.hidden=!ok;if(ok)sp.href=k.s}
+ function load(n,play){if(!T.length)return;info(n);if(!T[cur].a)return;au.src=T[cur].a;if(play)au.play().catch(function(){})}
+ function playCur(){if(!T.length||!T[cur].a)return;if(!au.src)load(cur,true);else au.play().catch(function(){})}
+ au.addEventListener('play',function(){paused=false;pp.textContent='Pausar'});
+ au.addEventListener('pause',function(){paused=true;pp.textContent='Reproducir'});
+ au.addEventListener('ended',function(){load(cur+1,true)});
+ pp.addEventListener('click',function(){if(au.paused)playCur();else au.pause()});
+ document.getElementById('next').addEventListener('click',function(){go(cur+1)});
+ document.getElementById('prev').addEventListener('click',function(){go(cur-1)});
+ var FADE=2,fo=1;
+ function fadeVol(){if(!au.src||au.paused)return;if(drag){au.volume=1;return}var d=au.duration,t=au.currentTime,g=Math.min(1,t/FADE);if(d&&isFinite(d))g=Math.min(g,Math.max(0,(d-t)/FADE));au.volume=Math.max(0,Math.min(1,g*fo))}
+ function go(n){if(au.paused||!au.src){load(n,true);return}var s0=performance.now();(function f(){var k=1-(performance.now()-s0)/400;if(k<=0){fo=1;load(n,true);return}fo=k;requestAnimationFrame(f)})()}
+ info(0);
+
+ })();
+</script>
+</body>
+</html>
