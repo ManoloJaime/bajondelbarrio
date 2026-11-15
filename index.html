@@ -157,11 +157,12 @@ background:repeating-radial-gradient(circle,#111 0 2px,#050505 2px 4px),#0a0a0a;
  function audio(){if(ac)return;try{ac=new (window.AudioContext||window.webkitAudioContext)();var n=ac.sampleRate,buf=ac.createBuffer(1,n,n),d=buf.getChannelData(0);for(var i=0;i<n;i++)d[i]=Math.random()*2-1;var src=ac.createBufferSource();src.buffer=buf;src.loop=true;filt=ac.createBiquadFilter();filt.type='bandpass';filt.Q.value=1.2;gain=ac.createGain();gain.gain.value=0;src.connect(filt);filt.connect(gain);gain.connect(ac.destination);src.start();osc=ac.createOscillator();osc.type='sawtooth';osc.frequency.value=100;var lp=ac.createBiquadFilter();lp.type='lowpass';lp.frequency.value=1800;og=ac.createGain();og.gain.value=0;osc.connect(lp);lp.connect(og);og.connect(ac.destination);osc.start()}catch(e){ac=null}}
  function ptr(e){var r=v.getBoundingClientRect();return Math.atan2(e.clientY-(r.top+r.height/2),e.clientX-(r.left+r.width/2))*180/Math.PI}
  function sound(s){if(!ac||!gain)return;var a=Math.min(Math.abs(s)/900,1);gain.gain.setTargetAtTime(drag?a*.25:0,ac.currentTime,.03);filt.frequency.setTargetAtTime(500+Math.min(Math.abs(s),1500)*3,ac.currentTime,.03);if(osc&&og){osc.frequency.setTargetAtTime(90+Math.min(Math.abs(s),1500)*.6,ac.currentTime,.02);og.gain.setTargetAtTime(drag?a*.1:0,ac.currentTime,.03)}}
- v.addEventListener('pointerdown',function(e){drag=true;moved=0;lastA=ptr(e);last=performance.now();try{v.setPointerCapture(e.pointerId)}catch(x){}v.classList.add('grabbing');audio();if(ac&&ac.state==='suspended')ac.resume()});
- v.addEventListener('pointermove',function(e){if(!drag)return;var a=ptr(e),da=a-lastA;if(da>180)da-=360;if(da<-180)da+=360;lastA=a;var now=performance.now(),dt=Math.max(now-last,1)/1000;last=now;ang+=da;moved+=Math.abs(da);energy+=Math.abs(da)/360*3;vel=vel*.6+(da/dt)*.4;if(au.src&&!au.paused){au.playbackRate=Math.max(.1,Math.min(3,Math.abs(vel)/72));au.currentTime=Math.max(0,au.currentTime+da/360*1.8)}sound(vel)});
- function end(){if(!drag)return;drag=false;v.classList.remove('grabbing');sound(0);au.playbackRate=1;if(moved<4&&base){if(T.length){if(au.paused)playCur();else au.pause()}else paused=!paused}}
+ var sx=0,sy=0,far=0,tapped=false;
+ v.addEventListener('pointerdown',function(e){sx=e.clientX;sy=e.clientY;far=0;tapped=false;drag=true;moved=0;lastA=ptr(e);last=performance.now();try{v.setPointerCapture(e.pointerId)}catch(x){}v.classList.add('grabbing');audio();if(ac&&ac.state==='suspended')ac.resume()});
+ v.addEventListener('pointermove',function(e){if(!drag)return;far=Math.max(far,Math.hypot(e.clientX-sx,e.clientY-sy));var a=ptr(e),da=a-lastA;if(da>180)da-=360;if(da<-180)da+=360;lastA=a;var now=performance.now(),dt=Math.max(now-last,1)/1000;last=now;ang+=da;moved+=Math.abs(da);energy+=Math.abs(da)/360*3;vel=vel*.6+(da/dt)*.4;if(au.src&&!au.paused){au.playbackRate=Math.max(.1,Math.min(3,Math.abs(vel)/72));au.currentTime=Math.max(0,au.currentTime+da/360*1.8)}sound(vel)});
+ function end(e){if(!drag)return;drag=false;v.classList.remove('grabbing');sound(0);au.playbackRate=1;tapped=!!(e&&e.type==='pointerup'&&far<12)}
  v.addEventListener('pointerup',end);v.addEventListener('pointercancel',end);
- v.addEventListener('click',function(e){if(e.detail===0&&base)paused=!paused});
+ v.addEventListener('click',function(e){var t=tapped||e.detail===0;tapped=false;if(!t||!base)return;if(T.length){if(au.paused)playCur();else au.pause()}else paused=!paused});
  (function loop(t){var dt=Math.min((t-t0)/1000,.05);t0=t;if(drag){vel*=Math.pow(.001,dt);sound(vel);if(au.src&&!au.paused)au.playbackRate=Math.max(.1,Math.min(3,Math.abs(vel)/72))}else{var target=paused?0:base;vel+=(target-vel)*Math.min(dt*3,1);ang+=vel*dt}v.style.transform='rotate('+ang+'deg)';fadeVol();var rp=document.getElementById('rapper');if(rp)rp.classList.toggle('bob',!paused&&base>0&&Math.abs(vel)>8);requestAnimationFrame(loop)})(t0);
 
  /* Lluvia de comida al rifear */
@@ -193,7 +194,42 @@ background:repeating-radial-gradient(circle,#111 0 2px,#050505 2px 4px),#0a0a0a;
  function go(n){if(au.paused||!au.src){load(n,true);return}var s0=performance.now();(function f(){var k=1-(performance.now()-s0)/400;if(k<=0){fo=1;load(n,true);return}fo=k;requestAnimationFrame(f)})()}
  info(0);
 
+ 
+ /* Menú desde Google Sheets: pega aquí el enlace de tu hoja (el de compartir, o el CSV publicado). Si queda vacío, se usa el menú escrito en esta página. */
+ var SHEET_URL='https://docs.google.com/spreadsheets/d/1PFBgwQQWD2BR6HIfg8T-MQHwV_6OVb0GqGN_z7fNONs/edit?usp=sharing';
+ (function(){
+  if(!SHEET_URL||!window.fetch)return;
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  function norm(s){return String(s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').trim().toLowerCase()}
+  function parseCSV(t){var r=[],row=[],c='',q=false,i=0,ch;t=t.replace(/^﻿/,'');
+   for(;i<t.length;i++){ch=t[i];
+    if(q){if(ch==='"'){if(t[i+1]==='"'){c+='"';i++}else q=false}else c+=ch}
+    else if(ch==='"')q=true;
+    else if(ch===','){row.push(c);c=''}
+    else if(ch==='\n'||ch==='\r'){if(ch==='\r'&&t[i+1]==='\n')i++;row.push(c);c='';r.push(row);row=[]}
+    else c+=ch}
+   if(c!==''||row.length){row.push(c);r.push(row)}return r}
+  var U=SHEET_URL,mm=U.match(/spreadsheets\/d\/([a-zA-Z0-9_-]+)/);if(mm&&mm[1]!=='e'&&!/\/pub|output=csv|gviz/.test(U))U='https://docs.google.com/spreadsheets/d/'+mm[1]+'/gviz/tq?tqx=out:csv&headers=1';
+  fetch(U+(U.indexOf('?')>-1?'&':'?')+'t='+Date.now()).then(function(r){if(!r.ok)throw 0;return r.text()}).then(function(t){
+   var R=parseCSV(t);if(R.length<2)return;var H=R[0].map(norm),ix=function(n){return H.indexOf(n)};
+   var iT=ix('tipo'),iG=ix('grupo'),iN=ix('nombre'),iD=ix('descripcion'),iP=ix('precio');if(iT<0||iN<0)return;
+   var get=function(r,i){return i<0?'':String(r[i]||'').trim()};
+   var menu=[],byG={},promos=[],contact=[],subs={};
+   R.slice(1).forEach(function(r){var ty=norm(get(r,iT)),n=get(r,iN),d=get(r,iD);
+    if(ty==='subtitulo'){subs[norm(n)]=d;return}
+    if(!n)return;
+    if(ty==='menu'){var g=get(r,iG)||'Menú';if(!byG[g]){byG[g]={title:g,items:[]};menu.push(byG[g])}byG[g].items.push({n:n,d:d,p:get(r,iP)})}
+    else if(ty.indexOf('promo')===0)promos.push({n:n,d:d});
+    else if(ty==='contacto')contact.push({n:n,d:d})});
+   function fill(id,key,html){var el=document.getElementById(id);if(!el)return;var sub=el.querySelector('.sub');if(sub&&subs[key])sub.textContent=subs[key];
+    var keep=el.querySelectorAll('h2,.sub');while(el.lastChild&&!(el.lastChild.matches&&el.lastChild.matches('h2,.sub')))el.removeChild(el.lastChild);
+    el.insertAdjacentHTML('beforeend',html)}
+   if(menu.length)fill('menu','menu',menu.map(function(g){return '<h3>'+esc(g.title)+'</h3>'+g.items.map(function(i){return '<div class="item"><div><b>'+esc(i.n)+'</b><p>'+esc(i.d)+'</p></div><span class="price">'+esc(i.p)+'</span></div>'}).join('')}).join(''));
+   if(promos.length)fill('promos','promos',promos.map(function(i){return '<div class="promo"><b>'+esc(i.n)+'</b><p>'+esc(i.d)+'</p></div>'}).join(''));
+   if(contact.length)fill('contacto','contacto',contact.map(function(i){return norm(i.n)==='telefono'?'<p><span>'+esc(i.n)+'</span><a href="tel:+52'+i.d.replace(/\D/g,'')+'">'+esc(i.d)+'</a></p>':'<p><span>'+esc(i.n)+'</span>'+esc(i.d)+'</p>'}).join(''))
+  }).catch(function(){})
  })();
+})();
 </script>
 </body>
 </html>
