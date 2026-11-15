@@ -135,6 +135,9 @@ background:#150b19 url(disco.png) center/100% 100% no-repeat;will-change:transfo
 @keyframes press{0%{scale:1}35%{scale:.92;box-shadow:0 20px 60px rgba(0,0,0,.7),0 0 160px 30px rgba(215,25,25,.95)}70%{scale:1.04}100%{scale:1}}
 .vinyl.press{animation:press .38s ease-out}
 @media (prefers-reduced-motion:reduce){.vinyl.press{animation:none}}
+.ph{display:none;flex:none;width:104px;height:104px;border-radius:6px;background:#3a3a3a}
+#thumb[hidden]+.ph{display:block}
+@media (max-width:760px){.ph{width:84px;height:84px}}
 .mv{display:flex;gap:8px}
 .edw button:disabled{opacity:.35;cursor:default}
 .bar{display:flex;gap:10px;align-items:center;margin-top:24px;flex-wrap:wrap}
@@ -165,7 +168,7 @@ background:#150b19 url(disco.png) center/100% 100% no-repeat;will-change:transfo
   <div class="disc"><button class="vinyl" id="vinyl" aria-label="Pausar o reanudar el giro del disco"><span class="label">BAJÓN DEL<br>BARRIO</span></button>
    <svg class="rapper" id="rapper" viewBox="0 0 100 150" aria-hidden="true"><g class="bd"><rect x="44" y="72" width="12" height="20" fill="#a0643c"></rect><path d="M20 150Q22 92 50 88Q78 92 80 150Z" fill="#f7f3ee"></path><path d="M38 94Q50 114 62 94" fill="none" stroke="#e0b030" stroke-width="2.5"></path><circle cx="50" cy="109" r="4.5" fill="#e0b030"></circle><g class="hd"><circle cx="50" cy="56" r="21" fill="#a0643c"></circle><path d="M29 52Q29 30 50 30Q71 30 71 52Z" fill="#d62828"></path><path d="M60 50L90 54Q92 58 88 59L60 57Z" fill="#8f1a1a"></path><rect x="33" y="53" width="15" height="9" rx="3" fill="#0a0a0a"></rect><rect x="52" y="53" width="15" height="9" rx="3" fill="#0a0a0a"></rect><line x1="48" y1="57" x2="52" y2="57" stroke="#0a0a0a" stroke-width="2"></line><path d="M44 70Q50 74 56 70" fill="none" stroke="#4a2c1a" stroke-width="2" stroke-linecap="round"></path></g><g class="ar al"><line x1="28" y1="100" x2="14" y2="128" stroke="#f7f3ee" stroke-width="11" stroke-linecap="round"></line><circle cx="14" cy="130" r="5.5" fill="#a0643c"></circle><g class="ut"><line x1="14" y1="132" x2="7" y2="146" stroke="#ccc" stroke-width="2.5" stroke-linecap="round"></line><path d="M3.4 144.2L10.6 147.8M3.4 144.2l-3 6M7 146l-3 6M10.6 147.8l-3 6" fill="none" stroke="#ccc" stroke-width="2" stroke-linecap="round"></path></g></g><g class="ar arr"><line x1="72" y1="100" x2="86" y2="128" stroke="#f7f3ee" stroke-width="11" stroke-linecap="round"></line><circle cx="86" cy="130" r="5.5" fill="#a0643c"></circle><g class="ut"><line x1="86" y1="132" x2="90" y2="140" stroke="#333" stroke-width="3" stroke-linecap="round"></line><path d="M89 139L98 153L92 154L88 142Z" fill="#ddd"></path></g></g></g></svg>
   </div>
-  <div class="player" id="player"><img id="thumb" alt="" hidden><div class="pi"><span id="tt">Sirena</span><span id="ar" hidden></span><div class="ctl"><button type="button" id="prev" aria-label="Canción anterior"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M6 5h2.5v14H6zM20 5v14L9.5 12z"/></svg></button><button type="button" id="pp" aria-label="Reproducir"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button><button type="button" id="next" aria-label="Canción siguiente"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M15.5 5H18v14h-2.5zM4 5v14l10.5-7z"/></svg></button><div class="vol" id="vol"><button type="button" id="vb" aria-label="Volumen"><svg id="vi" viewBox="0 0 24 24" aria-hidden="true"></svg></button><div class="vpop"><div class="vbox"><input type="range" id="vr" min="0" max="100" step="1" value="50" aria-label="Volumen"></div></div></div></div><a id="sp" href="#" target="_blank" rel="noopener" hidden>Escuchar en Spotify</a></div><audio id="au" preload="none"></audio></div><script type="application/json" id="tracks">[{"t": "F.Y.K.M.", "a": "f-y-k-m.mp3", "i": "f-y-k-m.png", "s": ""}, {"t": "Sirena", "a": "sirena.mp3", "i": "sirena.png", "s": "", "r": "UweMe, Ghoret, Themas"}]</script>
+  <div class="player" id="player"><img id="thumb" alt="" hidden><div class="ph" id="ph" aria-hidden="true"></div><div class="pi"><span id="tt">---</span><span id="ar">---</span><div class="ctl"><button type="button" id="prev" aria-label="Canción anterior"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M6 5h2.5v14H6zM20 5v14L9.5 12z"/></svg></button><button type="button" id="pp" aria-label="Reproducir"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button><button type="button" id="next" aria-label="Canción siguiente"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M15.5 5H18v14h-2.5zM4 5v14l10.5-7z"/></svg></button><div class="vol" id="vol"><button type="button" id="vb" aria-label="Volumen"><svg id="vi" viewBox="0 0 24 24" aria-hidden="true"></svg></button><div class="vpop"><div class="vbox"><input type="range" id="vr" min="0" max="100" step="1" value="50" aria-label="Volumen"></div></div></div></div><a id="sp" href="#" target="_blank" rel="noopener" hidden>Escuchar en Spotify</a></div><audio id="au" preload="none"></audio></div><script type="application/json" id="tracks">[{"t": "F.Y.K.M.", "a": "f-y-k-m.mp3", "i": "f-y-k-m.png", "s": ""}, {"t": "Sirena", "a": "sirena.mp3", "i": "sirena.png", "s": "", "r": "UweMe, Ghoret, Themas"}]</script>
   <p class="hint">Arrastra el disco para rifear. Tócalo para pausar o reanudar.</p>
  </div>
 
@@ -218,9 +221,9 @@ background:#150b19 url(disco.png) center/100% 100% no-repeat;will-change:transfo
   requestAnimationFrame(rain)})(last2);
 
  /* Reproductor de canciones */
- var T=[],cur=0,pp=document.getElementById('pp'),tt=document.getElementById('tt'),th=document.getElementById('thumb'),sp=document.getElementById('sp'),ar=document.getElementById('ar');
+ var T=[],cur=0,ready=false,pp=document.getElementById('pp'),tt=document.getElementById('tt'),th=document.getElementById('thumb'),sp=document.getElementById('sp'),ar=document.getElementById('ar');
  try{T=JSON.parse(document.getElementById('tracks').textContent)||[]}catch(e){T=[]}
- function info(n){if(!T.length){tt.textContent='Aún no hay canciones';ar.hidden=true;th.hidden=true;sp.hidden=true;return}cur=(n+T.length)%T.length;var k=T[cur];tt.textContent=k.t||'Sin título';ar.textContent=k.r||'';ar.hidden=!k.r;th.hidden=!k.i;if(k.i)th.src=k.i;var ok=/^https:\/\/(open\.spotify\.com|spotify\.link)\//.test(k.s||'');sp.hidden=!ok;if(ok)sp.href=k.s}
+ function info(n){ready=true;if(!T.length){tt.textContent='Aún no hay canciones';ar.hidden=true;th.hidden=true;sp.hidden=true;return}cur=(n+T.length)%T.length;var k=T[cur];tt.textContent=k.t||'Sin título';ar.textContent=k.r||'';ar.hidden=!k.r;th.hidden=!k.i;if(k.i)th.src=k.i;var ok=/^https:\/\/(open\.spotify\.com|spotify\.link)\//.test(k.s||'');sp.hidden=!ok;if(ok)sp.href=k.s}
  function load(n,play){if(!T.length)return;info(n);if(!T[cur].a)return;au.src=T[cur].a;if(play)au.play().catch(function(){})}
  function playCur(){if(!T.length||!T[cur].a)return;if(!au.src)load(cur,true);else au.play().catch(function(){})}
  au.addEventListener('play',function(){paused=false;pp.firstChild.firstChild.setAttribute('d','M6 5h4v14H6zm8 0h4v14h-4z');pp.setAttribute('aria-label','Pausar')});
@@ -234,7 +237,7 @@ background:#150b19 url(disco.png) center/100% 100% no-repeat;will-change:transfo
  var FADE=2,fo=1;
  function fadeVol(){if(!au.src||au.paused)return;if(drag){au.volume=VM();return}var d=au.duration,t=au.currentTime,g=Math.min(1,t/FADE);if(d&&isFinite(d))g=Math.min(g,Math.max(0,(d-t)/FADE));au.volume=Math.max(0,Math.min(1,g*fo*VM()))}
  function go(n){if(au.paused||!au.src){load(n,true);return}var s0=performance.now();(function f(){var k=1-(performance.now()-s0)/400;if(k<=0){fo=1;load(n,true);return}fo=k;requestAnimationFrame(f)})()}
- info(0);
+ setTimeout(function(){if(!ready)info(0)},6000);
 
  
  /* Volumen: en celular empieza con sonido (toque = silenciar/activar, mantener presionado = barra); en escritorio empieza al 50 % y la barra aparece al pasar el cursor */
@@ -305,7 +308,7 @@ background:#150b19 url(disco.png) center/100% 100% no-repeat;will-change:transfo
    if(S&&has(S,'archivo')){var okA=/^[\w\-. ]+\.(mp3|m4a|wav|ogg|aac)$/i,okI=/^[\w\-. ]+\.(png|jpe?g|webp|gif)$/i;
     var songs=S.rows.filter(function(r){return okA.test(r.archivo)}).map(function(r){return {t:r.titulo,a:encodeURI(r.archivo),i:okI.test(r.miniatura)?encodeURI(r.miniatura):'',s:r.spotify,r:r.artista||r.artistas||r.artist||r.autor||r.cantante||r.interprete||''}});
     if(songs.length&&!au.src){T=songs;info(0)}}
-  })
+  }).catch(function(){}).then(function(){if(!ready)info(0)})
  })();
   /* Abrir una sección directo desde la dirección: #menu, #promociones o #contacto (también ?s=menu) */
  (function(){var h='';try{h=decodeURIComponent(location.hash.replace('#',''))||new URLSearchParams(location.search).get('s')||''}catch(e){}
