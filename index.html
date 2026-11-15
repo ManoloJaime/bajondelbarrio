@@ -195,10 +195,12 @@ background:repeating-radial-gradient(circle,#111 0 2px,#050505 2px 4px),#0a0a0a;
  info(0);
 
  
- /* Menú desde Google Sheets: pega aquí el enlace de tu hoja (el de compartir, o el CSV publicado). Si queda vacío, se usa el menú escrito en esta página. */
+ /* Datos desde Google Sheets (hojas MENÚ, PROMOCIONES, CONTACTO y MÚSICA). Pega aquí el enlace de tu hoja. Si queda vacío, se usa lo escrito en esta página. */
  var SHEET_URL='https://docs.google.com/spreadsheets/d/1PFBgwQQWD2BR6HIfg8T-MQHwV_6OVb0GqGN_z7fNONs/edit?usp=sharing';
  (function(){
-  if(!SHEET_URL||!window.fetch)return;
+  var mm=SHEET_URL.match(/spreadsheets\/d\/([a-zA-Z0-9_-]+)/);
+  if(!mm||mm[1]==='e'||!window.fetch)return;
+  var ID=mm[1];
   function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
   function norm(s){return String(s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').trim().toLowerCase()}
   function parseCSV(t){var r=[],row=[],c='',q=false,i=0,ch;t=t.replace(/^﻿/,'');
@@ -209,27 +211,26 @@ background:repeating-radial-gradient(circle,#111 0 2px,#050505 2px 4px),#0a0a0a;
     else if(ch==='\n'||ch==='\r'){if(ch==='\r'&&t[i+1]==='\n')i++;row.push(c);c='';r.push(row);row=[]}
     else c+=ch}
    if(c!==''||row.length){row.push(c);r.push(row)}return r}
-  var U=SHEET_URL,mm=U.match(/spreadsheets\/d\/([a-zA-Z0-9_-]+)/);if(mm&&mm[1]!=='e'&&!/\/pub|output=csv|gviz/.test(U))U='https://docs.google.com/spreadsheets/d/'+mm[1]+'/gviz/tq?tqx=out:csv&headers=1';
-  fetch(U+(U.indexOf('?')>-1?'&':'?')+'t='+Date.now()).then(function(r){if(!r.ok)throw 0;return r.text()}).then(function(t){
-   var R=parseCSV(t);if(R.length<2)return;var H=R[0].map(norm),ix=function(n){return H.indexOf(n)};
-   var iT=ix('tipo'),iG=ix('grupo'),iN=ix('nombre'),iD=ix('descripcion'),iP=ix('precio');if(iT<0||iN<0)return;
-   var get=function(r,i){return i<0?'':String(r[i]||'').trim()};
-   var menu=[],byG={},promos=[],contact=[],subs={};
-   R.slice(1).forEach(function(r){var ty=norm(get(r,iT)),n=get(r,iN),d=get(r,iD);
-    if(ty==='subtitulo'){subs[norm(n)]=d;return}
-    if(!n)return;
-    if(ty==='menu'){var g=get(r,iG)||'Menú';if(!byG[g]){byG[g]={title:g,items:[]};menu.push(byG[g])}byG[g].items.push({n:n,d:d,p:get(r,iP)})}
-    else if(ty.indexOf('promo')===0)promos.push({n:n,d:d});
-    else if(ty==='contacto')contact.push({n:n,d:d})});
-   function fill(id,key,html){var el=document.getElementById(id);if(!el)return;var sub=el.querySelector('.sub');if(sub&&subs[key])sub.textContent=subs[key];
-    var keep=el.querySelectorAll('h2,.sub');while(el.lastChild&&!(el.lastChild.matches&&el.lastChild.matches('h2,.sub')))el.removeChild(el.lastChild);
-    el.insertAdjacentHTML('beforeend',html)}
-   if(menu.length)fill('menu','menu',menu.map(function(g){return '<h3>'+esc(g.title)+'</h3>'+g.items.map(function(i){return '<div class="item"><div><b>'+esc(i.n)+'</b><p>'+esc(i.d)+'</p></div><span class="price">'+esc(i.p)+'</span></div>'}).join('')}).join(''));
-   if(promos.length)fill('promos','promos',promos.map(function(i){return '<div class="promo"><b>'+esc(i.n)+'</b><p>'+esc(i.d)+'</p></div>'}).join(''));
-   if(contact.length)fill('contacto','contacto',contact.map(function(i){return norm(i.n)==='telefono'?'<p><span>'+esc(i.n)+'</span><a href="tel:+52'+i.d.replace(/\D/g,'')+'">'+esc(i.d)+'</a></p>':'<p><span>'+esc(i.n)+'</span>'+esc(i.d)+'</p>'}).join(''))
-  }).catch(function(){})
+  function tab(name){return fetch('https://docs.google.com/spreadsheets/d/'+ID+'/gviz/tq?tqx=out:csv&headers=1&sheet='+encodeURIComponent(name)+'&t='+Date.now()).then(function(r){if(!r.ok)throw 0;return r.text()}).then(function(t){var R=parseCSV(t);if(!R.length)return null;var H=R[0].map(norm);return {H:H,rows:R.slice(1).map(function(r){var o={};H.forEach(function(h,i){o[h]=String(r[i]||'').trim()});return o})}}).catch(function(){return null})}
+  function has(t){for(var i=1;i<arguments.length;i++)if(t.H.indexOf(arguments[i])<0)return false;return true}
+  function fill(id,sub,html){var el=document.getElementById(id);if(!el)return;var s=el.querySelector('.sub');if(s&&sub)s.textContent=sub;while(el.lastChild&&!(el.lastChild.matches&&el.lastChild.matches('h2,.sub')))el.removeChild(el.lastChild);el.insertAdjacentHTML('beforeend',html)}
+  Promise.all([tab('MENÚ'),tab('PROMOCIONES'),tab('CONTACTO'),tab('MÚSICA')]).then(function(x){
+   var M=x[0],P=x[1],C=x[2],S=x[3],sub='';
+   if(M&&has(M,'categoria','nombre','precio')){var menu=[],byG={};sub='';
+    M.rows.forEach(function(r){if(norm(r.categoria)==='subtitulo'){sub=r.descripcion;return}if(!r.nombre)return;var g=r.categoria||'Menú';if(!byG[g]){byG[g]={t:g,i:[]};menu.push(byG[g])}byG[g].i.push(r)});
+    if(menu.length)fill('menu',sub,menu.map(function(g){return '<h3>'+esc(g.t)+'</h3>'+g.i.map(function(i){return '<div class="item"><div><b>'+esc(i.nombre)+'</b><p>'+esc(i.descripcion)+'</p></div><span class="price">'+esc(i.precio)+'</span></div>'}).join('')}).join(''))}
+   if(P&&has(P,'nombre','descripcion')&&P.H.indexOf('precio')<0&&P.H.indexOf('categoria')<0){var pr=[];sub='';
+    P.rows.forEach(function(r){if(norm(r.nombre)==='subtitulo'){sub=r.descripcion;return}if(r.nombre)pr.push(r)});
+    if(pr.length)fill('promos',sub,pr.map(function(i){return '<div class="promo"><b>'+esc(i.nombre)+'</b><p>'+esc(i.descripcion)+'</p></div>'}).join(''))}
+   if(C&&has(C,'dato','valor')){var ct=[];sub='';
+    C.rows.forEach(function(r){if(norm(r.dato)==='subtitulo'){sub=r.valor;return}if(r.dato)ct.push(r)});
+    if(ct.length)fill('contacto',sub,ct.map(function(i){return norm(i.dato)==='telefono'?'<p><span>'+esc(i.dato)+'</span><a href="tel:+52'+i.valor.replace(/\D/g,'')+'">'+esc(i.valor)+'</a></p>':'<p><span>'+esc(i.dato)+'</span>'+esc(i.valor)+'</p>'}).join(''))}
+   if(S&&has(S,'archivo')){var okA=/^[\w\-. ]+\.(mp3|m4a|wav|ogg|aac)$/i,okI=/^[\w\-. ]+\.(png|jpe?g|webp|gif)$/i;
+    var songs=S.rows.filter(function(r){return okA.test(r.archivo)}).map(function(r){return {t:r.titulo,a:encodeURI(r.archivo),i:okI.test(r.miniatura)?encodeURI(r.miniatura):'',s:r.spotify}});
+    if(songs.length&&!au.src){T=songs;info(0)}}
+  })
  })();
-})();
+ })();
 </script>
 </body>
 </html>
