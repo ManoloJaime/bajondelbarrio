@@ -230,7 +230,11 @@ background:repeating-radial-gradient(circle,#111 0 2px,#050505 2px 4px),#0a0a0a;
     if(songs.length&&!au.src){T=songs;info(0)}}
   })
  })();
- })();
+  /* Abrir una sección directo desde la dirección: #menu, #promociones o #contacto (también ?s=menu) */
+ (function(){var h='';try{h=decodeURIComponent(location.hash.replace('#',''))||new URLSearchParams(location.search).get('s')||''}catch(e){}
+  h=h.toLowerCase();var m={menu:'menu','menú':'menu',promos:'promos',promo:'promos',promociones:'promos',contacto:'contacto'};
+  if(m[h])setTimeout(function(){show(m[h])},450)})();
+})();
 </script>
 </body>
 </html>
