@@ -27,10 +27,9 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--white);outline-offs
 .stage{position:relative;height:100%}
 .deck{position:absolute;top:52%;left:50%;transform:translate(-50%,-50%);width:min(60vh,86vw,420px);transition:left .7s cubic-bezier(.7,0,.2,1),top .7s cubic-bezier(.7,0,.2,1),width .7s}
 .vinyl{position:relative;aspect-ratio:1;border-radius:50%;cursor:pointer;border:0;padding:0;display:block;width:100%;
-background:repeating-radial-gradient(circle,#111 0 2px,#050505 2px 4px),#0a0a0a;box-shadow:0 20px 60px rgba(0,0,0,.7),0 0 0 6px #1b1b1b,0 0 80px rgba(214,40,40,.25);touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab}
+background:#150b19 url(disco.png) center/100% 100% no-repeat;will-change:transform;box-shadow:0 20px 60px rgba(0,0,0,.7),0 0 90px rgba(120,8,8,.6);touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab;container-type:inline-size}
 .vinyl.grabbing{cursor:grabbing}
-.vinyl::before{content:"";position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 20deg,transparent 0 20%,rgba(255,255,255,.14) 25%,transparent 32% 70%,rgba(255,255,255,.1) 75%,transparent 82%)}
-.label{position:absolute;inset:34%;border-radius:50%;background:radial-gradient(circle at 50% 50%,var(--black) 0 7%,var(--red) 8%);display:grid;place-items:center;text-align:center;font-family:Anton,Impact,sans-serif;font-size:clamp(.6rem,2.2vw,1rem);line-height:1.1;color:var(--white);padding-top:34%}
+.label{position:absolute;inset:33.3%;border-radius:50%;display:flex;align-items:flex-end;justify-content:center;padding-bottom:3.2%;text-align:center;font-family:Anton,Impact,sans-serif;font-size:clamp(.6rem,2.2vw,1rem);font-size:3.6cqw;line-height:1.1;color:var(--white)}
 @keyframes spin{to{transform:rotate(360deg)}}
 .player{margin-top:22px;border-radius:14px;overflow:hidden;background:var(--black);border:2px solid var(--brown);min-height:80px}
 .player iframe{display:block;width:100%;height:152px;border:0}
@@ -100,14 +99,35 @@ background:repeating-radial-gradient(circle,#111 0 2px,#050505 2px 4px),#0a0a0a;
 .vol.open .vpop{visibility:visible;opacity:1;transition-delay:0s}
 @media (hover:hover) and (pointer:fine){.vol:hover .vpop,.vol:has(:focus-visible) .vpop{visibility:visible;opacity:1;transition-delay:0s}}
 .vol.nosl .vpop{display:none!important}
-@media (max-width:760px){.player{margin-left:-14px;margin-right:-14px}.player .ctl{gap:6px}.player .ctl button{flex:1 1 auto;min-width:0;font-size:.78rem;padding:9px 4px}.player .ctl .vol button{flex:none;width:38px;padding:9px 0}}
-@media (max-width:340px){.player .ctl button{font-size:.68rem;padding:9px 2px}.player .ctl{gap:4px}}
 .np{display:flex;gap:10px;align-items:center;margin-bottom:10px;min-height:44px}
 .np img{width:44px;height:44px;object-fit:cover;border-radius:6px;border:2px solid var(--brown)}
 #tt{font-family:Anton,Impact,sans-serif;font-size:1.05rem;letter-spacing:.02em}
 .ctl{display:flex;gap:8px}
 .ctl button{flex:1;background:var(--brown);color:var(--white);border:0;border-radius:6px;padding:9px;font:600 .85rem 'Work Sans',sans-serif;cursor:pointer}
 .ctl #pp{background:var(--red)}
+.player{display:flex;align-items:center;gap:16px;padding:14px 18px;overflow:visible;border:2px solid var(--red);border-radius:14px;min-height:0;margin-left:0;margin-right:0}
+.player #thumb{flex:none;width:96px;height:96px;object-fit:cover;border-radius:6px;border:0}
+.player .pi{flex:1;min-width:0}
+#tt{display:block;font-size:1.35rem;line-height:1.15;margin-bottom:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.player .ctl{display:flex;align-items:center;gap:4px}
+.player .ctl button,.player .ctl .vol button{flex:none;width:40px;height:40px;padding:0;background:none;border-radius:50%;color:rgba(255,255,255,.45);display:grid;place-items:center;transition:color .15s}
+.player .ctl button:hover,.player .ctl button:focus-visible{color:#fff}
+.player .ctl #pp{background:none;color:rgba(255,255,255,.7)}
+.player .ctl button svg{width:26px;height:26px}
+.player .ctl .vol svg{width:24px;height:24px}
+@media (max-width:760px){.player{gap:12px;padding:12px 14px}.player #thumb{width:76px;height:76px}#tt{font-size:1.15rem}.player .ctl{gap:0}.player .ctl button,.player .ctl .vol button{width:36px;height:36px}.player .ctl button svg{width:24px;height:24px}}
+.player{max-width:380px;margin-left:auto;margin-right:auto;padding:22px 18px;gap:16px}
+.player #thumb{width:104px;height:104px}
+.player .pi{display:flex;flex-direction:column;justify-content:center}
+#tt{margin-bottom:2px}
+#ar{display:block;font-size:.8rem;color:rgba(255,255,255,.55);margin-bottom:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#ar[hidden]{display:none}
+#tt:last-of-type{margin-bottom:8px}
+.vbox{width:46px;padding:12px 0;display:flex;justify-content:center}
+.vbox input{width:28px;height:98px;writing-mode:vertical-lr;direction:rtl;-webkit-appearance:slider-vertical;appearance:auto;touch-action:none}
+#sp{display:block;margin-top:8px;font-size:.78rem;color:rgba(255,255,255,.75);text-decoration:underline;text-align:left;padding:0}
+#sp[hidden]{display:none}
+@media (max-width:760px){.player{max-width:none;padding:18px 14px;gap:12px}.player #thumb{width:84px;height:84px}}
 .mv{display:flex;gap:8px}
 .edw button:disabled{opacity:.35;cursor:default}
 .bar{display:flex;gap:10px;align-items:center;margin-top:24px;flex-wrap:wrap}
@@ -137,7 +157,7 @@ background:repeating-radial-gradient(circle,#111 0 2px,#050505 2px 4px),#0a0a0a;
   <div class="disc"><button class="vinyl" id="vinyl" aria-label="Pausar o reanudar el giro del disco"><span class="label">BAJÓN DEL<br>BARRIO</span></button>
    <svg class="rapper" id="rapper" viewBox="0 0 100 150" aria-hidden="true"><g class="bd"><rect x="44" y="72" width="12" height="20" fill="#a0643c"></rect><path d="M20 150Q22 92 50 88Q78 92 80 150Z" fill="#f7f3ee"></path><path d="M38 94Q50 114 62 94" fill="none" stroke="#e0b030" stroke-width="2.5"></path><circle cx="50" cy="109" r="4.5" fill="#e0b030"></circle><g class="hd"><circle cx="50" cy="56" r="21" fill="#a0643c"></circle><path d="M29 52Q29 30 50 30Q71 30 71 52Z" fill="#d62828"></path><path d="M60 50L90 54Q92 58 88 59L60 57Z" fill="#8f1a1a"></path><rect x="33" y="53" width="15" height="9" rx="3" fill="#0a0a0a"></rect><rect x="52" y="53" width="15" height="9" rx="3" fill="#0a0a0a"></rect><line x1="48" y1="57" x2="52" y2="57" stroke="#0a0a0a" stroke-width="2"></line><path d="M44 70Q50 74 56 70" fill="none" stroke="#4a2c1a" stroke-width="2" stroke-linecap="round"></path></g><g class="ar al"><line x1="28" y1="100" x2="14" y2="128" stroke="#f7f3ee" stroke-width="11" stroke-linecap="round"></line><circle cx="14" cy="130" r="5.5" fill="#a0643c"></circle><g class="ut"><line x1="14" y1="132" x2="7" y2="146" stroke="#ccc" stroke-width="2.5" stroke-linecap="round"></line><path d="M3.4 144.2L10.6 147.8M3.4 144.2l-3 6M7 146l-3 6M10.6 147.8l-3 6" fill="none" stroke="#ccc" stroke-width="2" stroke-linecap="round"></path></g></g><g class="ar arr"><line x1="72" y1="100" x2="86" y2="128" stroke="#f7f3ee" stroke-width="11" stroke-linecap="round"></line><circle cx="86" cy="130" r="5.5" fill="#a0643c"></circle><g class="ut"><line x1="86" y1="132" x2="90" y2="140" stroke="#333" stroke-width="3" stroke-linecap="round"></line><path d="M89 139L98 153L92 154L88 142Z" fill="#ddd"></path></g></g></g></svg>
   </div>
-  <div class="player" id="player"><div class="np"><img id="thumb" alt="" hidden><span id="tt">Sirena</span></div><div class="ctl"><button type="button" id="prev" aria-label="Canción anterior">Anterior</button><button type="button" id="pp">Reproducir</button><button type="button" id="next" aria-label="Canción siguiente">Siguiente</button><div class="vol" id="vol"><button type="button" id="vb" aria-label="Volumen"><svg id="vi" viewBox="0 0 24 24" aria-hidden="true"></svg></button><div class="vpop"><div class="vbox"><input type="range" id="vr" min="0" max="100" step="1" value="50" aria-label="Volumen"></div></div></div></div><a id="sp" href="https://open.spotify.com/track/1vn1nVXez6DxeZ8BY5Wzho?si=897a854153224eb1" target="_blank" rel="noopener">Escuchar en Spotify</a><audio id="au" preload="none"></audio></div><script type="application/json" id="tracks">[{"t": "F.Y.K.M.", "a": "f-y-k-m.mp3", "i": "f-y-k-m.png", "s": ""}, {"t": "Sirena", "a": "sirena.mp3", "i": "sirena.png", "s": ""}]</script>
+  <div class="player" id="player"><img id="thumb" alt="" hidden><div class="pi"><span id="tt">Sirena</span><span id="ar" hidden></span><div class="ctl"><button type="button" id="prev" aria-label="Canción anterior"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M6 5h2.5v14H6zM20 5v14L9.5 12z"/></svg></button><button type="button" id="pp" aria-label="Reproducir"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button><button type="button" id="next" aria-label="Canción siguiente"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M15.5 5H18v14h-2.5zM4 5v14l10.5-7z"/></svg></button><div class="vol" id="vol"><button type="button" id="vb" aria-label="Volumen"><svg id="vi" viewBox="0 0 24 24" aria-hidden="true"></svg></button><div class="vpop"><div class="vbox"><input type="range" id="vr" min="0" max="100" step="1" value="50" aria-label="Volumen"></div></div></div></div><a id="sp" href="#" target="_blank" rel="noopener" hidden>Escuchar en Spotify</a></div></div><audio id="au" preload="none"></audio></div><script type="application/json" id="tracks">[{"t": "F.Y.K.M.", "a": "f-y-k-m.mp3", "i": "f-y-k-m.png", "s": ""}, {"t": "Sirena", "a": "sirena.mp3", "i": "sirena.png", "s": "", "r": "UweMe, Ghoret, Themas"}]</script>
   <p class="hint">Arrastra el disco para rifear. Tócalo para pausar o reanudar.</p>
  </div>
 
@@ -190,13 +210,13 @@ background:repeating-radial-gradient(circle,#111 0 2px,#050505 2px 4px),#0a0a0a;
   requestAnimationFrame(rain)})(last2);
 
  /* Reproductor de canciones */
- var T=[],cur=0,pp=document.getElementById('pp'),tt=document.getElementById('tt'),th=document.getElementById('thumb'),sp=document.getElementById('sp');
+ var T=[],cur=0,pp=document.getElementById('pp'),tt=document.getElementById('tt'),th=document.getElementById('thumb'),sp=document.getElementById('sp'),ar=document.getElementById('ar');
  try{T=JSON.parse(document.getElementById('tracks').textContent)||[]}catch(e){T=[]}
- function info(n){if(!T.length){tt.textContent='Aún no hay canciones';th.hidden=true;sp.hidden=true;return}cur=(n+T.length)%T.length;var k=T[cur];tt.textContent=k.t||'Sin título';th.hidden=!k.i;if(k.i)th.src=k.i;var ok=/^https:\/\/(open\.spotify\.com|spotify\.link)\//.test(k.s||'');sp.hidden=!ok;if(ok)sp.href=k.s}
+ function info(n){if(!T.length){tt.textContent='Aún no hay canciones';ar.hidden=true;th.hidden=true;sp.hidden=true;return}cur=(n+T.length)%T.length;var k=T[cur];tt.textContent=k.t||'Sin título';ar.textContent=k.r||'';ar.hidden=!k.r;th.hidden=!k.i;if(k.i)th.src=k.i;var ok=/^https:\/\/(open\.spotify\.com|spotify\.link)\//.test(k.s||'');sp.hidden=!ok;if(ok)sp.href=k.s}
  function load(n,play){if(!T.length)return;info(n);if(!T[cur].a)return;au.src=T[cur].a;if(play)au.play().catch(function(){})}
  function playCur(){if(!T.length||!T[cur].a)return;if(!au.src)load(cur,true);else au.play().catch(function(){})}
- au.addEventListener('play',function(){paused=false;pp.textContent='Pausar'});
- au.addEventListener('pause',function(){paused=true;pp.textContent='Reproducir'});
+ au.addEventListener('play',function(){paused=false;pp.firstChild.firstChild.setAttribute('d','M6 5h4v14H6zm8 0h4v14h-4z');pp.setAttribute('aria-label','Pausar')});
+ au.addEventListener('pause',function(){paused=true;pp.firstChild.firstChild.setAttribute('d','M8 5v14l11-7z');pp.setAttribute('aria-label','Reproducir')});
  au.addEventListener('ended',function(){load(cur+1,true)});
  pp.addEventListener('click',function(){if(au.paused)playCur();else au.pause()});
  document.getElementById('next').addEventListener('click',function(){go(cur+1)});
@@ -273,7 +293,7 @@ background:repeating-radial-gradient(circle,#111 0 2px,#050505 2px 4px),#0a0a0a;
     C.rows.forEach(function(r){if(norm(r.dato)==='subtitulo'){sub=rt(r,'valor');return}if(r.dato)ct.push(r)});
     if(ct.length)fill('contacto',sub,ct.map(function(i){return norm(i.dato)==='telefono'?'<p><span>'+esc(i.dato)+'</span><a href="tel:+52'+i.valor.replace(/\D/g,'')+'">'+rt(i,'valor')+'</a></p>':'<p><span>'+esc(i.dato)+'</span>'+rt(i,'valor')+'</p>'}).join(''))}
    if(S&&has(S,'archivo')){var okA=/^[\w\-. ]+\.(mp3|m4a|wav|ogg|aac)$/i,okI=/^[\w\-. ]+\.(png|jpe?g|webp|gif)$/i;
-    var songs=S.rows.filter(function(r){return okA.test(r.archivo)}).map(function(r){return {t:r.titulo,a:encodeURI(r.archivo),i:okI.test(r.miniatura)?encodeURI(r.miniatura):'',s:r.spotify}});
+    var songs=S.rows.filter(function(r){return okA.test(r.archivo)}).map(function(r){return {t:r.titulo,a:encodeURI(r.archivo),i:okI.test(r.miniatura)?encodeURI(r.miniatura):'',s:r.spotify,r:r.artista||''}});
     if(songs.length&&!au.src){T=songs;info(0)}}
   })
  })();
