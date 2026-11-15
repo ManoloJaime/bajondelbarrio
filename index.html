@@ -128,6 +128,8 @@ background:#150b19 url(disco.png) center/100% 100% no-repeat;will-change:transfo
 #sp{display:block;margin-top:8px;font-size:.78rem;color:rgba(255,255,255,.75);text-decoration:underline;text-align:left;padding:0}
 #sp[hidden]{display:none}
 @media (max-width:760px){.player{max-width:none;padding:18px 14px;gap:12px}.player #thumb{width:84px;height:84px}}
+.mm{display:none}
+@media (max-width:760px){body.menu-open nav .mm{display:grid;place-items:center;position:absolute;top:10px;right:12px;width:38px;height:38px;padding:0;border:2px solid var(--brown);border-radius:50%;background:rgba(10,10,10,.6);color:rgba(255,255,255,.8)}body.menu-open nav .mm.on{color:#fff;background:var(--red);border-color:var(--red)}nav .mm svg{width:20px;height:20px}}
 .mv{display:flex;gap:8px}
 .edw button:disabled{opacity:.35;cursor:default}
 .bar{display:flex;gap:10px;align-items:center;margin-top:24px;flex-wrap:wrap}
@@ -145,6 +147,7 @@ background:#150b19 url(disco.png) center/100% 100% no-repeat;will-change:transfo
 <canvas id="rain" aria-hidden="true"></canvas>
 <nav>
  <a class="logo" href="#" id="home">BAJÓN <span>DEL</span> BARRIO</a>
+ <button type="button" class="mm" id="mm" aria-label="Reproducir música"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M9 3v11.6A3.5 3.5 0 1 0 11 18V7.8l8-1.8v7.6A3.5 3.5 0 1 0 21 17V3z" transform="translate(-1 1) scale(.95)"/></svg></button>
  <ul>
   <li><button data-p="menu" aria-current="false">Menú</button></li>
   <li><button data-p="promos" aria-current="false">Promociones</button></li>
@@ -170,10 +173,10 @@ background:#150b19 url(disco.png) center/100% 100% no-repeat;will-change:transfo
 
 <script>
 (function(){
- var stage=document.getElementById('stage'),btns=document.querySelectorAll('nav button'),panels=document.querySelectorAll('.panel');
+ var stage=document.getElementById('stage'),btns=document.querySelectorAll('nav button[data-p]'),panels=document.querySelectorAll('.panel');
  panels.forEach(function(p){p.addEventListener('scroll',function(){var d=document.querySelector('.deck');if(d)d.style.setProperty('--sy',p.scrollTop+'px')},{passive:true})});
  function show(id){
-  stage.classList.toggle('open',!!id);
+  stage.classList.toggle('open',!!id);document.body.classList.toggle('menu-open',!!id);
   panels.forEach(function(p){p.classList.toggle('on',p.id===id)});
   btns.forEach(function(b){b.setAttribute('aria-current',String(b.dataset.p===id))});
   var rr=document.getElementById('rapper');if(rr)rr.classList.toggle('eat',id==='menu');
@@ -219,6 +222,8 @@ background:#150b19 url(disco.png) center/100% 100% no-repeat;will-change:transfo
  au.addEventListener('pause',function(){paused=true;pp.firstChild.firstChild.setAttribute('d','M8 5v14l11-7z');pp.setAttribute('aria-label','Reproducir')});
  au.addEventListener('ended',function(){load(cur+1,true)});
  pp.addEventListener('click',function(){if(au.paused)playCur();else au.pause()});
+ var mm=document.getElementById('mm');mm.addEventListener('click',function(){if(au.paused)playCur();else au.pause()});
+ au.addEventListener('play',function(){mm.classList.add('on');mm.setAttribute('aria-label','Pausar música')});au.addEventListener('pause',function(){mm.classList.remove('on');mm.setAttribute('aria-label','Reproducir música')});
  document.getElementById('next').addEventListener('click',function(){go(cur+1)});
  document.getElementById('prev').addEventListener('click',function(){go(cur-1)});
  var FADE=2,fo=1;
