@@ -120,7 +120,7 @@ background:#150b19 url(disco.png) center/100% 100% no-repeat;will-change:transfo
 .player #thumb{width:104px;height:104px}
 .player .pi{display:flex;flex-direction:column;justify-content:center}
 #tt{margin-bottom:2px}
-#ar{display:block;font-size:.8rem;color:rgba(255,255,255,.55);margin-bottom:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#ar{display:block;font-size:1rem;color:rgba(255,255,255,.55);margin-bottom:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #ar[hidden]{display:none}
 #tt:last-of-type{margin-bottom:8px}
 .vbox{width:46px;padding:12px 0;display:flex;justify-content:center}
@@ -293,7 +293,7 @@ background:#150b19 url(disco.png) center/100% 100% no-repeat;will-change:transfo
     C.rows.forEach(function(r){if(norm(r.dato)==='subtitulo'){sub=rt(r,'valor');return}if(r.dato)ct.push(r)});
     if(ct.length)fill('contacto',sub,ct.map(function(i){return norm(i.dato)==='telefono'?'<p><span>'+esc(i.dato)+'</span><a href="tel:+52'+i.valor.replace(/\D/g,'')+'">'+rt(i,'valor')+'</a></p>':'<p><span>'+esc(i.dato)+'</span>'+rt(i,'valor')+'</p>'}).join(''))}
    if(S&&has(S,'archivo')){var okA=/^[\w\-. ]+\.(mp3|m4a|wav|ogg|aac)$/i,okI=/^[\w\-. ]+\.(png|jpe?g|webp|gif)$/i;
-    var songs=S.rows.filter(function(r){return okA.test(r.archivo)}).map(function(r){return {t:r.titulo,a:encodeURI(r.archivo),i:okI.test(r.miniatura)?encodeURI(r.miniatura):'',s:r.spotify,r:r.artista||''}});
+    var songs=S.rows.filter(function(r){return okA.test(r.archivo)}).map(function(r){return {t:r.titulo,a:encodeURI(r.archivo),i:okI.test(r.miniatura)?encodeURI(r.miniatura):'',s:r.spotify,r:r.artista||r.artistas||r.artist||r.autor||r.cantante||r.interprete||''}});
     if(songs.length&&!au.src){T=songs;info(0)}}
   })
  })();
