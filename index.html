@@ -227,10 +227,10 @@ background:#150b19 url(disco.png) center/100% 100% no-repeat;will-change:transfo
  info(0);
 
  
- /* Volumen: en celular empieza silenciado (toque = 50 %, mantener presionado = barra); en escritorio empieza al 50 % y la barra aparece al pasar el cursor */
+ /* Volumen: en celular empieza con sonido (toque = silenciar/activar, mantener presionado = barra); en escritorio empieza al 50 % y la barra aparece al pasar el cursor */
  var volOK=(function(){try{var a=document.createElement('audio');a.volume=.5;return a.volume===.5}catch(e){return false}})();
  var touchMode=!(window.matchMedia&&matchMedia('(hover:hover) and (pointer:fine)').matches);
- var vol=.5,muted=touchMode,lp=false,lpT=0,idleT=0;
+ var vol=.5,muted=false,lp=false,lpT=0,idleT=0;
  var vw=document.getElementById('vol'),vb=document.getElementById('vb'),vr=document.getElementById('vr'),vi=document.getElementById('vi');
  function VM(){return volOK?vol:1}
  function MV(){return muted?0:(volOK?Math.min(1.6,vol*2):1)}
