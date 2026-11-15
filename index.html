@@ -227,12 +227,15 @@ background:repeating-radial-gradient(circle,#111 0 2px,#050505 2px 4px),#0a0a0a;
  document.addEventListener('pointerdown',function(e){if(vw.classList.contains('open')&&!vw.contains(e.target))vw.classList.remove('open')});
  applyVol();
 
- /* Datos desde Google Sheets (hojas MENÚ, PROMOCIONES, CONTACTO y MÚSICA). Pega aquí el enlace de tu hoja. Si queda vacío, se usa lo escrito en esta página. */
+ /* Datos desde Google Sheets (hojas MENÚ, PROMOCIONES, CONTACTO y MÚSICA).
+    SHEET_URL: el enlace de tu hoja (lee el texto).
+    SCRIPT_URL: el enlace de tu script de Apps Script (lee también negritas y cursivas). Si queda vacío, se usa solo SHEET_URL.
+    Si ambos fallan, se usa lo escrito en esta página. */
  var SHEET_URL='https://docs.google.com/spreadsheets/d/1PFBgwQQWD2BR6HIfg8T-MQHwV_6OVb0GqGN_z7fNONs/edit?usp=sharing';
+ var SCRIPT_URL='https://script.google.com/macros/s/AKfycbxKURFSbE0L3fuYYyKHwK7_n-WP4JOEbmmwfGamytGOC8iC_u_S-46yCaYk3POH2zrXag/exec';
  (function(){
-  var mm=SHEET_URL.match(/spreadsheets\/d\/([a-zA-Z0-9_-]+)/);
-  if(!mm||mm[1]==='e'||!window.fetch)return;
-  var ID=mm[1];
+  var mm=SHEET_URL.match(/spreadsheets\/d\/([a-zA-Z0-9_-]+)/),ID=mm&&mm[1]!=='e'?mm[1]:'';
+  if(!window.fetch||(!ID&&!SCRIPT_URL))return;
   function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
   function norm(s){return String(s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').trim().toLowerCase()}
   function parseCSV(t){var r=[],row=[],c='',q=false,i=0,ch;t=t.replace(/^﻿/,'');
@@ -243,20 +246,32 @@ background:repeating-radial-gradient(circle,#111 0 2px,#050505 2px 4px),#0a0a0a;
     else if(ch==='\n'||ch==='\r'){if(ch==='\r'&&t[i+1]==='\n')i++;row.push(c);c='';r.push(row);row=[]}
     else c+=ch}
    if(c!==''||row.length){row.push(c);r.push(row)}return r}
-  function tab(name){return fetch('https://docs.google.com/spreadsheets/d/'+ID+'/gviz/tq?tqx=out:csv&headers=1&sheet='+encodeURIComponent(name)+'&t='+Date.now()).then(function(r){if(!r.ok)throw 0;return r.text()}).then(function(t){var R=parseCSV(t);if(!R.length)return null;var H=R[0].map(norm);return {H:H,rows:R.slice(1).map(function(r){var o={};H.forEach(function(h,i){o[h]=String(r[i]||'').trim()});return o})}}).catch(function(){return null})}
+  function plain(c){return Array.isArray(c)?c.map(function(x){return x[0]}).join(''):String(c==null?'':c)}
+  function rich(c){if(!Array.isArray(c))return esc(plain(c)).replace(/\n/g,'<br>');
+   return c.map(function(x){var t=esc(x[0]).replace(/\n/g,'<br>');if(x[1])t='<strong>'+t+'</strong>';if(x[2])t='<em>'+t+'</em>';return t}).join('')}
+  function build(head,rows){var H=head.map(function(c){return norm(plain(c))});
+   return {H:H,rows:rows.map(function(r){var o={},h={};H.forEach(function(k,i){var c=r[i];o[k]=plain(c).trim();h[k]=rich(c).trim()});o.__h=h;return o})}}
+  function rt(r,k){return r.__h&&r.__h[k]!==undefined?r.__h[k]:esc(r[k]||'')}
+  var SC=null;
+  function tabS(name){if(!SCRIPT_URL)return Promise.resolve(null);
+   SC=SC||fetch(SCRIPT_URL+(SCRIPT_URL.indexOf('?')>-1?'&':'?')+'t='+Date.now()).then(function(r){if(!r.ok)throw 0;return r.json()}).catch(function(){return null});
+   return SC.then(function(j){var d=j&&j[name];return d&&d.length?build(d[0],d.slice(1)):null})}
+  function tabG(name){if(!ID)return Promise.resolve(null);
+   return fetch('https://docs.google.com/spreadsheets/d/'+ID+'/gviz/tq?tqx=out:csv&headers=1&sheet='+encodeURIComponent(name)+'&t='+Date.now()).then(function(r){if(!r.ok)throw 0;return r.text()}).then(function(t){var R=parseCSV(t);return R.length?build(R[0],R.slice(1)):null}).catch(function(){return null})}
+  function tab(name){return tabS(name).then(function(d){return d||tabG(name)})}
   function has(t){for(var i=1;i<arguments.length;i++)if(t.H.indexOf(arguments[i])<0)return false;return true}
-  function fill(id,sub,html){var el=document.getElementById(id);if(!el)return;var s=el.querySelector('.sub');if(s&&sub)s.textContent=sub;while(el.lastChild&&!(el.lastChild.matches&&el.lastChild.matches('h2,.sub')))el.removeChild(el.lastChild);el.insertAdjacentHTML('beforeend',html)}
+  function fill(id,sub,html){var el=document.getElementById(id);if(!el)return;var s=el.querySelector('.sub');if(s&&sub)s.innerHTML=sub;while(el.lastChild&&!(el.lastChild.matches&&el.lastChild.matches('h2,.sub')))el.removeChild(el.lastChild);el.insertAdjacentHTML('beforeend',html)}
   Promise.all([tab('MENÚ'),tab('PROMOCIONES'),tab('CONTACTO'),tab('MÚSICA')]).then(function(x){
    var M=x[0],P=x[1],C=x[2],S=x[3],sub='';
    if(M&&has(M,'categoria','nombre','precio')){var menu=[],byG={};sub='';
-    M.rows.forEach(function(r){if(norm(r.categoria)==='subtitulo'){sub=r.descripcion;return}if(!r.nombre)return;var g=r.categoria||'Menú';if(!byG[g]){byG[g]={t:g,i:[]};menu.push(byG[g])}byG[g].i.push(r)});
-    if(menu.length)fill('menu',sub,menu.map(function(g){return '<h3>'+esc(g.t)+'</h3>'+g.i.map(function(i){return '<div class="item"><div><b>'+esc(i.nombre)+'</b><p>'+esc(i.descripcion)+'</p></div><span class="price">'+esc(i.precio)+'</span></div>'}).join('')}).join(''))}
+    M.rows.forEach(function(r){if(norm(r.categoria)==='subtitulo'){sub=rt(r,'descripcion');return}if(!r.nombre)return;var g=r.categoria||'Menú';if(!byG[g]){byG[g]={t:g,i:[]};menu.push(byG[g])}byG[g].i.push(r)});
+    if(menu.length)fill('menu',sub,menu.map(function(g){return '<h3>'+esc(g.t)+'</h3>'+g.i.map(function(i){return '<div class="item"><div><b>'+rt(i,'nombre')+'</b><p>'+rt(i,'descripcion')+'</p></div><span class="price">'+rt(i,'precio')+'</span></div>'}).join('')}).join(''))}
    if(P&&has(P,'nombre','descripcion')&&P.H.indexOf('precio')<0&&P.H.indexOf('categoria')<0){var pr=[];sub='';
-    P.rows.forEach(function(r){if(norm(r.nombre)==='subtitulo'){sub=r.descripcion;return}if(r.nombre)pr.push(r)});
-    if(pr.length)fill('promos',sub,pr.map(function(i){return '<div class="promo"><b>'+esc(i.nombre)+'</b><p>'+esc(i.descripcion)+'</p></div>'}).join(''))}
+    P.rows.forEach(function(r){if(norm(r.nombre)==='subtitulo'){sub=rt(r,'descripcion');return}if(r.nombre)pr.push(r)});
+    if(pr.length)fill('promos',sub,pr.map(function(i){return '<div class="promo"><b>'+rt(i,'nombre')+'</b><p>'+rt(i,'descripcion')+'</p></div>'}).join(''))}
    if(C&&has(C,'dato','valor')){var ct=[];sub='';
-    C.rows.forEach(function(r){if(norm(r.dato)==='subtitulo'){sub=r.valor;return}if(r.dato)ct.push(r)});
-    if(ct.length)fill('contacto',sub,ct.map(function(i){return norm(i.dato)==='telefono'?'<p><span>'+esc(i.dato)+'</span><a href="tel:+52'+i.valor.replace(/\D/g,'')+'">'+esc(i.valor)+'</a></p>':'<p><span>'+esc(i.dato)+'</span>'+esc(i.valor)+'</p>'}).join(''))}
+    C.rows.forEach(function(r){if(norm(r.dato)==='subtitulo'){sub=rt(r,'valor');return}if(r.dato)ct.push(r)});
+    if(ct.length)fill('contacto',sub,ct.map(function(i){return norm(i.dato)==='telefono'?'<p><span>'+esc(i.dato)+'</span><a href="tel:+52'+i.valor.replace(/\D/g,'')+'">'+rt(i,'valor')+'</a></p>':'<p><span>'+esc(i.dato)+'</span>'+rt(i,'valor')+'</p>'}).join(''))}
    if(S&&has(S,'archivo')){var okA=/^[\w\-. ]+\.(mp3|m4a|wav|ogg|aac)$/i,okI=/^[\w\-. ]+\.(png|jpe?g|webp|gif)$/i;
     var songs=S.rows.filter(function(r){return okA.test(r.archivo)}).map(function(r){return {t:r.titulo,a:encodeURI(r.archivo),i:okI.test(r.miniatura)?encodeURI(r.miniatura):'',s:r.spotify}});
     if(songs.length&&!au.src){T=songs;info(0)}}
