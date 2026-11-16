@@ -280,7 +280,10 @@ background:#150b19 url(disco.png) center/100% 100% no-repeat;will-change:transfo
  var T=[],cur=0,ready=false,pp=document.getElementById('pp'),tt=document.getElementById('tt'),th=document.getElementById('thumb'),sp=document.getElementById('sp'),ar=document.getElementById('ar');
  try{T=JSON.parse(document.getElementById('tracks').textContent)||[]}catch(e){T=[]}
  function info(n){ready=true;if(!T.length){tt.textContent='Aún no hay canciones';ar.hidden=true;th.hidden=true;sp.hidden=true;return}cur=(n+T.length)%T.length;var k=T[cur];tt.textContent=k.t||'Sin título';ar.textContent=k.r||'';ar.hidden=!k.r;th.hidden=!k.i;if(k.i)th.src=k.i;var ok=/^https:\/\/(open\.spotify\.com|spotify\.link)\//.test(k.s||'');sp.hidden=!ok;if(ok)sp.href=k.s}
- function load(n,play){if(!T.length)return;info(n);if(!T[cur].a)return;au.src=T[cur].a;if(play)au.play().catch(function(){})}
+ var vr=[],vi=0,vp=false;
+ function variants(u){var m=/^https:\/\/drive\.(?:usercontent\.)?google\.com\/(?:download|uc)\?[^#]*?\bid=([\w-]+)/.exec(u)||/^https:\/\/drive\.google\.com\/file\/d\/([\w-]+)/.exec(u);if(!m)return [u];var id=m[1];return ['https://drive.usercontent.google.com/download?id='+id+'&export=download&confirm=t','https://drive.google.com/uc?export=download&id='+id,'https://docs.google.com/uc?export=open&id='+id]}
+ au.addEventListener('error',function(){if(vi<vr.length-1){vi++;au.src=vr[vi];if(vp)au.play().catch(function(){})}});
+ function load(n,play){if(!T.length)return;info(n);if(!T[cur].a)return;vr=variants(T[cur].a);vi=0;vp=!!play;au.src=vr[0];if(play)au.play().catch(function(){})}
  function playCur(){if(!T.length||!T[cur].a)return;if(!au.src)load(cur,true);else au.play().catch(function(){})}
  au.addEventListener('play',function(){paused=false;pp.firstChild.firstChild.setAttribute('d','M6 5h4v14H6zm8 0h4v14h-4z');pp.setAttribute('aria-label','Pausar')});
  au.addEventListener('pause',function(){paused=true;pp.firstChild.firstChild.setAttribute('d','M8 5v14l11-7z');pp.setAttribute('aria-label','Reproducir')});
