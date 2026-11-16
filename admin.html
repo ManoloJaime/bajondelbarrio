@@ -104,7 +104,8 @@ label.f{display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.
  ];
  var IMG={imagen:1,miniatura:1};
  var WIDE={descripcion:1,valor:1};
- var pass='',data={},cur=0,dirty={},busy=false;
+ var pass='',data={},cur=0,dirty={},busy=false,missing={};
+ var DEFENC={'MENÚ':['categoria','nombre','descripcion','precio'],'PROMOCIONES':['nombre','descripcion'],'CONTACTO':['dato','valor'],'MÚSICA':['titulo','archivo','miniatura','spotify','artista'],'SLIDES':['imagen','titulo','descripcion','emoji'],'BOTONES':['nombre','imagen','emoji'],'AJUSTES':['clave','valor']};
  var $=function(id){return document.getElementById(id)};
  function el(tag,cls,txt){var e=document.createElement(tag);if(cls)e.className=cls;if(txt!==undefined)e.textContent=txt;return e}
 
@@ -121,7 +122,7 @@ label.f{display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.
    $('lb').disabled=false;
    if(!r||!r.ok){pass='';$('le').textContent=r&&r.error==='clave'?'Clave incorrecta.':'No se pudo entrar: '+(r&&r.error||'sin respuesta');try{sessionStorage.removeItem('bdb')}catch(e){}return}
    try{sessionStorage.setItem('bdb',p)}catch(e){}
-   data={};HOJAS.forEach(function(h){var x=r.hojas[h.n]||{encabezados:[],filas:[]};data[h.n]={enc:x.encabezados,filas:x.filas.map(function(f){var o=f.slice();while(o.length<x.encabezados.length)o.push('');return o})}});
+   data={};missing={};HOJAS.forEach(function(h){if(!r.hojas[h.n])missing[h.n]=1;var x=r.hojas[h.n]||{encabezados:DEFENC[h.n],filas:[]};if(!x.encabezados||!x.encabezados.length)x.encabezados=DEFENC[h.n];data[h.n]={enc:x.encabezados,filas:x.filas.map(function(f){var o=f.slice();while(o.length<x.encabezados.length)o.push('');return o})}});
    $('login').style.display='none';$('app').style.display='block';$('sb').style.display='flex';dirty={};tabs();draw();upd();
   }).catch(function(){$('lb').disabled=false;pass='';$('le').textContent='No hay conexión con el servidor. Revisa tu internet y que el Apps Script esté desplegado.'});
  }
@@ -156,7 +157,8 @@ label.f{display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.
   if(h.n==='MENÚ'){var dl=document.getElementById('cats');if(!dl){dl=document.createElement('datalist');dl.id='cats';document.body.appendChild(dl)}dl.innerHTML='';cats.concat(['subtitulo']).forEach(function(c){var o=document.createElement('option');o.value=c;dl.appendChild(o)})}
  }
  function drawSpecial(d,box){
-  var ki=d.enc.indexOf('clave'),vi=d.enc.indexOf('valor');if(ki<0||vi<0)return;
+  if(missing.AJUSTES){var w0=el('div','empty','Tu Apps Script todavía no está actualizado, así que esta pestaña aún no puede guardar. Pega el código nuevo de codigo-apps-script.txt y crea una nueva versión de la implementación (Implementar → Administrar implementaciones → editar → Nueva versión).');w0.style.cssText='border-color:#ffc94d;color:#ffc94d;opacity:1;text-align:left';box.appendChild(w0)}
+  var ki=d.enc.indexOf('clave'),vi=d.enc.indexOf('valor');if(ki<0||vi<0){d.enc=['clave','valor'];ki=0;vi=1}
   [['fondo','Fondo de la página','bg'],['icono','Icono de la pestaña','icon']].forEach(function(it){
    var f=null;d.filas.forEach(function(x){if(String(x[ki]).trim().toLowerCase()===it[0])f=x});
    if(!f){f=d.enc.map(function(){return ''});f[ki]=it[0];d.filas.push(f)}
@@ -181,7 +183,7 @@ label.f{display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.
    prep(fl,kind).then(function(o){st.textContent='Subiendo…';return api({accion:'subir',nombre:o.nombre,tipo:o.tipo,datos:o.datos})}).then(function(r){
     up.disabled=false;file.value='';
     if(!r||!r.ok){st.textContent='No se pudo subir: '+(r&&r.error||'sin respuesta');return}
-    f[c]=r.url;inp.value=r.url;show();st.textContent='Imagen subida. Recuerda guardar.';mark()
+    f[c]=r.url;inp.value=r.url;show();st.textContent=r.aviso?'Imagen subida, pero revisa que la carpeta de Drive esté compartida con “Cualquier persona con el enlace”. Recuerda guardar.':'Imagen subida. Recuerda guardar.';mark()
    }).catch(function(e){up.disabled=false;st.textContent='No se pudo subir: '+(e&&e.message||'error de red')})});
   var bar=el('div','');bar.style.cssText='display:flex;gap:8px;align-items:center;flex-wrap:wrap';bar.appendChild(up);bar.appendChild(st);
   col.appendChild(inp);col.appendChild(bar);col.appendChild(file);w.appendChild(pv);w.appendChild(col);show();return w}
@@ -201,7 +203,7 @@ label.f{display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.
   names.forEach(function(n){chain=chain.then(function(){if(fail)return;
    var d=data[n];var filas=d.filas.filter(function(f){return f.some(function(x){return String(x).trim()!==''})});
    return api({accion:'guardar',hoja:n,encabezados:d.enc,filas:filas}).then(function(r){if(!r||!r.ok)fail=(r&&r.error)||'sin respuesta';else{delete dirty[n];d.filas=filas}})})});
-  chain.then(function(){busy=false;tabs();draw();if(fail){status('No se pudo guardar: '+fail,'bad');$('save').disabled=false}else{status('Guardado. La página se actualiza en menos de un minuto.','ok');$('save').disabled=true}})
+  chain.then(function(){busy=false;tabs();draw();if(fail){status(/no permitida/i.test(fail)?'Tu Apps Script no está actualizado: pega el código nuevo y crea una nueva versión de la implementación.':'No se pudo guardar: '+fail,'bad');$('save').disabled=false}else{status('Guardado. La página se actualiza en menos de un minuto.','ok');$('save').disabled=true}})
    .catch(function(){busy=false;status('Error de conexión. Intenta de nuevo.','bad');$('save').disabled=false});
  });
 
