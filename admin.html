@@ -94,18 +94,18 @@ label.f{display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.
  /* Misma dirección del Apps Script que usa la página */
  var SCRIPT_URL='https://script.google.com/macros/s/AKfycbxKURFSbE0L3fuYYyKHwK7_n-WP4JOEbmmwfGamytGOC8iC_u_S-46yCaYk3POH2zrXag/exec';
  var HOJAS=[
-  {n:'MENÚ',t:'Menú',h:'Cada fila es un platillo. En "categoria" escribe el grupo (Hamburguesas, Hot dogs, Boneless, Especiales…). Para el texto de abajo del título "Menú", crea una fila con la categoria "subtitulo" y ponlo en la descripción. Puedes usar **negritas** y *cursivas* con asteriscos.'},
+  {n:'MENÚ',t:'Menú',h:'Cada fila es un platillo. En "categoria" escribe el grupo (Hamburguesas, Hot dogs, Boneless, Especiales…). Para añadir una descripción a una categoría (texto gris debajo de su título), crea una fila con esa categoría, deja "nombre" vacío y escribe el texto en "descripcion". Para el texto de abajo del título "Menú", crea una fila con la categoria "subtitulo" y ponlo en la descripción. Puedes usar **negritas** y *cursivas* con asteriscos.'},
   {n:'PROMOCIONES',t:'Promociones',h:'Cada fila es una promoción. Para el subtítulo de la sección, usa una fila con el nombre "subtitulo".'},
   {n:'CONTACTO',t:'Contacto',h:'Cada fila es un dato (Dirección, Teléfono, Horario, Instagram…). Para el subtítulo de la sección, usa una fila con "subtitulo" en "dato".'},
   {n:'MÚSICA',t:'Música',h:'Lista de canciones, en el orden en que suenan. "archivo" es el nombre del mp3 que subiste a GitHub. "miniatura" puede ser un nombre de archivo de GitHub o una imagen que subas desde aquí. "spotify" es opcional.'},
   {n:'SLIDES',t:'Carrusel',h:'Imágenes que pasan cada 5 segundos en el inicio. Lo ideal son fotos horizontales 16:9 (por ejemplo 1600×900). Si dejas la imagen vacía se muestra el emoji.'},
   {n:'AJUSTES',t:'Apariencia',special:1,h:'Cambia la imagen de fondo de toda la página y el icono que se ve en la pestaña del navegador. Para el fondo funcionan mejor imágenes oscuras (se ve detrás de todo el contenido). El icono se recorta cuadrado, y conviene una imagen sencilla que se reconozca pequeña. Si quitas una imagen, la página vuelve a su diseño original.'},
-  {n:'BOTONES',t:'Botones',h:'Los 4 botones bajo el carrusel. El "nombre" debe coincidir con una categoría del menú para que el botón lleve hasta ella (Especiales, Hamburguesas, Boneless, Hot dogs).'}
+  {n:'BOTONES',t:'Botones',h:'Los 4 botones bajo el carrusel. En "categoria" elige a qué sección del menú lleva cada botón: al tocarlo se abre el menú con solo esa categoría desplegada y las demás plegadas. Si la dejas vacía, se usa el "nombre" del botón.'}
  ];
  var IMG={imagen:1,miniatura:1};
  var WIDE={descripcion:1,valor:1};
  var pass='',data={},cur=0,dirty={},busy=false,missing={};
- var DEFENC={'MENÚ':['categoria','nombre','descripcion','precio'],'PROMOCIONES':['nombre','descripcion'],'CONTACTO':['dato','valor'],'MÚSICA':['titulo','archivo','miniatura','spotify','artista'],'SLIDES':['imagen','titulo','descripcion','emoji'],'BOTONES':['nombre','imagen','emoji'],'AJUSTES':['clave','valor']};
+ var DEFENC0=0;var DEFENC={'MENÚ':['categoria','nombre','descripcion','precio'],'PROMOCIONES':['nombre','descripcion'],'CONTACTO':['dato','valor'],'MÚSICA':['titulo','archivo','miniatura','spotify','artista'],'SLIDES':['imagen','titulo','descripcion','emoji'],'BOTONES':['nombre','imagen','emoji','categoria'],'AJUSTES':['clave','valor']};
  var $=function(id){return document.getElementById(id)};
  function el(tag,cls,txt){var e=document.createElement(tag);if(cls)e.className=cls;if(txt!==undefined)e.textContent=txt;return e}
 
@@ -122,7 +122,7 @@ label.f{display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.
    $('lb').disabled=false;
    if(!r||!r.ok){pass='';$('le').textContent=r&&r.error==='clave'?'Clave incorrecta.':'No se pudo entrar: '+(r&&r.error||'sin respuesta');try{sessionStorage.removeItem('bdb')}catch(e){}return}
    try{sessionStorage.setItem('bdb',p)}catch(e){}
-   data={};missing={};HOJAS.forEach(function(h){if(!r.hojas[h.n])missing[h.n]=1;var x=r.hojas[h.n]||{encabezados:DEFENC[h.n],filas:[]};if(!x.encabezados||!x.encabezados.length)x.encabezados=DEFENC[h.n];data[h.n]={enc:x.encabezados,filas:x.filas.map(function(f){var o=f.slice();while(o.length<x.encabezados.length)o.push('');return o})}});
+   data={};missing={};HOJAS.forEach(function(h){if(!r.hojas[h.n])missing[h.n]=1;var x=r.hojas[h.n]||{encabezados:DEFENC[h.n],filas:[]};if(!x.encabezados||!x.encabezados.length)x.encabezados=DEFENC[h.n];if(h.n==='BOTONES'&&x.encabezados.indexOf('categoria')<0)x.encabezados=x.encabezados.concat(['categoria']);data[h.n]={enc:x.encabezados,filas:x.filas.map(function(f){var o=f.slice();while(o.length<x.encabezados.length)o.push('');return o})}});
    $('login').style.display='none';$('app').style.display='block';$('sb').style.display='flex';dirty={};tabs();draw();upd();
   }).catch(function(){$('lb').disabled=false;pass='';$('le').textContent='No hay conexión con el servidor. Revisa tu internet y que el Apps Script esté desplegado.'});
  }
@@ -136,6 +136,7 @@ label.f{display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.
  function upd(){var any=Object.keys(dirty).length>0;$('save').disabled=busy||!any;if(!busy)status(any?'Hay cambios sin guardar.':'Sin cambios.',any?'warn':'')}
 
  /* ---- filas ---- */
+ function menuCats(){var m=data['MENÚ'];var o=[];if(!m)return o;var ci=m.enc.indexOf('categoria');m.filas.forEach(function(f){var v=f[ci];if(v&&o.indexOf(v)<0&&v.toLowerCase()!=='subtitulo')o.push(v)});return o}
  function draw(){
   var h=HOJAS[cur],d=data[h.n];$('hint').textContent=h.h;var box=$('rows');box.innerHTML='';
   $('add').style.display=h.special?'none':'';
@@ -149,6 +150,7 @@ label.f{display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.
     var lab=el('label','f',col);w.appendChild(lab);
     if(IMG[key])w.appendChild(imgField(f,c,lab));
     else if(WIDE[key]){var ta=document.createElement('textarea');ta.value=f[c]||'';ta.rows=2;ta.setAttribute('aria-label',col);ta.addEventListener('input',function(){f[c]=ta.value;mark()});w.appendChild(ta)}
+    else if(h.n==='BOTONES'&&key==='categoria'){var sel=document.createElement('select');sel.setAttribute('aria-label',col);var mc=menuCats();var cur0=f[c]||'';if(cur0&&mc.indexOf(cur0)<0)mc.push(cur0);[''].concat(mc).forEach(function(v){var o=document.createElement('option');o.value=v;o.textContent=v||'(igual que el nombre del botón)';sel.appendChild(o)});sel.value=cur0;sel.addEventListener('change',function(){f[c]=sel.value;mark()});w.appendChild(sel)}
     else{var inp=document.createElement('input');inp.type='text';inp.value=f[c]||'';inp.setAttribute('aria-label',col);if(h.n==='MENÚ'&&key==='categoria'){inp.setAttribute('list','cats')}inp.addEventListener('input',function(){f[c]=inp.value;mark()});w.appendChild(inp)}
     fl.appendChild(w)});
    var ac=el('div','acts');

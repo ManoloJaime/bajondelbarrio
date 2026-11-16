@@ -39,7 +39,7 @@ background:#150b19 url(disco.png) center/100% 100% no-repeat;will-change:transfo
 .panel.on{opacity:1;pointer-events:auto;transform:none}
 .panel h2{font-size:clamp(2.2rem,5vw,3.6rem);color:var(--red);margin-bottom:6px}
 .panel .sub{margin:0 0 22px;opacity:.75;max-width:46ch}
-.panel h3{font-size:1.2rem;margin:22px 0 10px;padding-bottom:6px;border-bottom:2px solid var(--brown)}
+#menu h3{font-size:2rem;margin:34px 0 6px;padding-bottom:6px;border-bottom:2px solid var(--brown)}#menu h3.cj{cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px;user-select:none;-webkit-tap-highlight-color:transparent}#menu h3.cj::after{content:'';flex:none;width:12px;height:12px;border-right:3px solid var(--red);border-bottom:3px solid var(--red);transform:rotate(45deg) translate(-3px,-3px);transition:transform .3s}#menu h3.cj.shut::after{transform:rotate(-45deg)}#menu h3.cj:hover{color:#fff}#menu h3.cj:focus-visible{outline:2px solid var(--red);outline-offset:3px}#menu .cw{display:grid;grid-template-rows:1fr;transition:grid-template-rows .35s ease}#menu .cw.shut{grid-template-rows:0fr}#menu .cin{overflow:hidden;min-height:0}#menu h3+.item,#menu .cdesc+.item{margin-top:14px}#menu .cdesc{margin:8px 0 0;color:#c9c9c9;font-size:.95rem;line-height:1.45}.panel h3{font-size:1.2rem;margin:22px 0 10px;padding-bottom:6px;border-bottom:2px solid var(--brown)}
 .item{display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px dashed var(--brown)}
 .item b{font-family:Anton,Impact,sans-serif;font-weight:400;font-size:1.25rem;letter-spacing:.02em}
 .item p{margin:3px 0 0;font-size:.9rem;opacity:.8;max-width:42ch}
@@ -148,10 +148,10 @@ background:#150b19 url(disco.png) center/100% 100% no-repeat;will-change:transfo
  .panel{padding-top:300px}
  .deck{top:112px;width:min(70vw,300px);transform:translate(-50%,calc(0px - var(--sy,0px)))}
 }
-:root{--rc:clamp(300px,27vw,400px)}
-@media (min-width:761px){.deck{left:calc(100% - 3vw - var(--rc)/2);top:50%;width:min(40vh,calc(var(--rc)*.85),340px)}.player{width:var(--rc);max-width:none;margin-left:0;position:relative;left:50%;transform:translateX(-50%)}}
-.showcase{position:absolute;left:3vw;top:50%;transform:translateY(-50%);width:min(calc(100vw - var(--rc) - 6vw - 40px),1200px,calc((100vh - 250px)*16/9));display:flex;flex-direction:column;gap:12px;transition:opacity .45s}
-.slides{position:relative;width:100%;aspect-ratio:16/9;border:2px solid var(--red);border-radius:14px;overflow:hidden;background:#111;box-shadow:0 20px 60px rgba(0,0,0,.7),0 0 70px rgba(120,8,8,.4)}
+:root{--rc:clamp(300px,27vw,400px);--dw:min(40vh,calc(var(--rc)*.85),340px)}
+@media (min-width:761px){.deck{left:calc(100% - 3vw - var(--rc)/2);top:50%;width:var(--dw)}.player{width:var(--rc);max-width:none;margin-left:0;position:relative;left:50%;transform:translateX(-50%)}}
+.showcase{position:absolute;left:3vw;top:50%;transform:translateY(-50%);width:max(calc(var(--dw)*2.2),min(calc(100vw - var(--rc) - 6vw - 40px),70.4vw,1600px,calc((100vh - 250px)*2.35)));display:flex;flex-direction:column;gap:12px;transition:opacity .45s}
+.slides{position:relative;width:100%;aspect-ratio:2.35/1;border:2px solid var(--red);border-radius:14px;overflow:hidden;background:#111;box-shadow:0 20px 60px rgba(0,0,0,.7),0 0 70px rgba(120,8,8,.4)}
 .open .showcase{opacity:0;pointer-events:none}
 @keyframes ldspin{to{transform:rotate(360deg)}}
 .spin{display:block;width:34px;height:34px;border:4px solid rgba(255,255,255,.18);border-top-color:var(--red);border-radius:50%;animation:ldspin .8s linear infinite}
@@ -180,12 +180,13 @@ background:#150b19 url(disco.png) center/100% 100% no-repeat;will-change:transfo
 .sl:nth-child(3n+3){background:linear-gradient(135deg,#a11818,#3b1010)}
 .sl.on{opacity:1}
 .sl img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.sl .em{font-size:clamp(4rem,10vw,8rem);line-height:1;filter:drop-shadow(0 8px 14px rgba(0,0,0,.5))}
+.sl .em{font-size:clamp(3rem,6vw,6rem);line-height:1;margin-top:-26px;filter:drop-shadow(0 8px 14px rgba(0,0,0,.5))}
 .sl .cap{position:absolute;left:0;right:0;bottom:0;padding:48px 18px 36px;background:linear-gradient(transparent,rgba(0,0,0,.82));color:#fff}
 .sl .cap b{display:block;font-family:Anton,Impact,sans-serif;font-weight:400;font-size:clamp(1.2rem,2.2vw,1.8rem);letter-spacing:.02em}
 .sl .cap span{display:block;font-size:.9rem;opacity:.85;margin-top:2px}
 .sl-dots{position:absolute;left:14px;right:14px;bottom:14px;display:flex;gap:6px;z-index:2}
 .sl-dots .seg{flex:1;height:6px;padding:0;border:0;border-radius:3px;background:rgba(255,255,255,.3);cursor:pointer;overflow:hidden;position:relative}
+.sl-arr{position:absolute;top:50%;z-index:6;width:38px;height:38px;margin-top:-30px;padding:0;border:0;border-radius:50%;background:rgba(10,10,10,.55);cursor:pointer;opacity:.75;transition:opacity .2s,background .2s;display:grid;place-items:center;-webkit-tap-highlight-color:transparent}.sl-arr::before{content:'';width:10px;height:10px;border-top:3px solid #fff;border-right:3px solid #fff}.sl-arr.prev{left:10px}.sl-arr.prev::before{transform:rotate(-135deg) translate(-1px,1px)}.sl-arr.next{right:10px}.sl-arr.next::before{transform:rotate(45deg) translate(-1px,1px)}.sl-arr:hover,.sl-arr:focus-visible{opacity:1;background:var(--red)}.sl-arr[hidden]{display:none}@media (max-width:760px){.sl-arr{width:32px;height:32px;margin-top:-26px}.sl-arr.prev{left:6px}.sl-arr.next{right:6px}}
 .sl-dots .seg i{position:absolute;inset:0;background:var(--red);transform:scaleX(0);transform-origin:left}
 .sl-dots .seg.done i{transform:scaleX(1)}
 .sl-dots .seg.act i{animation:segfill 5s linear forwards}
@@ -193,9 +194,9 @@ background:#150b19 url(disco.png) center/100% 100% no-repeat;will-change:transfo
 @keyframes segfill{from{transform:scaleX(0)}to{transform:scaleX(1)}}
 .sl-dots[hidden]{display:none}
 @media (min-width:761px) and (max-width:1000px){.player #thumb,.ph{width:80px;height:80px}}
-@media (max-width:760px){.showcase{position:relative;left:auto;top:auto;transform:none;width:100%;margin-top:14px}.open .showcase{display:none}.sl .em{font-size:3rem;margin-top:-34px}.sl .cap{padding:30px 14px 28px}.tiles{grid-template-columns:repeat(2,1fr)}.tile .em{font-size:2rem}.tile .nm{font-size:.85rem}.panel h3{scroll-margin-top:120px}}
+@media (max-width:760px){.slides{aspect-ratio:16/9}.showcase{position:relative;left:auto;top:auto;transform:none;width:100%;margin-top:14px}.open .showcase{display:none}.sl .em{font-size:3rem;margin-top:-34px}.sl .cap{padding:30px 14px 28px}.tiles{grid-template-columns:repeat(2,1fr)}.tile .em{font-size:2rem}.tile .nm{font-size:.85rem}.panel h3{scroll-margin-top:120px}}
 @media (prefers-reduced-motion:reduce){.sl{transition:none}}
-@media (min-width:761px) and (max-width:960px){.deck{display:none}.showcase{left:50%;transform:translate(-50%,-50%);width:max(320px,min(92vw,900px,calc((100vh - 380px)*16/9)))}.showcase .player{position:static;transform:none;width:100%;max-width:440px;margin:0 auto}body.menu-open nav .mm{display:grid;place-items:center;position:absolute;top:10px;right:12px;width:38px;height:38px;padding:0;border:2px solid var(--brown);border-radius:50%;background:rgba(10,10,10,.6);color:rgba(255,255,255,.8)}body.menu-open nav .mm.on{color:#fff;background:var(--red);border-color:var(--red)}}
+@media (min-width:761px) and (max-width:960px){.deck{display:none}.showcase{left:50%;transform:translate(-50%,-50%);width:max(320px,min(92vw,900px,calc((100vh - 380px)*2.35)))}.showcase .player{position:static;transform:none;width:100%;max-width:none;margin:0;order:-1}.showcase .player #thumb,.showcase .player .ph{width:88px;height:88px}.showcase .player{padding:14px 20px}.showcase .vpop{bottom:auto;top:100%;padding-bottom:0;padding-top:8px}body.menu-open nav .mm{display:grid;place-items:center;position:absolute;top:10px;right:12px;width:38px;height:38px;padding:0;border:2px solid var(--brown);border-radius:50%;background:rgba(10,10,10,.6);color:rgba(255,255,255,.8)}body.menu-open nav .mm.on{color:#fff;background:var(--red);border-color:var(--red)}}
 @media (prefers-reduced-motion:reduce){.vinyl{animation:none}.deck,.panel{transition:none}}
 </style>
 </head>
@@ -220,9 +221,9 @@ background:#150b19 url(disco.png) center/100% 100% no-repeat;will-change:transfo
   <p class="hint">Arrastra el disco para rifear. Tócalo para pausar o reanudar.</p>
  </div>
 
- <div class="showcase" id="showcase"><aside class="slides" id="slides" aria-label="Imágenes del menú y promociones" aria-roledescription="carrusel"><div class="sl-track" id="slTrack"></div><div class="sl-dots" id="slDots"></div><div class="sl-load" id="slLoad" role="status" aria-label="Cargando imágenes"><span class="spin"></span></div></aside><div class="tiles" id="tiles"><button type="button" class="tile skel" tabindex="-1" aria-hidden="true"><span class="spin"></span></button><button type="button" class="tile skel" tabindex="-1" aria-hidden="true"><span class="spin"></span></button><button type="button" class="tile skel" tabindex="-1" aria-hidden="true"><span class="spin"></span></button><button type="button" class="tile skel" tabindex="-1" aria-hidden="true"><span class="spin"></span></button></div></div>
+ <div class="showcase" id="showcase"><aside class="slides" id="slides" aria-label="Imágenes del menú y promociones" aria-roledescription="carrusel"><div class="sl-track" id="slTrack"></div><button type="button" class="sl-arr prev" id="slPrev" aria-label="Imagen anterior" hidden></button><button type="button" class="sl-arr next" id="slNext" aria-label="Imagen siguiente" hidden></button><div class="sl-dots" id="slDots"></div><div class="sl-load" id="slLoad" role="status" aria-label="Cargando imágenes"><span class="spin"></span></div></aside><div class="tiles" id="tiles"><button type="button" class="tile skel" tabindex="-1" aria-hidden="true"><span class="spin"></span></button><button type="button" class="tile skel" tabindex="-1" aria-hidden="true"><span class="spin"></span></button><button type="button" class="tile skel" tabindex="-1" aria-hidden="true"><span class="spin"></span></button><button type="button" class="tile skel" tabindex="-1" aria-hidden="true"><span class="spin"></span></button></div></div>
 
- <section class="panel" id="menu" aria-label="Menú"><h2>Menú</h2><p class="sub">Carne al carbón, pan tostado en mantequilla y salsa de la casa.</p><h3>Especiales</h3><div class="item"><div><b>Combo Bajón</b><p>Hamburguesa de la casa, papas y refresco.</p></div><span class="price">$165</span></div><h3>Hamburguesas</h3><div class="item"><div><b>Doble Rima</b><p>Doble carne, cheddar, tocino crujiente, cebolla caramelizada y salsa BBQ.</p></div><span class="price">$145</span></div><div class="item"><div><b>Brava 808</b><p>Carne, queso pepper jack, jalapeño, aderezo chipotle y cebolla morada.</p></div><span class="price">$135</span></div><div class="item"><div><b>Flow Clásica</b><p>Carne de res, queso americano, lechuga, jitomate y mayonesa de la casa.</p></div><span class="price">$110</span></div><h3>Boneless</h3><div class="item"><div><b>Boneless BBQ</b><p>10 piezas con aderezo a elegir.</p></div><span class="price">$120</span></div><h3>Hot dogs</h3><div class="item"><div><b>Street Dog</b><p>Salchicha, tocino, cebolla caramelizada, mostaza y catsup.</p></div><span class="price">$75</span></div><div class="item"><div><b>El Freestyle</b><p>Salchicha, chili con carne, queso fundido y jalapeños.</p></div><span class="price">$85</span></div></section>
+ <section class="panel" id="menu" aria-label="Menú"><h2>Menú</h2><p class="sub">Carne al carbón, pan tostado en mantequilla y salsa de la casa.</p><h3>Especiales</h3><div class="item"><div><b>Combo Bajón</b><p>Hamburguesa de la casa, papas y refresco.</p></div><span class="price">$165</span></div><h3>Hamburguesas</h3><p class="cdesc">Carne al carbón, pan tostado en mantequilla y salsa de la casa.</p><div class="item"><div><b>Doble Rima</b><p>Doble carne, cheddar, tocino crujiente, cebolla caramelizada y salsa BBQ.</p></div><span class="price">$145</span></div><div class="item"><div><b>Brava 808</b><p>Carne, queso pepper jack, jalapeño, aderezo chipotle y cebolla morada.</p></div><span class="price">$135</span></div><div class="item"><div><b>Flow Clásica</b><p>Carne de res, queso americano, lechuga, jitomate y mayonesa de la casa.</p></div><span class="price">$110</span></div><h3>Boneless</h3><div class="item"><div><b>Boneless BBQ</b><p>10 piezas con aderezo a elegir.</p></div><span class="price">$120</span></div><h3>Hot dogs</h3><p class="cdesc">Salchicha asada con todo el sabor de la calle.</p><div class="item"><div><b>Street Dog</b><p>Salchicha, tocino, cebolla caramelizada, mostaza y catsup.</p></div><span class="price">$75</span></div><div class="item"><div><b>El Freestyle</b><p>Salchicha, chili con carne, queso fundido y jalapeños.</p></div><span class="price">$85</span></div></section>
 
  <section class="panel" id="promos" aria-label="Promociones"><h2>Promociones</h2><p class="sub">Aprovecha antes de que cambie el track.</p><div class="promo"><b>Combo Mic Drop</b><p>Doble Rima + papas + refresco por $185.</p></div><div class="promo"><b>Martes 2x1 en hot dogs</b><p>Pide un Street Dog o un Freestyle y llévate otro gratis.</p></div><div class="promo"><b>Jueves de Brava</b><p>Brava 808 con papas a $120.</p></div></section>
 
@@ -244,8 +245,10 @@ background:#150b19 url(disco.png) center/100% 100% no-repeat;will-change:transfo
   show(b.getAttribute('aria-current')==='true'?null:b.dataset.p);
  })});
  document.getElementById('home').addEventListener('click',function(e){e.preventDefault();show(null)});
+ window.__wrapMenu=function(){var m=document.getElementById('menu');if(!m)return;var hs=[].slice.call(m.children).filter(function(e){return e.tagName==='H3'});hs.forEach(function(h){var w=document.createElement('div');w.className='cw';var c=document.createElement('div');c.className='cin';w.appendChild(c);var n=h.nextSibling;while(n&&!(n.nodeType===1&&n.tagName==='H3')){var x=n.nextSibling;c.appendChild(n);n=x}h.parentNode.insertBefore(w,n);h.classList.add('cj');h.setAttribute('role','button');h.tabIndex=0;h.setAttribute('aria-expanded','true');var t=function(){var s=!w.classList.contains('shut');w.classList.toggle('shut',s);h.classList.toggle('shut',s);h.setAttribute('aria-expanded',String(!s))};h.addEventListener('click',t);h.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();t()}})})};
+ (function(){var m=document.getElementById('menu');window.__wrapMenu();if(window.MutationObserver&&m)new MutationObserver(function(){if([].some.call(m.children,function(e){return e.tagName==='H3'}))window.__wrapMenu()}).observe(m,{childList:true})})();
  window.__openMenu=function(cat){show('menu');var q=String(cat||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim().toLowerCase();if(!q)return;
-  var hs=document.querySelectorAll('#menu h3');for(var i=0;i<hs.length;i++){var t=hs[i].textContent.normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim().toLowerCase();if(t===q||t.indexOf(q)>-1||q.indexOf(t)>-1){(function(h){requestAnimationFrame(function(){h.scrollIntoView({behavior:'smooth',block:'start'})})})(hs[i]);return}}};
+  var hs=document.querySelectorAll('#menu h3');for(var i=0;i<hs.length;i++){var t=hs[i].textContent.normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim().toLowerCase();if(t===q||t.indexOf(q)>-1||q.indexOf(t)>-1){(function(h){for(var k=0;k<hs.length;k++){if(hs[k].classList.contains('shut')!==(hs[k]!==h))hs[k].click()}setTimeout(function(){h.scrollIntoView({behavior:'smooth',block:'start'})},400)})(hs[i]);return}}};
  var v=document.getElementById('vinyl');
  var au=document.getElementById('au'),AS=null,energy=0,ang=0,base=72,vel=72,drag=false,last=0,lastA=0,moved=0,paused=false,t0=performance.now(),ac,gain,filt,osc,og;
  if(window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches){base=0;vel=0}
@@ -349,8 +352,8 @@ background:#150b19 url(disco.png) center/100% 100% no-repeat;will-change:transfo
   Promise.all([tab('MENÚ'),tab('PROMOCIONES'),tab('CONTACTO'),tab('MÚSICA'),tab('SLIDES'),tab('BOTONES'),tab('AJUSTES')]).then(function(x){
    var M=x[0],P=x[1],C=x[2],S=x[3],sub='';
    if(M&&has(M,'categoria','nombre','precio')){var menu=[],byG={};sub='';
-    M.rows.forEach(function(r){if(norm(r.categoria)==='subtitulo'){sub=rt(r,'descripcion');return}if(!r.nombre)return;var g=r.categoria||'Menú';if(!byG[g]){byG[g]={t:g,i:[]};menu.push(byG[g])}byG[g].i.push(r)});
-    if(menu.length)fill('menu',sub,menu.map(function(g){return '<h3>'+esc(g.t)+'</h3>'+g.i.map(function(i){return '<div class="item"><div><b>'+rt(i,'nombre')+'</b><p>'+rt(i,'descripcion')+'</p></div><span class="price">'+rt(i,'precio')+'</span></div>'}).join('')}).join(''))}
+    M.rows.forEach(function(r){if(norm(r.categoria)==='subtitulo'){sub=rt(r,'descripcion');return}var g=r.categoria||'Menú';if(!r.nombre){if(r.descripcion){if(!byG[g]){byG[g]={t:g,i:[]};menu.push(byG[g])}byG[g].d=rt(r,'descripcion')}return}if(!byG[g]){byG[g]={t:g,i:[]};menu.push(byG[g])}byG[g].i.push(r)});
+    if(menu.length)fill('menu',sub,menu.map(function(g){return '<h3>'+esc(g.t)+'</h3>'+(g.d?'<p class="cdesc">'+g.d+'</p>':'')+g.i.map(function(i){return '<div class="item"><div><b>'+rt(i,'nombre')+'</b><p>'+rt(i,'descripcion')+'</p></div><span class="price">'+rt(i,'precio')+'</span></div>'}).join('')}).join(''))}
    if(P&&has(P,'nombre','descripcion')&&P.H.indexOf('precio')<0&&P.H.indexOf('categoria')<0){var pr=[];sub='';
     P.rows.forEach(function(r){if(norm(r.nombre)==='subtitulo'){sub=rt(r,'descripcion');return}if(r.nombre)pr.push(r)});
     if(pr.length)fill('promos',sub,pr.map(function(i){return '<div class="promo"><b>'+rt(i,'nombre')+'</b><p>'+rt(i,'descripcion')+'</p></div>'}).join(''))}
@@ -365,7 +368,7 @@ background:#150b19 url(disco.png) center/100% 100% no-repeat;will-change:transfo
      if(k==='fondo'){document.body.style.background='radial-gradient(ellipse at 30% 40%,rgba(92,42,20,.45),rgba(10,10,10,0) 70%),url("'+u.replace(/"/g,'%22')+'") center/cover no-repeat fixed #0a0a0a'}
      else if(k==='icono'){var L=document.querySelector('link[rel~="icon"]');if(!L){L=document.createElement('link');L.rel='icon';document.head.appendChild(L)}L.removeAttribute('type');L.href=u}})}
    var BT=x[5];if(BT&&has(BT,'nombre','imagen')&&BT.H.indexOf('archivo')<0){var okB=/^([\w\-. ]+\.(png|jpe?g|webp|gif)|https:\/\/\S+)$/i;
-    var bl=BT.rows.filter(function(r){return r.nombre}).map(function(r){var im=(r.imagen||'').trim();return {n:r.nombre,img:okB.test(im)?(/^https:/i.test(im)?im:encodeURI(im)):'',e:r.emoji||''}});
+    var bl=BT.rows.filter(function(r){return r.nombre}).map(function(r){var im=(r.imagen||'').trim();return {n:r.nombre,c:(r.categoria||'').trim(),img:okB.test(im)?(/^https:/i.test(im)?im:encodeURI(im)):'',e:r.emoji||''}});
     if(window.__setTiles)window.__setTiles(bl)}
    if(S&&has(S,'archivo')){var okA=/^[\w\-. ]+\.(mp3|m4a|wav|ogg|aac)$/i,okI=/^([\w\-. ]+\.(png|jpe?g|webp|gif)|https:\/\/\S+)$/i;
     var songs=S.rows.filter(function(r){return okA.test(r.archivo)}).map(function(r){return {t:r.titulo,a:encodeURI(r.archivo),i:okI.test(r.miniatura)?encodeURI(r.miniatura):'',s:r.spotify,r:r.artista||r.artistas||r.artist||r.autor||r.cantante||r.interprete||''}});
@@ -383,12 +386,13 @@ background:#150b19 url(disco.png) center/100% 100% no-repeat;will-change:transfo
    if(s.img){d.classList.add('wi');var sp=document.createElement('div');sp.className='sp';sp.appendChild(Object.assign(document.createElement('span'),{className:'spin'}));d.appendChild(sp);var im=new Image();im.alt=s.t||'';im.decoding='async';im.onload=function(){d.classList.add('ld')};im.onerror=function(){im.remove();sp.remove();d.classList.remove('wi');emo()};im.src=s.img;d.appendChild(im)}else emo();
    if(s.t||s.d){var c=document.createElement('div');c.className='cap';if(s.t){var b=document.createElement('b');b.textContent=s.t;c.appendChild(b)}if(s.d){var p=document.createElement('span');p.textContent=s.d;c.appendChild(p)}d.appendChild(c)}
    return d}
-  function render(l){list=l;tr.innerHTML='';dots.innerHTML='';l.forEach(function(s,k){tr.appendChild(card(s,k,l.length));var b=document.createElement('button');b.type='button';b.className='seg';b.appendChild(document.createElement('i'));b.setAttribute('aria-label','Ir a la imagen '+(k+1));b.addEventListener('click',function(){go(k)});b.firstChild.addEventListener('animationend',function(){go((k+1)%list.length)});dots.appendChild(b)});dots.hidden=l.length<2;go(0);restart()}
+  function render(l){list=l;tr.innerHTML='';dots.innerHTML='';l.forEach(function(s,k){tr.appendChild(card(s,k,l.length));var b=document.createElement('button');b.type='button';b.className='seg';b.appendChild(document.createElement('i'));b.setAttribute('aria-label','Ir a la imagen '+(k+1));b.addEventListener('click',function(){go(k)});b.firstChild.addEventListener('animationend',function(){go((k+1)%list.length)});dots.appendChild(b)});dots.hidden=l.length<2;pv.hidden=nx.hidden=l.length<2;go(0);restart()}
+  var pv=document.getElementById('slPrev'),nx=document.getElementById('slNext');pv.addEventListener('click',function(){go((cur-1+list.length)%list.length)});nx.addEventListener('click',function(){go((cur+1)%list.length)});
   var mm2=window.matchMedia('(min-width:761px) and (max-width:960px)'),pl=document.getElementById('player');
   function place(){var hint=deck.querySelector('.hint');
    if(pl.parentNode!==deck)deck.insertBefore(pl,hint);
    if(mq.matches){if(box.parentNode!==deck)deck.appendChild(box)}
-   else{if(box.parentNode!==stage)stage.insertBefore(box,stage.querySelector('.panel'));if(mm2.matches)box.appendChild(pl)}}
+   else{if(box.parentNode!==stage)stage.insertBefore(box,stage.querySelector('.panel'));if(mm2.matches)box.insertBefore(pl,box.firstChild)}}
   root.addEventListener('mouseenter',function(){hover=true});root.addEventListener('mouseleave',function(){hover=false});root.addEventListener('focusin',function(){hover=true});root.addEventListener('focusout',function(){hover=false});
   if(mq.addEventListener){mq.addEventListener('change',place);mm2.addEventListener('change',place)}place();
   var slOK=false,tlOK=false,ld=document.getElementById('slLoad');dots.hidden=true;
@@ -398,7 +402,7 @@ background:#150b19 url(disco.png) center/100% 100% no-repeat;will-change:transfo
    function emo(){var e=document.createElement('span');e.className='em';e.textContent=s.e||'🍔';b.insertBefore(e,b.firstChild)}
    if(s.img){b.classList.add('wi');var sp=document.createElement('span');sp.className='sp';sp.appendChild(Object.assign(document.createElement('span'),{className:'spin'}));b.appendChild(sp);var im=new Image();im.alt='';im.decoding='async';im.onload=function(){b.classList.add('ld')};im.onerror=function(){im.remove();sp.remove();b.classList.remove('wi');emo()};im.src=s.img;b.appendChild(im)}else emo();
    var nm=document.createElement('span');nm.className='nm';nm.textContent=s.n;b.appendChild(nm);
-   b.addEventListener('click',function(){if(window.__openMenu)window.__openMenu(s.n)});tiles.appendChild(b)})}
+   b.addEventListener('click',function(){if(window.__openMenu)window.__openMenu(s.c||s.n)});tiles.appendChild(b)})}
   window.__setTiles=function(l){if(l&&l.length){tlOK=true;rtiles(l)}};
   window.__fallbackShowcase=function(){if(!slOK){slOK=true;render(DEF);if(ld)ld.classList.add('off')}if(!tlOK){tlOK=true;rtiles(TD)}}})();
   /* Abrir una sección directo desde la dirección: #menu, #promociones o #contacto (también ?s=menu) */
