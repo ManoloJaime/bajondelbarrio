@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Panel de edición · Bajón del Barrio</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Work+Sans:wght@400;600&display=swap">
+<style>
+:root{--red:#d62828;--black:#0a0a0a;--brown:#5c2a14;--brown2:#2a140c;--white:#f7f3ee;--card:#171210;--line:#3a2418}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--black);color:var(--white);font-family:'Work Sans',system-ui,sans-serif}
+body{min-height:100vh;background:radial-gradient(ellipse at 20% 0%,var(--brown2),var(--black) 60%)}
+h1,h2{font-family:Anton,Impact,sans-serif;font-weight:400;letter-spacing:.02em;margin:0}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid var(--white);outline-offset:2px}
+a.btn{color:inherit;display:inline-block}
+.btn{background:var(--red);border:2px solid var(--red);border-radius:999px;padding:9px 18px;font-weight:600}
+.btn.ghost{background:none;border-color:var(--brown)}
+.btn.ghost:hover{border-color:var(--red)}
+.btn:disabled{opacity:.4;cursor:default}
+/* acceso */
+#login{max-width:380px;margin:14vh auto 0;padding:28px 24px;background:var(--card);border:2px solid var(--red);border-radius:16px;text-align:center}
+#login h1{font-size:2rem;margin-bottom:6px}
+#login p{margin:0 0 18px;opacity:.7;font-size:.95rem}
+#login input{width:100%;padding:12px 14px;border-radius:10px;border:2px solid var(--line);background:#0e0a09;color:var(--white);font-size:1rem;margin-bottom:12px}
+#login .err{color:#ff7a7a;min-height:1.3em;margin:8px 0 0;font-size:.9rem}
+/* panel */
+#app{display:none;max-width:980px;margin:0 auto;padding:0 16px 120px}
+header.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:18px 0 8px}
+header.top h1{font-size:1.6rem}
+header.top h1 span{color:var(--red)}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 18px;position:sticky;top:0;background:rgba(10,10,10,.94);padding:10px 0;z-index:5;backdrop-filter:blur(6px)}
+.tabs button{background:none;border:2px solid transparent;border-radius:999px;padding:8px 14px;font-weight:600;font-size:.95rem}
+.tabs button:hover{border-color:var(--brown)}
+.tabs button[aria-selected="true"]{background:var(--red);border-color:var(--red)}
+.tabs .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#ffc94d;margin-left:6px;vertical-align:middle}
+.hint{opacity:.7;font-size:.92rem;margin:0 0 16px;line-height:1.45}
+.row{background:var(--card);border:2px solid var(--line);border-radius:12px;padding:12px;margin-bottom:10px;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:start}
+.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.fields .wide{grid-column:1/-1}
+label.f{display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;opacity:.65;margin-bottom:4px}
+.row input[type=text],.row textarea{width:100%;padding:9px 10px;border-radius:8px;border:2px solid var(--line);background:#0e0a09;color:var(--white);font:inherit;font-size:.95rem}
+.row textarea{resize:vertical;min-height:62px}
+.row input:focus,.row textarea:focus{border-color:var(--red)}
+.acts{display:flex;flex-direction:column;gap:6px}
+.acts button{width:38px;height:38px;border-radius:10px;border:2px solid var(--line);background:none;font-size:1rem;line-height:1}
+.acts button:hover:not(:disabled){border-color:var(--red)}
+.acts button:disabled{opacity:.25;cursor:default}
+.acts .del:hover:not(:disabled){background:var(--red)}
+.img{display:flex;gap:10px;align-items:center}
+.img .pv{flex:none;width:96px;height:54px;border-radius:6px;background:#2a1a14 center/cover no-repeat;border:2px solid var(--line);display:grid;place-items:center;font-size:.7rem;opacity:.95;color:#999;text-align:center}
+.img .col{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}
+.img .small{padding:6px 12px;font-size:.82rem}
+.up-st{font-size:.78rem;opacity:.8}
+.add{margin-top:6px}
+.empty{padding:26px;text-align:center;opacity:.6;border:2px dashed var(--line);border-radius:12px;margin-bottom:10px}
+/* barra de guardado */
+.savebar{position:fixed;left:0;right:0;bottom:0;background:rgba(10,10,10,.96);border-top:2px solid var(--brown);padding:12px 16px;display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap;z-index:10}
+.savebar .st{font-size:.92rem;opacity:.85}
+.savebar .st.warn{color:#ffc94d;opacity:1}
+.savebar .st.ok{color:#7be08b;opacity:1}
+.savebar .st.bad{color:#ff7a7a;opacity:1}
+@media (max-width:560px){.row{grid-template-columns:1fr}.acts{flex-direction:row}.img{flex-direction:column;align-items:stretch}.img .pv{width:100%;height:120px}}
+</style>
+</head>
+<body>
+
+<div id="login">
+ <h1>Bajón del Barrio</h1>
+ <p>Panel de edición. Escribe tu clave para entrar.</p>
+ <form id="lf"><input type="password" id="pw" placeholder="Clave" autocomplete="current-password" aria-label="Clave"><button class="btn" id="lb" type="submit" style="width:100%">Entrar</button></form>
+ <div class="err" id="le" role="alert"></div>
+</div>
+
+<div id="app">
+ <header class="top">
+  <h1>Panel de edición · <span>Bajón del Barrio</span></h1>
+  <div style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn ghost" href="./" target="_blank" rel="noopener" style="text-decoration:none">Ver página</a><button class="btn ghost" id="out" type="button">Salir</button></div>
+ </header>
+ <div class="tabs" id="tabs" role="tablist"></div>
+ <p class="hint" id="hint"></p>
+ <div id="rows"></div>
+ <button class="btn ghost add" id="add" type="button">+ Agregar</button>
+</div>
+
+<div class="savebar" id="sb" style="display:none">
+ <span class="st" id="st">Sin cambios.</span>
+ <button class="btn" id="save" type="button" disabled>Guardar cambios</button>
+</div>
+
+<script>
+(function(){
+ /* Misma dirección del Apps Script que usa la página */
+ var SCRIPT_URL='https://script.google.com/macros/s/AKfycbxKURFSbE0L3fuYYyKHwK7_n-WP4JOEbmmwfGamytGOC8iC_u_S-46yCaYk3POH2zrXag/exec';
+ var HOJAS=[
+  {n:'MENÚ',t:'Menú',h:'Cada fila es un platillo. En "categoria" escribe el grupo (Hamburguesas, Hot dogs, Boneless, Especiales…). Para el texto de abajo del título "Menú", crea una fila con la categoria "subtitulo" y ponlo en la descripción. Puedes usar **negritas** y *cursivas* con asteriscos.'},
+  {n:'PROMOCIONES',t:'Promociones',h:'Cada fila es una promoción. Para el subtítulo de la sección, usa una fila con el nombre "subtitulo".'},
+  {n:'CONTACTO',t:'Contacto',h:'Cada fila es un dato (Dirección, Teléfono, Horario, Instagram…). Para el subtítulo de la sección, usa una fila con "subtitulo" en "dato".'},
+  {n:'MÚSICA',t:'Música',h:'Lista de canciones, en el orden en que suenan. "archivo" es el nombre del mp3 que subiste a GitHub. "miniatura" puede ser un nombre de archivo de GitHub o una imagen que subas desde aquí. "spotify" es opcional.'},
+  {n:'SLIDES',t:'Carrusel',h:'Imágenes que pasan cada 5 segundos en el inicio. Lo ideal son fotos horizontales 16:9 (por ejemplo 1600×900). Si dejas la imagen vacía se muestra el emoji.'},
+  {n:'BOTONES',t:'Botones',h:'Los 4 botones bajo el carrusel. El "nombre" debe coincidir con una categoría del menú para que el botón lleve hasta ella (Especiales, Hamburguesas, Boneless, Hot dogs).'}
+ ];
+ var IMG={imagen:1,miniatura:1};
+ var WIDE={descripcion:1,valor:1};
+ var pass='',data={},cur=0,dirty={},busy=false;
+ var $=function(id){return document.getElementById(id)};
+ function el(tag,cls,txt){var e=document.createElement(tag);if(cls)e.className=cls;if(txt!==undefined)e.textContent=txt;return e}
+
+ function api(body){
+  body.pass=pass;
+  return fetch(SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(body)}).then(function(r){return r.json()});
+ }
+ function status(msg,cls){var s=$('st');s.textContent=msg;s.className='st '+(cls||'')}
+
+ /* ---- acceso ---- */
+ function entrar(p){
+  pass=p;$('lb').disabled=true;$('le').textContent='';
+  return api({accion:'leer'}).then(function(r){
+   $('lb').disabled=false;
+   if(!r||!r.ok){pass='';$('le').textContent=r&&r.error==='clave'?'Clave incorrecta.':'No se pudo entrar: '+(r&&r.error||'sin respuesta');try{sessionStorage.removeItem('bdb')}catch(e){}return}
+   try{sessionStorage.setItem('bdb',p)}catch(e){}
+   data={};HOJAS.forEach(function(h){var x=r.hojas[h.n]||{encabezados:[],filas:[]};data[h.n]={enc:x.encabezados,filas:x.filas.map(function(f){var o=f.slice();while(o.length<x.encabezados.length)o.push('');return o})}});
+   $('login').style.display='none';$('app').style.display='block';$('sb').style.display='flex';dirty={};tabs();draw();upd();
+  }).catch(function(){$('lb').disabled=false;pass='';$('le').textContent='No hay conexión con el servidor. Revisa tu internet y que el Apps Script esté desplegado.'});
+ }
+ $('lf').addEventListener('submit',function(e){e.preventDefault();var p=$('pw').value;if(p)entrar(p)});
+ $('out').addEventListener('click',function(){if(Object.keys(dirty).length&&!confirm('Hay cambios sin guardar. ¿Salir de todos modos?'))return;try{sessionStorage.removeItem('bdb')}catch(e){}location.reload()});
+ addEventListener('beforeunload',function(e){if(Object.keys(dirty).length){e.preventDefault();e.returnValue=''}});
+
+ /* ---- pestañas ---- */
+ function tabs(){var t=$('tabs');t.innerHTML='';HOJAS.forEach(function(h,i){var b=el('button','',h.t);b.type='button';b.setAttribute('role','tab');b.setAttribute('aria-selected',String(i===cur));if(dirty[h.n])b.appendChild(el('span','dot'));b.addEventListener('click',function(){cur=i;tabs();draw()});t.appendChild(b)})}
+ function mark(){dirty[HOJAS[cur].n]=1;tabs();upd()}
+ function upd(){var any=Object.keys(dirty).length>0;$('save').disabled=busy||!any;if(!busy)status(any?'Hay cambios sin guardar.':'Sin cambios.',any?'warn':'')}
+
+ /* ---- filas ---- */
+ function draw(){
+  var h=HOJAS[cur],d=data[h.n];$('hint').textContent=h.h;var box=$('rows');box.innerHTML='';
+  if(!d.filas.length)box.appendChild(el('div','empty','Todavía no hay filas. Pulsa "+ Agregar".'));
+  var cats=[];if(h.n==='MENÚ'){var ci=d.enc.indexOf('categoria');d.filas.forEach(function(f){if(f[ci]&&cats.indexOf(f[ci])<0&&f[ci].toLowerCase()!=='subtitulo')cats.push(f[ci])})}
+  d.filas.forEach(function(f,i){
+   var row=el('div','row'),fl=el('div','fields');
+   d.enc.forEach(function(col,c){
+    var key=col.toLowerCase(),w=el('div',(WIDE[key]||IMG[key])?'wide':'');
+    var lab=el('label','f',col);w.appendChild(lab);
+    if(IMG[key])w.appendChild(imgField(f,c,lab));
+    else if(WIDE[key]){var ta=document.createElement('textarea');ta.value=f[c]||'';ta.rows=2;ta.setAttribute('aria-label',col);ta.addEventListener('input',function(){f[c]=ta.value;mark()});w.appendChild(ta)}
+    else{var inp=document.createElement('input');inp.type='text';inp.value=f[c]||'';inp.setAttribute('aria-label',col);if(h.n==='MENÚ'&&key==='categoria'){inp.setAttribute('list','cats')}inp.addEventListener('input',function(){f[c]=inp.value;mark()});w.appendChild(inp)}
+    fl.appendChild(w)});
+   var ac=el('div','acts');
+   [['↑','Subir',function(){mv(i,-1)},i===0,''],['↓','Bajar',function(){mv(i,1)},i===d.filas.length-1,''],['✕','Eliminar',function(){if(confirm('¿Eliminar esta fila?')){d.filas.splice(i,1);mark();draw()}},false,'del']].forEach(function(x){var b=el('button',x[4],x[0]);b.type='button';b.title=x[1];b.setAttribute('aria-label',x[1]);b.disabled=x[3];b.addEventListener('click',x[2]);ac.appendChild(b)});
+   row.appendChild(fl);row.appendChild(ac);box.appendChild(row)});
+  if(h.n==='MENÚ'){var dl=document.getElementById('cats');if(!dl){dl=document.createElement('datalist');dl.id='cats';document.body.appendChild(dl)}dl.innerHTML='';cats.concat(['subtitulo']).forEach(function(c){var o=document.createElement('option');o.value=c;dl.appendChild(o)})}
+ }
+ function mv(i,dx){var a=data[HOJAS[cur].n].filas;var j=i+dx;if(j<0||j>=a.length)return;var t=a[i];a[i]=a[j];a[j]=t;mark();draw()}
+ $('add').addEventListener('click',function(){var d=data[HOJAS[cur].n];var f=d.enc.map(function(){return ''});var h=HOJAS[cur].n;if(h==='MENÚ'&&d.filas.length){f[d.enc.indexOf('categoria')]=d.filas[d.filas.length-1][d.enc.indexOf('categoria')]||''}d.filas.push(f);mark();draw();var r=$('rows').lastElementChild;if(r){r.scrollIntoView({behavior:'smooth',block:'center'});var i=r.querySelector('input,textarea');if(i)i.focus({preventScroll:true})}});
+
+ /* ---- imágenes ---- */
+ function src(v){v=(v||'').trim();if(!v)return '';if(/^https:\/\//i.test(v))return v;if(/^[\w\-. ]+\.(png|jpe?g|webp|gif)$/i.test(v))return encodeURI(v);return ''}
+ function imgField(f,c,lab){
+  var w=el('div','img'),pv=el('div','pv','sin imagen'),col=el('div','col');
+  function show(){var u=src(f[c]);pv.textContent=u?'':'sin imagen';pv.style.backgroundImage=u?'url("'+u.replace(/"/g,'%22')+'")':'none'}
+  var inp=document.createElement('input');inp.type='text';inp.value=f[c]||'';inp.placeholder='nombre de archivo o enlace https://';inp.setAttribute('aria-label',lab.textContent);
+  inp.addEventListener('input',function(){f[c]=inp.value;show();mark()});
+  var file=document.createElement('input');file.type='file';file.accept='image/*';file.style.display='none';
+  var up=el('button','btn ghost small','Subir imagen');up.type='button';var st=el('span','up-st','');
+  up.addEventListener('click',function(){file.click()});
+  file.addEventListener('change',function(){var fl=file.files&&file.files[0];if(!fl)return;st.textContent='Preparando…';up.disabled=true;
+   prep(fl).then(function(o){st.textContent='Subiendo…';return api({accion:'subir',nombre:o.nombre,tipo:o.tipo,datos:o.datos})}).then(function(r){
+    up.disabled=false;file.value='';
+    if(!r||!r.ok){st.textContent='No se pudo subir: '+(r&&r.error||'sin respuesta');return}
+    f[c]=r.url;inp.value=r.url;show();st.textContent='Imagen subida. Recuerda guardar.';mark()
+   }).catch(function(e){up.disabled=false;st.textContent='No se pudo subir: '+(e&&e.message||'error de red')})});
+  var bar=el('div','');bar.style.cssText='display:flex;gap:8px;align-items:center;flex-wrap:wrap';bar.appendChild(up);bar.appendChild(st);
+  col.appendChild(inp);col.appendChild(bar);col.appendChild(file);w.appendChild(pv);w.appendChild(col);show();return w}
+ /* reduce la imagen antes de subirla (máx. 1600 px, JPG) */
+ function prep(file){return new Promise(function(res,rej){
+  if(file.type==='image/gif'){var r0=new FileReader();r0.onload=function(){res({nombre:file.name,tipo:file.type,datos:String(r0.result).split(',')[1]})};r0.onerror=function(){rej(new Error('No se pudo leer el archivo'))};r0.readAsDataURL(file);return}
+  var url=URL.createObjectURL(file),im=new Image();
+  im.onload=function(){var m=1600,k=Math.min(1,m/Math.max(im.width,im.height)),cv=document.createElement('canvas');cv.width=Math.round(im.width*k);cv.height=Math.round(im.height*k);var cx=cv.getContext('2d');cx.fillStyle='#fff';cx.fillRect(0,0,cv.width,cv.height);cx.drawImage(im,0,0,cv.width,cv.height);URL.revokeObjectURL(url);
+   var d=cv.toDataURL('image/jpeg',.85);res({nombre:(file.name||'imagen').replace(/\.\w+$/,'')+'.jpg',tipo:'image/jpeg',datos:d.split(',')[1]})};
+  im.onerror=function(){URL.revokeObjectURL(url);rej(new Error('No se pudo leer la imagen'))};im.src=url})}
+
+ /* ---- guardar ---- */
+ $('save').addEventListener('click',function(){
+  var names=Object.keys(dirty);if(!names.length||busy)return;busy=true;$('save').disabled=true;status('Guardando…');
+  var chain=Promise.resolve(),fail=null;
+  names.forEach(function(n){chain=chain.then(function(){if(fail)return;
+   var d=data[n];var filas=d.filas.filter(function(f){return f.some(function(x){return String(x).trim()!==''})});
+   return api({accion:'guardar',hoja:n,encabezados:d.enc,filas:filas}).then(function(r){if(!r||!r.ok)fail=(r&&r.error)||'sin respuesta';else{delete dirty[n];d.filas=filas}})})});
+  chain.then(function(){busy=false;tabs();draw();if(fail){status('No se pudo guardar: '+fail,'bad');$('save').disabled=false}else{status('Guardado. La página se actualiza en menos de un minuto.','ok');$('save').disabled=true}})
+   .catch(function(){busy=false;status('Error de conexión. Intenta de nuevo.','bad');$('save').disabled=false});
+ });
+
+ var saved='';try{saved=sessionStorage.getItem('bdb')||''}catch(e){}
+ if(saved)entrar(saved);
+})();
+</script>
+</body>
+</html>

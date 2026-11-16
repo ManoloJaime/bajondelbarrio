@@ -148,6 +148,39 @@ background:#150b19 url(disco.png) center/100% 100% no-repeat;will-change:transfo
  .panel{padding-top:300px}
  .deck{top:112px;width:min(70vw,300px);transform:translate(-50%,calc(0px - var(--sy,0px)))}
 }
+@media (min-width:761px){.deck{left:81%;top:50%;width:min(40vh,27vw,340px)}.player{width:356px;max-width:none;margin-left:calc(50% - 178px)}}
+.showcase{position:absolute;left:3vw;top:50%;transform:translateY(-50%);width:min(58vw,1000px,calc((100vh - 250px)*16/9));display:flex;flex-direction:column;gap:12px;transition:opacity .45s}
+.slides{position:relative;width:100%;aspect-ratio:16/9;border:2px solid var(--red);border-radius:14px;overflow:hidden;background:#111;box-shadow:0 20px 60px rgba(0,0,0,.7),0 0 70px rgba(120,8,8,.4)}
+.open .showcase{opacity:0;pointer-events:none}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.tile{position:relative;aspect-ratio:16/9;border:2px solid var(--brown);border-radius:10px;overflow:hidden;padding:0;cursor:pointer;color:#fff;background:linear-gradient(135deg,#4a2010,#140a06);display:grid;place-items:center;transition:transform .2s,border-color .2s}
+.tile:nth-child(even){background:linear-gradient(135deg,#7a1414,#2a0d0d)}
+.tile:hover,.tile:focus-visible{transform:translateY(-3px);border-color:var(--red)}
+.tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.tile .em{font-size:clamp(1.6rem,3vw,2.6rem);line-height:1;filter:drop-shadow(0 4px 8px rgba(0,0,0,.5))}
+.tile .nm{position:absolute;left:0;right:0;bottom:0;padding:16px 8px 6px;background:linear-gradient(transparent,rgba(0,0,0,.85));font-family:Anton,Impact,sans-serif;font-size:clamp(.8rem,1.3vw,1.1rem);letter-spacing:.03em;text-align:center}
+.panel h3{scroll-margin-top:96px}
+.sl-track,.sl{position:absolute;inset:0}
+.sl{opacity:0;transition:opacity .8s ease;display:grid;place-items:center;background:linear-gradient(135deg,#7a1414,#2a0d0d)}
+.sl:nth-child(3n+2){background:linear-gradient(135deg,#4a2010,#140a06)}
+.sl:nth-child(3n+3){background:linear-gradient(135deg,#a11818,#3b1010)}
+.sl.on{opacity:1}
+.sl img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.sl .em{font-size:clamp(4rem,10vw,8rem);line-height:1;filter:drop-shadow(0 8px 14px rgba(0,0,0,.5))}
+.sl .cap{position:absolute;left:0;right:0;bottom:0;padding:48px 18px 36px;background:linear-gradient(transparent,rgba(0,0,0,.82));color:#fff}
+.sl .cap b{display:block;font-family:Anton,Impact,sans-serif;font-weight:400;font-size:clamp(1.2rem,2.2vw,1.8rem);letter-spacing:.02em}
+.sl .cap span{display:block;font-size:.9rem;opacity:.85;margin-top:2px}
+.sl-dots{position:absolute;left:14px;right:14px;bottom:14px;display:flex;gap:6px;z-index:2}
+.sl-dots .seg{flex:1;height:6px;padding:0;border:0;border-radius:3px;background:rgba(255,255,255,.3);cursor:pointer;overflow:hidden;position:relative}
+.sl-dots .seg i{position:absolute;inset:0;background:var(--red);transform:scaleX(0);transform-origin:left}
+.sl-dots .seg.done i{transform:scaleX(1)}
+.sl-dots .seg.act i{animation:segfill 5s linear forwards}
+.slides:hover .seg.act i,.slides:focus-within .seg.act i{animation-play-state:paused}
+@keyframes segfill{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.sl-dots[hidden]{display:none}
+@media (min-width:761px) and (max-width:1000px){.player #thumb,.ph{width:80px;height:80px}}
+@media (max-width:760px){.showcase{position:relative;left:auto;top:auto;transform:none;width:100%;margin-top:14px}.open .showcase{display:none}.sl .em{font-size:3rem;margin-top:-34px}.sl .cap{padding:30px 14px 28px}.tiles{grid-template-columns:repeat(2,1fr)}.tile .em{font-size:2rem}.tile .nm{font-size:.85rem}.panel h3{scroll-margin-top:120px}}
+@media (prefers-reduced-motion:reduce){.sl{transition:none}}
 @media (prefers-reduced-motion:reduce){.vinyl{animation:none}.deck,.panel{transition:none}}
 </style>
 </head>
@@ -172,7 +205,9 @@ background:#150b19 url(disco.png) center/100% 100% no-repeat;will-change:transfo
   <p class="hint">Arrastra el disco para rifear. Tócalo para pausar o reanudar.</p>
  </div>
 
- <section class="panel" id="menu" aria-label="Menú"><h2>Menú</h2><p class="sub">Carne al carbón, pan tostado en mantequilla y salsa de la casa.</p><h3>Hamburguesas</h3><div class="item"><div><b>Doble Rima</b><p>Doble carne, cheddar, tocino crujiente, cebolla caramelizada y salsa BBQ.</p></div><span class="price">$145</span></div><div class="item"><div><b>Brava 808</b><p>Carne, queso pepper jack, jalapeño, aderezo chipotle y cebolla morada.</p></div><span class="price">$135</span></div><div class="item"><div><b>Flow Clásica</b><p>Carne de res, queso americano, lechuga, jitomate y mayonesa de la casa.</p></div><span class="price">$110</span></div><h3>Hot dogs</h3><div class="item"><div><b>Street Dog</b><p>Salchicha, tocino, cebolla caramelizada, mostaza y catsup.</p></div><span class="price">$75</span></div><div class="item"><div><b>El Freestyle</b><p>Salchicha, chili con carne, queso fundido y jalapeños.</p></div><span class="price">$85</span></div></section>
+ <div class="showcase" id="showcase"><aside class="slides" id="slides" aria-label="Imágenes del menú y promociones" aria-roledescription="carrusel"><div class="sl-track" id="slTrack"></div><div class="sl-dots" id="slDots"></div></aside><div class="tiles" id="tiles"></div></div>
+
+ <section class="panel" id="menu" aria-label="Menú"><h2>Menú</h2><p class="sub">Carne al carbón, pan tostado en mantequilla y salsa de la casa.</p><h3>Especiales</h3><div class="item"><div><b>Combo Bajón</b><p>Hamburguesa de la casa, papas y refresco.</p></div><span class="price">$165</span></div><h3>Hamburguesas</h3><div class="item"><div><b>Doble Rima</b><p>Doble carne, cheddar, tocino crujiente, cebolla caramelizada y salsa BBQ.</p></div><span class="price">$145</span></div><div class="item"><div><b>Brava 808</b><p>Carne, queso pepper jack, jalapeño, aderezo chipotle y cebolla morada.</p></div><span class="price">$135</span></div><div class="item"><div><b>Flow Clásica</b><p>Carne de res, queso americano, lechuga, jitomate y mayonesa de la casa.</p></div><span class="price">$110</span></div><h3>Boneless</h3><div class="item"><div><b>Boneless BBQ</b><p>10 piezas con aderezo a elegir.</p></div><span class="price">$120</span></div><h3>Hot dogs</h3><div class="item"><div><b>Street Dog</b><p>Salchicha, tocino, cebolla caramelizada, mostaza y catsup.</p></div><span class="price">$75</span></div><div class="item"><div><b>El Freestyle</b><p>Salchicha, chili con carne, queso fundido y jalapeños.</p></div><span class="price">$85</span></div></section>
 
  <section class="panel" id="promos" aria-label="Promociones"><h2>Promociones</h2><p class="sub">Aprovecha antes de que cambie el track.</p><div class="promo"><b>Combo Mic Drop</b><p>Doble Rima + papas + refresco por $185.</p></div><div class="promo"><b>Martes 2x1 en hot dogs</b><p>Pide un Street Dog o un Freestyle y llévate otro gratis.</p></div><div class="promo"><b>Jueves de Brava</b><p>Brava 808 con papas a $120.</p></div></section>
 
@@ -194,6 +229,8 @@ background:#150b19 url(disco.png) center/100% 100% no-repeat;will-change:transfo
   show(b.getAttribute('aria-current')==='true'?null:b.dataset.p);
  })});
  document.getElementById('home').addEventListener('click',function(e){e.preventDefault();show(null)});
+ window.__openMenu=function(cat){show('menu');var q=String(cat||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim().toLowerCase();if(!q)return;
+  var hs=document.querySelectorAll('#menu h3');for(var i=0;i<hs.length;i++){var t=hs[i].textContent.normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim().toLowerCase();if(t===q||t.indexOf(q)>-1||q.indexOf(t)>-1){(function(h){requestAnimationFrame(function(){h.scrollIntoView({behavior:'smooth',block:'start'})})})(hs[i]);return}}};
  var v=document.getElementById('vinyl');
  var au=document.getElementById('au'),AS=null,energy=0,ang=0,base=72,vel=72,drag=false,last=0,lastA=0,moved=0,paused=false,t0=performance.now(),ac,gain,filt,osc,og;
  if(window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches){base=0;vel=0}
@@ -294,7 +331,7 @@ background:#150b19 url(disco.png) center/100% 100% no-repeat;will-change:transfo
   function tab(name){return tabS(name).then(function(d){return d||tabG(name)})}
   function has(t){for(var i=1;i<arguments.length;i++)if(t.H.indexOf(arguments[i])<0)return false;return true}
   function fill(id,sub,html){var el=document.getElementById(id);if(!el)return;var s=el.querySelector('.sub');if(s&&sub)s.innerHTML=sub;while(el.lastChild&&!(el.lastChild.matches&&el.lastChild.matches('h2,.sub')))el.removeChild(el.lastChild);el.insertAdjacentHTML('beforeend',html)}
-  Promise.all([tab('MENÚ'),tab('PROMOCIONES'),tab('CONTACTO'),tab('MÚSICA')]).then(function(x){
+  Promise.all([tab('MENÚ'),tab('PROMOCIONES'),tab('CONTACTO'),tab('MÚSICA'),tab('SLIDES'),tab('BOTONES')]).then(function(x){
    var M=x[0],P=x[1],C=x[2],S=x[3],sub='';
    if(M&&has(M,'categoria','nombre','precio')){var menu=[],byG={};sub='';
     M.rows.forEach(function(r){if(norm(r.categoria)==='subtitulo'){sub=rt(r,'descripcion');return}if(!r.nombre)return;var g=r.categoria||'Menú';if(!byG[g]){byG[g]={t:g,i:[]};menu.push(byG[g])}byG[g].i.push(r)});
@@ -305,11 +342,40 @@ background:#150b19 url(disco.png) center/100% 100% no-repeat;will-change:transfo
    if(C&&has(C,'dato','valor')){var ct=[];sub='';
     C.rows.forEach(function(r){if(norm(r.dato)==='subtitulo'){sub=rt(r,'valor');return}if(r.dato)ct.push(r)});
     if(ct.length)fill('contacto',sub,ct.map(function(i){return norm(i.dato)==='telefono'?'<p><span>'+esc(i.dato)+'</span><a href="tel:+52'+i.valor.replace(/\D/g,'')+'">'+rt(i,'valor')+'</a></p>':'<p><span>'+esc(i.dato)+'</span>'+rt(i,'valor')+'</p>'}).join(''))}
-   if(S&&has(S,'archivo')){var okA=/^[\w\-. ]+\.(mp3|m4a|wav|ogg|aac)$/i,okI=/^[\w\-. ]+\.(png|jpe?g|webp|gif)$/i;
+   var SL=x[4];if(SL&&has(SL,'imagen')){var okS=/^([\w\-. ]+\.(png|jpe?g|webp|gif)|https:\/\/\S+)$/i;
+    var sl=SL.rows.filter(function(r){return r.imagen||r.titulo||r.descripcion}).map(function(r){var im=(r.imagen||'').trim();return {img:okS.test(im)?(/^https:/i.test(im)?im:encodeURI(im)):'',t:r.titulo||'',d:r.descripcion||'',e:r.emoji||''}});
+    if(window.__setSlides)window.__setSlides(sl)}
+   var BT=x[5];if(BT&&has(BT,'nombre','imagen')&&BT.H.indexOf('archivo')<0){var okB=/^([\w\-. ]+\.(png|jpe?g|webp|gif)|https:\/\/\S+)$/i;
+    var bl=BT.rows.filter(function(r){return r.nombre}).map(function(r){var im=(r.imagen||'').trim();return {n:r.nombre,img:okB.test(im)?(/^https:/i.test(im)?im:encodeURI(im)):'',e:r.emoji||''}});
+    if(window.__setTiles)window.__setTiles(bl)}
+   if(S&&has(S,'archivo')){var okA=/^[\w\-. ]+\.(mp3|m4a|wav|ogg|aac)$/i,okI=/^([\w\-. ]+\.(png|jpe?g|webp|gif)|https:\/\/\S+)$/i;
     var songs=S.rows.filter(function(r){return okA.test(r.archivo)}).map(function(r){return {t:r.titulo,a:encodeURI(r.archivo),i:okI.test(r.miniatura)?encodeURI(r.miniatura):'',s:r.spotify,r:r.artista||r.artistas||r.artist||r.autor||r.cantante||r.interprete||''}});
     if(songs.length&&!au.src){T=songs;info(0)}}
   }).catch(function(){}).then(function(){if(!ready)info(0)})
  })();
+  /* Carrusel de imágenes (se llena desde la hoja SLIDES; si no hay datos, usa estas tarjetas de ejemplo) */
+ (function(){var root=document.getElementById('slides'),box=document.getElementById('showcase'),tiles=document.getElementById('tiles'),tr=document.getElementById('slTrack'),dots=document.getElementById('slDots'),stage=document.getElementById('stage'),deck=document.querySelector('.deck'),mq=window.matchMedia('(max-width:760px)');
+  if(!root||!tr)return;var list=[],cur=0,timer=null,hover=false;
+  var DEF=[{t:'Hamburguesas',d:'Carne al carbón y salsa de la casa',e:'🍔'},{t:'Hot dogs',d:'Street Dog y El Freestyle',e:'🌭'},{t:'Promociones',d:'Pregunta por las promos de la semana',e:'🔥'}];
+  function go(n){cur=n;[].forEach.call(tr.children,function(c,k){c.classList.toggle('on',k===n)});[].forEach.call(dots.children,function(b,k){b.setAttribute('aria-current',k===n?'true':'false');b.classList.remove('act');b.classList.toggle('done',k<n);if(k===n){void b.offsetWidth;if(list.length>1)b.classList.add('act')}})}
+  function restart(){}
+  function card(s,k,n){var d=document.createElement('div');d.className='sl';d.setAttribute('role','group');d.setAttribute('aria-label',(k+1)+' de '+n);
+   function emo(){var e=document.createElement('div');e.className='em';e.textContent=s.e||'🍔';d.insertBefore(e,d.firstChild)}
+   if(s.img){var im=new Image();im.alt=s.t||'';im.decoding='async';im.onerror=function(){im.remove();emo()};im.src=s.img;d.appendChild(im)}else emo();
+   if(s.t||s.d){var c=document.createElement('div');c.className='cap';if(s.t){var b=document.createElement('b');b.textContent=s.t;c.appendChild(b)}if(s.d){var p=document.createElement('span');p.textContent=s.d;c.appendChild(p)}d.appendChild(c)}
+   return d}
+  function render(l){list=l;tr.innerHTML='';dots.innerHTML='';l.forEach(function(s,k){tr.appendChild(card(s,k,l.length));var b=document.createElement('button');b.type='button';b.className='seg';b.appendChild(document.createElement('i'));b.setAttribute('aria-label','Ir a la imagen '+(k+1));b.addEventListener('click',function(){go(k)});b.firstChild.addEventListener('animationend',function(){go((k+1)%list.length)});dots.appendChild(b)});dots.hidden=l.length<2;go(0);restart()}
+  function place(){if(mq.matches){if(box.parentNode!==deck)deck.appendChild(box)}else if(box.parentNode!==stage)stage.insertBefore(box,stage.querySelector('.panel'))}
+  root.addEventListener('mouseenter',function(){hover=true});root.addEventListener('mouseleave',function(){hover=false});root.addEventListener('focusin',function(){hover=true});root.addEventListener('focusout',function(){hover=false});
+  if(mq.addEventListener)mq.addEventListener('change',place);place();
+  window.__setSlides=function(l){if(l&&l.length)render(l)};render(DEF);
+  var TD=[{n:'Especiales',e:'⭐'},{n:'Hamburguesas',e:'🍔'},{n:'Boneless',e:'🍗'},{n:'Hot dogs',e:'🌭'}];
+  function rtiles(l){tiles.innerHTML='';l.slice(0,4).forEach(function(s){var b=document.createElement('button');b.type='button';b.className='tile';b.setAttribute('aria-label','Ver '+s.n+' en el menú');
+   function emo(){var e=document.createElement('span');e.className='em';e.textContent=s.e||'🍔';b.insertBefore(e,b.firstChild)}
+   if(s.img){var im=new Image();im.alt='';im.decoding='async';im.onerror=function(){im.remove();emo()};im.src=s.img;b.appendChild(im)}else emo();
+   var nm=document.createElement('span');nm.className='nm';nm.textContent=s.n;b.appendChild(nm);
+   b.addEventListener('click',function(){if(window.__openMenu)window.__openMenu(s.n)});tiles.appendChild(b)})}
+  window.__setTiles=function(l){if(l&&l.length)rtiles(l)};rtiles(TD)})();
   /* Abrir una sección directo desde la dirección: #menu, #promociones o #contacto (también ?s=menu) */
  (function(){var h='';try{h=decodeURIComponent(location.hash.replace('#',''))||new URLSearchParams(location.search).get('s')||''}catch(e){}
   h=h.toLowerCase();var m={menu:'menu','menú':'menu',promos:'promos',promo:'promos',promociones:'promos',contacto:'contacto'};
