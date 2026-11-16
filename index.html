@@ -372,7 +372,7 @@ background:#150b19 url(disco.png) center/100% 100% no-repeat;will-change:transfo
    var BT=x[5];if(BT&&has(BT,'nombre','imagen')&&BT.H.indexOf('archivo')<0){var okB=/^([\w\-. ]+\.(png|jpe?g|webp|gif)|https:\/\/\S+)$/i;
     var bl=BT.rows.filter(function(r){return r.nombre}).map(function(r){var im=(r.imagen||'').trim();return {n:r.nombre,c:(r.categoria||'').trim(),img:okB.test(im)?(/^https:/i.test(im)?im:encodeURI(im)):'',e:r.emoji||''}});
     if(window.__setTiles)window.__setTiles(bl)}
-   if(S&&has(S,'archivo')){var okA=/^[\w\-. ]+\.(mp3|m4a|wav|ogg|aac)$/i,okI=/^([\w\-. ]+\.(png|jpe?g|webp|gif)|https:\/\/\S+)$/i;
+   if(S&&has(S,'archivo')){var okA=/^([\w\-. ]+\.(mp3|m4a|wav|ogg|aac)|https:\/\/\S+)$/i,okI=/^([\w\-. ]+\.(png|jpe?g|webp|gif)|https:\/\/\S+)$/i;
     var songs=S.rows.filter(function(r){return okA.test(r.archivo)}).map(function(r){return {t:r.titulo,a:encodeURI(r.archivo),i:okI.test(r.miniatura)?encodeURI(r.miniatura):'',s:r.spotify,r:r.artista||r.artistas||r.artist||r.autor||r.cantante||r.interprete||''}});
     if(songs.length&&!au.src){T=songs;info(0)}}
   }).catch(function(){}).then(function(){if(!ready)info(0);if(window.__fallbackShowcase)window.__fallbackShowcase()})

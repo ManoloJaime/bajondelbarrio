@@ -97,7 +97,7 @@ label.f{display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.
   {n:'MENÚ',t:'Menú',h:'Cada fila es un platillo. En "categoria" escribe el grupo (Hamburguesas, Hot dogs, Boneless, Especiales…). La descripción gris de cada categoría se edita en el recuadro "Descripción de cada categoría" de arriba. Para el texto de abajo del título "Menú", crea una fila con la categoria "subtitulo" y ponlo en la descripción. Puedes usar **negritas** y *cursivas* con asteriscos. En "imagen" puedes subir una foto pequeña del platillo (opcional; se guarda como PNG, con su transparencia, y se muestra como miniatura a la izquierda).'},
   {n:'PROMOCIONES',t:'Promociones',h:'Cada fila es una promoción. Para el subtítulo de la sección, usa una fila con el nombre "subtitulo".'},
   {n:'CONTACTO',t:'Contacto',h:'Cada fila es un dato (Dirección, Teléfono, Horario, Instagram…). Para el subtítulo de la sección, usa una fila con "subtitulo" en "dato".'},
-  {n:'MÚSICA',t:'Música',h:'Lista de canciones, en el orden en que suenan. "archivo" es el nombre del mp3 que subiste a GitHub. "miniatura" puede ser un nombre de archivo de GitHub o una imagen que subas desde aquí. "spotify" es opcional.'},
+  {n:'MÚSICA',t:'Música',h:'Lista de canciones, en el orden en que suenan. En "archivo" puedes escribir el nombre de un mp3 que subiste a GitHub o pulsar "Subir mp3" para subir la canción desde aquí (máx. 20 MB). "miniatura" puede ser un nombre de archivo de GitHub o una imagen que subas desde aquí. "spotify" es opcional.'},
   {n:'SLIDES',t:'Carrusel',h:'Imágenes que pasan cada 5 segundos en el inicio. Lo ideal son fotos horizontales 16:9 (por ejemplo 1600×900). Si dejas la imagen vacía se muestra el emoji.'},
   {n:'AJUSTES',t:'Apariencia',special:1,h:'Cambia la imagen de fondo de toda la página y el icono que se ve en la pestaña del navegador. Para el fondo funcionan mejor imágenes oscuras (se ve detrás de todo el contenido). El icono se recorta cuadrado, y conviene una imagen sencilla que se reconozca pequeña. Si quitas una imagen, la página vuelve a su diseño original.'},
   {n:'BOTONES',t:'Botones',h:'Los 4 botones bajo el carrusel. En "categoria" elige a qué sección del menú lleva cada botón: al tocarlo se abre el menú con solo esa categoría desplegada y las demás plegadas. Si la dejas vacía, se usa el "nombre" del botón.'}
@@ -152,7 +152,8 @@ label.f{display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.
    d.enc.forEach(function(col,c){
     var key=col.toLowerCase(),w=el('div',(WIDE[key]||IMG[key])?'wide':'');
     var lab=el('label','f',col);w.appendChild(lab);
-    if(IMG[key])w.appendChild(imgField(f,c,lab,(h.n==='MENÚ'&&key==='imagen')?'thumb':undefined));
+    if(h.n==='MÚSICA'&&key==='archivo')w.appendChild(audioField(f,c,lab));
+    else if(IMG[key])w.appendChild(imgField(f,c,lab,(h.n==='MENÚ'&&key==='imagen')?'thumb':undefined));
     else if(WIDE[key]){var ta=document.createElement('textarea');ta.value=f[c]||'';ta.rows=2;ta.setAttribute('aria-label',col);ta.addEventListener('input',function(){f[c]=ta.value;mark()});w.appendChild(ta)}
     else if(h.n==='BOTONES'&&key==='categoria'){var sel=document.createElement('select');sel.setAttribute('aria-label',col);var mc=menuCats();var cur0=f[c]||'';if(cur0&&mc.indexOf(cur0)<0)mc.push(cur0);[''].concat(mc).forEach(function(v){var o=document.createElement('option');o.value=v;o.textContent=v||'(igual que el nombre del botón)';sel.appendChild(o)});sel.value=cur0;sel.addEventListener('change',function(){f[c]=sel.value;mark()});w.appendChild(sel)}
     else{var inp=document.createElement('input');inp.type='text';inp.value=f[c]||'';inp.setAttribute('aria-label',col);if(h.n==='MENÚ'&&key==='categoria'){inp.setAttribute('list','cats')}inp.addEventListener('input',function(){f[c]=inp.value;mark()});w.appendChild(inp)}
@@ -177,6 +178,25 @@ label.f{display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.
 
  /* ---- imágenes ---- */
  function src(v){v=(v||'').trim();if(!v)return '';if(/^https:\/\//i.test(v))return v;if(/^[\w\-. ]+\.(png|jpe?g|webp|gif)$/i.test(v))return encodeURI(v);return ''}
+ function audioField(f,c,lab){
+  var col=el('div','col');
+  var inp=document.createElement('input');inp.type='text';inp.value=f[c]||'';inp.placeholder='nombre.mp3 (de GitHub) o enlace https://';inp.setAttribute('aria-label',lab.textContent);
+  inp.addEventListener('input',function(){f[c]=inp.value;mark()});
+  var file=document.createElement('input');file.type='file';file.accept='audio/mpeg,audio/mp3,.mp3,audio/mp4,.m4a,audio/wav,.wav,audio/ogg,.ogg,audio/aac,.aac';file.style.display='none';
+  var up=el('button','btn ghost small','Subir mp3');up.type='button';var st=el('span','up-st','');
+  up.addEventListener('click',function(){file.click()});
+  file.addEventListener('change',function(){var fl=file.files&&file.files[0];if(!fl)return;
+   if(fl.size>20*1024*1024){st.textContent='El archivo pesa más de 20 MB. Comprímelo o súbelo a GitHub.';file.value='';return}
+   var ext=(fl.name.match(/\.(\w+)$/)||[,''])[1].toLowerCase();var tipo=fl.type||({mp3:'audio/mpeg',m4a:'audio/mp4',wav:'audio/wav',ogg:'audio/ogg',aac:'audio/aac'}[ext]||'');
+   if(!/^audio\//.test(tipo)){st.textContent='Elige un archivo de audio (mp3, m4a, wav, ogg o aac).';file.value='';return}
+   st.textContent='Leyendo archivo…';up.disabled=true;
+   new Promise(function(res,rej){var r0=new FileReader();r0.onload=function(){res(String(r0.result).split(',')[1])};r0.onerror=function(){rej(new Error('No se pudo leer el archivo'))};r0.readAsDataURL(fl)}).then(function(datos){st.textContent='Subiendo… (puede tardar un momento)';return api({accion:'subir',nombre:fl.name,tipo:tipo,datos:datos})}).then(function(r){
+    up.disabled=false;file.value='';
+    if(!r||!r.ok){st.textContent='No se pudo subir: '+(r&&r.error||'sin respuesta');return}
+    f[c]=r.url;inp.value=r.url;st.textContent=r.aviso?'Canción subida, pero revisa que la carpeta de Drive esté compartida con “Cualquier persona con el enlace”. Recuerda guardar.':'Canción subida. Recuerda guardar.';mark()
+   }).catch(function(e){up.disabled=false;st.textContent='No se pudo subir: '+(e&&e.message||'error de red')})});
+  var bar=el('div','');bar.style.cssText='display:flex;gap:8px;align-items:center;flex-wrap:wrap';bar.appendChild(up);bar.appendChild(st);
+  col.appendChild(inp);col.appendChild(bar);col.appendChild(file);return col}
  function imgField(f,c,lab,kind){
   var w=el('div','img'),pv=el('div','pv','sin imagen'),col=el('div','col');
   function show(){var u=src(f[c]);pv.textContent=u?'':'sin imagen';pv.style.backgroundImage=u?'url("'+u.replace(/"/g,'%22')+'")':'none'}
