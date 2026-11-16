@@ -94,7 +94,7 @@ label.f{display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.
  /* Misma dirección del Apps Script que usa la página */
  var SCRIPT_URL='https://script.google.com/macros/s/AKfycbxKURFSbE0L3fuYYyKHwK7_n-WP4JOEbmmwfGamytGOC8iC_u_S-46yCaYk3POH2zrXag/exec';
  var HOJAS=[
-  {n:'MENÚ',t:'Menú',h:'Cada fila es un platillo. En "categoria" escribe el grupo (Hamburguesas, Hot dogs, Boneless, Especiales…). Para añadir una descripción a una categoría (texto gris debajo de su título), crea una fila con esa categoría, deja "nombre" vacío y escribe el texto en "descripcion". Para el texto de abajo del título "Menú", crea una fila con la categoria "subtitulo" y ponlo en la descripción. Puedes usar **negritas** y *cursivas* con asteriscos.'},
+  {n:'MENÚ',t:'Menú',h:'Cada fila es un platillo. En "categoria" escribe el grupo (Hamburguesas, Hot dogs, Boneless, Especiales…). La descripción gris de cada categoría se edita en el recuadro "Descripción de cada categoría" de arriba. Para el texto de abajo del título "Menú", crea una fila con la categoria "subtitulo" y ponlo en la descripción. Puedes usar **negritas** y *cursivas* con asteriscos.'},
   {n:'PROMOCIONES',t:'Promociones',h:'Cada fila es una promoción. Para el subtítulo de la sección, usa una fila con el nombre "subtitulo".'},
   {n:'CONTACTO',t:'Contacto',h:'Cada fila es un dato (Dirección, Teléfono, Horario, Instagram…). Para el subtítulo de la sección, usa una fila con "subtitulo" en "dato".'},
   {n:'MÚSICA',t:'Música',h:'Lista de canciones, en el orden en que suenan. "archivo" es el nombre del mp3 que subiste a GitHub. "miniatura" puede ser un nombre de archivo de GitHub o una imagen que subas desde aquí. "spotify" es opcional.'},
@@ -137,13 +137,17 @@ label.f{display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.
 
  /* ---- filas ---- */
  function menuCats(){var m=data['MENÚ'];var o=[];if(!m)return o;var ci=m.enc.indexOf('categoria');m.filas.forEach(function(f){var v=f[ci];if(v&&o.indexOf(v)<0&&v.toLowerCase()!=='subtitulo')o.push(v)});return o}
+ function isDesc(f,ix){var c=(f[ix.c]||'').trim();return !!c&&c.toLowerCase()!=='subtitulo'&&!(f[ix.n]||'').trim()&&!!(f[ix.d]||'').trim()}
+ function catBox(d,box){var ix={c:d.enc.indexOf('categoria'),n:d.enc.indexOf('nombre'),d:d.enc.indexOf('descripcion')};if(ix.c<0||ix.n<0||ix.d<0)return;var cs=menuCats();if(!cs.length)return;var w=el('div','row');w.style.gridTemplateColumns='1fr';var inner=el('div','');inner.appendChild(el('label','f','Descripción de cada categoría (texto gris bajo su título; déjala vacía si no quieres descripción)'));cs.forEach(function(cat){var g=el('div','');g.style.marginTop='10px';g.appendChild(el('label','f',cat));var ta=document.createElement('textarea');ta.rows=2;ta.setAttribute('aria-label','Descripción de '+cat);var row=null;d.filas.forEach(function(f){if(!row&&(f[ix.c]||'').trim()===cat&&isDesc(f,ix))row=f});ta.value=row?row[ix.d]:'';ta.addEventListener('change',function(){var t=ta.value.trim();var cur=null;d.filas.forEach(function(f){if(!cur&&(f[ix.c]||'').trim()===cat&&!(f[ix.n]||'').trim()&&f!==null&&(isDesc(f,ix)))cur=f});if(cur){if(t){cur[ix.d]=ta.value}else{d.filas.splice(d.filas.indexOf(cur),1)}}else if(t){var nf=d.enc.map(function(){return ''});nf[ix.c]=cat;nf[ix.d]=ta.value;var at=-1;d.filas.forEach(function(f,k){if(at<0&&(f[ix.c]||'').trim()===cat)at=k});d.filas.splice(at<0?d.filas.length:at,0,nf)}mark();draw()});g.appendChild(ta);inner.appendChild(g)});w.appendChild(inner);box.appendChild(w)}
  function draw(){
   var h=HOJAS[cur],d=data[h.n];$('hint').textContent=h.h;var box=$('rows');box.innerHTML='';
   $('add').style.display=h.special?'none':'';
   if(h.special){drawSpecial(d,box);return}
+  var dix=null;if(h.n==='MENÚ'){catBox(d,box);dix={c:d.enc.indexOf('categoria'),n:d.enc.indexOf('nombre'),d:d.enc.indexOf('descripcion')}}
   if(!d.filas.length)box.appendChild(el('div','empty','Todavía no hay filas. Pulsa "+ Agregar".'));
   var cats=[];if(h.n==='MENÚ'){var ci=d.enc.indexOf('categoria');d.filas.forEach(function(f){if(f[ci]&&cats.indexOf(f[ci])<0&&f[ci].toLowerCase()!=='subtitulo')cats.push(f[ci])})}
   d.filas.forEach(function(f,i){
+   if(dix&&dix.c>=0&&dix.n>=0&&dix.d>=0&&isDesc(f,dix))return;
    var row=el('div','row'),fl=el('div','fields');
    d.enc.forEach(function(col,c){
     var key=col.toLowerCase(),w=el('div',(WIDE[key]||IMG[key])?'wide':'');
@@ -168,7 +172,7 @@ label.f{display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.
    w.appendChild(el('label','f',it[1]));var fld=imgField(f,vi,el('span','',it[1]),it[2]);w.appendChild(fld);
    var q=el('button','btn ghost small','Quitar imagen');q.type='button';q.style.marginTop='8px';q.addEventListener('click',function(){f[vi]='';mark();draw()});
    w.appendChild(q);row.appendChild(w);box.appendChild(row)})}
- function mv(i,dx){var a=data[HOJAS[cur].n].filas;var j=i+dx;if(j<0||j>=a.length)return;var t=a[i];a[i]=a[j];a[j]=t;mark();draw()}
+ function mv(i,dx){var a=data[HOJAS[cur].n].filas;var j=i+dx;if(HOJAS[cur].n==='MENÚ'){var ix={c:data['MENÚ'].enc.indexOf('categoria'),n:data['MENÚ'].enc.indexOf('nombre'),d:data['MENÚ'].enc.indexOf('descripcion')};while(j>=0&&j<a.length&&ix.c>=0&&isDesc(a[j],ix))j+=dx}if(j<0||j>=a.length)return;var t=a[i];a[i]=a[j];a[j]=t;mark();draw()}
  $('add').addEventListener('click',function(){var d=data[HOJAS[cur].n];var f=d.enc.map(function(){return ''});var h=HOJAS[cur].n;if(h==='MENÚ'&&d.filas.length){f[d.enc.indexOf('categoria')]=d.filas[d.filas.length-1][d.enc.indexOf('categoria')]||''}d.filas.push(f);mark();draw();var r=$('rows').lastElementChild;if(r){r.scrollIntoView({behavior:'smooth',block:'center'});var i=r.querySelector('input,textarea');if(i)i.focus({preventScroll:true})}});
 
  /* ---- imágenes ---- */
