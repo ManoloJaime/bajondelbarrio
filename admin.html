@@ -94,7 +94,7 @@ label.f{display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.
  /* Misma dirección del Apps Script que usa la página */
  var SCRIPT_URL='https://script.google.com/macros/s/AKfycbxKURFSbE0L3fuYYyKHwK7_n-WP4JOEbmmwfGamytGOC8iC_u_S-46yCaYk3POH2zrXag/exec';
  var HOJAS=[
-  {n:'MENÚ',t:'Menú',h:'Cada fila es un platillo. En "categoria" escribe el grupo (Hamburguesas, Hot dogs, Boneless, Especiales…). La descripción gris de cada categoría se edita en el recuadro "Descripción de cada categoría" de arriba. Para el texto de abajo del título "Menú", crea una fila con la categoria "subtitulo" y ponlo en la descripción. Puedes usar **negritas** y *cursivas* con asteriscos.'},
+  {n:'MENÚ',t:'Menú',h:'Cada fila es un platillo. En "categoria" escribe el grupo (Hamburguesas, Hot dogs, Boneless, Especiales…). La descripción gris de cada categoría se edita en el recuadro "Descripción de cada categoría" de arriba. Para el texto de abajo del título "Menú", crea una fila con la categoria "subtitulo" y ponlo en la descripción. Puedes usar **negritas** y *cursivas* con asteriscos. En "imagen" puedes subir una foto pequeña del platillo (opcional; se muestra como miniatura a la izquierda).'},
   {n:'PROMOCIONES',t:'Promociones',h:'Cada fila es una promoción. Para el subtítulo de la sección, usa una fila con el nombre "subtitulo".'},
   {n:'CONTACTO',t:'Contacto',h:'Cada fila es un dato (Dirección, Teléfono, Horario, Instagram…). Para el subtítulo de la sección, usa una fila con "subtitulo" en "dato".'},
   {n:'MÚSICA',t:'Música',h:'Lista de canciones, en el orden en que suenan. "archivo" es el nombre del mp3 que subiste a GitHub. "miniatura" puede ser un nombre de archivo de GitHub o una imagen que subas desde aquí. "spotify" es opcional.'},
@@ -105,7 +105,7 @@ label.f{display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.
  var IMG={imagen:1,miniatura:1};
  var WIDE={descripcion:1,valor:1};
  var pass='',data={},cur=0,dirty={},busy=false,missing={};
- var DEFENC0=0;var DEFENC={'MENÚ':['categoria','nombre','descripcion','precio'],'PROMOCIONES':['nombre','descripcion'],'CONTACTO':['dato','valor'],'MÚSICA':['titulo','archivo','miniatura','spotify','artista'],'SLIDES':['imagen','titulo','descripcion','emoji'],'BOTONES':['nombre','imagen','emoji','categoria'],'AJUSTES':['clave','valor']};
+ var DEFENC0=0;var DEFENC={'MENÚ':['categoria','nombre','descripcion','precio','imagen'],'PROMOCIONES':['nombre','descripcion'],'CONTACTO':['dato','valor'],'MÚSICA':['titulo','archivo','miniatura','spotify','artista'],'SLIDES':['imagen','titulo','descripcion','emoji'],'BOTONES':['nombre','imagen','emoji','categoria'],'AJUSTES':['clave','valor']};
  var $=function(id){return document.getElementById(id)};
  function el(tag,cls,txt){var e=document.createElement(tag);if(cls)e.className=cls;if(txt!==undefined)e.textContent=txt;return e}
 
@@ -122,7 +122,7 @@ label.f{display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.
    $('lb').disabled=false;
    if(!r||!r.ok){pass='';$('le').textContent=r&&r.error==='clave'?'Clave incorrecta.':'No se pudo entrar: '+(r&&r.error||'sin respuesta');try{sessionStorage.removeItem('bdb')}catch(e){}return}
    try{sessionStorage.setItem('bdb',p)}catch(e){}
-   data={};missing={};HOJAS.forEach(function(h){if(!r.hojas[h.n])missing[h.n]=1;var x=r.hojas[h.n]||{encabezados:DEFENC[h.n],filas:[]};if(!x.encabezados||!x.encabezados.length)x.encabezados=DEFENC[h.n];if(h.n==='BOTONES'&&x.encabezados.indexOf('categoria')<0)x.encabezados=x.encabezados.concat(['categoria']);data[h.n]={enc:x.encabezados,filas:x.filas.map(function(f){var o=f.slice();while(o.length<x.encabezados.length)o.push('');return o})}});
+   data={};missing={};HOJAS.forEach(function(h){if(!r.hojas[h.n])missing[h.n]=1;var x=r.hojas[h.n]||{encabezados:DEFENC[h.n],filas:[]};if(!x.encabezados||!x.encabezados.length)x.encabezados=DEFENC[h.n];if(h.n==='BOTONES'&&x.encabezados.indexOf('categoria')<0)x.encabezados=x.encabezados.concat(['categoria']);if(h.n==='MENÚ'&&x.encabezados.indexOf('imagen')<0)x.encabezados=x.encabezados.concat(['imagen']);data[h.n]={enc:x.encabezados,filas:x.filas.map(function(f){var o=f.slice();while(o.length<x.encabezados.length)o.push('');return o})}});
    $('login').style.display='none';$('app').style.display='block';$('sb').style.display='flex';dirty={};tabs();draw();upd();
   }).catch(function(){$('lb').disabled=false;pass='';$('le').textContent='No hay conexión con el servidor. Revisa tu internet y que el Apps Script esté desplegado.'});
  }
@@ -152,7 +152,7 @@ label.f{display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.
    d.enc.forEach(function(col,c){
     var key=col.toLowerCase(),w=el('div',(WIDE[key]||IMG[key])?'wide':'');
     var lab=el('label','f',col);w.appendChild(lab);
-    if(IMG[key])w.appendChild(imgField(f,c,lab));
+    if(IMG[key])w.appendChild(imgField(f,c,lab,(h.n==='MENÚ'&&key==='imagen')?'thumb':undefined));
     else if(WIDE[key]){var ta=document.createElement('textarea');ta.value=f[c]||'';ta.rows=2;ta.setAttribute('aria-label',col);ta.addEventListener('input',function(){f[c]=ta.value;mark()});w.appendChild(ta)}
     else if(h.n==='BOTONES'&&key==='categoria'){var sel=document.createElement('select');sel.setAttribute('aria-label',col);var mc=menuCats();var cur0=f[c]||'';if(cur0&&mc.indexOf(cur0)<0)mc.push(cur0);[''].concat(mc).forEach(function(v){var o=document.createElement('option');o.value=v;o.textContent=v||'(igual que el nombre del botón)';sel.appendChild(o)});sel.value=cur0;sel.addEventListener('change',function(){f[c]=sel.value;mark()});w.appendChild(sel)}
     else{var inp=document.createElement('input');inp.type='text';inp.value=f[c]||'';inp.setAttribute('aria-label',col);if(h.n==='MENÚ'&&key==='categoria'){inp.setAttribute('list','cats')}inp.addEventListener('input',function(){f[c]=inp.value;mark()});w.appendChild(inp)}
@@ -198,7 +198,7 @@ label.f{display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.
   if(file.type==='image/gif'&&kind!=='icon'){var r0=new FileReader();r0.onload=function(){res({nombre:file.name,tipo:file.type,datos:String(r0.result).split(',')[1]})};r0.onerror=function(){rej(new Error('No se pudo leer el archivo'))};r0.readAsDataURL(file);return}
   var url=URL.createObjectURL(file),im=new Image();
   im.onload=function(){if(kind==='icon'){var cv0=document.createElement('canvas');cv0.width=cv0.height=256;var c0=cv0.getContext('2d'),sd=Math.min(im.width,im.height);c0.drawImage(im,(im.width-sd)/2,(im.height-sd)/2,sd,sd,0,0,256,256);URL.revokeObjectURL(url);res({nombre:'icono.png',tipo:'image/png',datos:cv0.toDataURL('image/png').split(',')[1]});return}
-   var m=kind==='bg'?1920:1600,k=Math.min(1,m/Math.max(im.width,im.height)),cv=document.createElement('canvas');cv.width=Math.round(im.width*k);cv.height=Math.round(im.height*k);var cx=cv.getContext('2d');cx.fillStyle='#fff';cx.fillRect(0,0,cv.width,cv.height);cx.drawImage(im,0,0,cv.width,cv.height);URL.revokeObjectURL(url);
+   var m=kind==='bg'?1920:kind==='thumb'?600:1600,k=Math.min(1,m/Math.max(im.width,im.height)),cv=document.createElement('canvas');cv.width=Math.round(im.width*k);cv.height=Math.round(im.height*k);var cx=cv.getContext('2d');cx.fillStyle='#fff';cx.fillRect(0,0,cv.width,cv.height);cx.drawImage(im,0,0,cv.width,cv.height);URL.revokeObjectURL(url);
    var d=cv.toDataURL('image/jpeg',.85);res({nombre:(file.name||'imagen').replace(/\.\w+$/,'')+'.jpg',tipo:'image/jpeg',datos:d.split(',')[1]})};
   im.onerror=function(){URL.revokeObjectURL(url);rej(new Error('No se pudo leer la imagen'))};im.src=url})}
 
