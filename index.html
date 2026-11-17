@@ -5,7 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Bajón del Barrio – Hamburguesas y rap</title>
 <meta name="description" content="Bajón del Barrio: hamburguesas, hot dogs y rap.">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Ctext y=%27.9em%27 font-size=%2790%27%3E%F0%9F%8D%94%3C/text%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="alternate icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Work+Sans:wght@400;600&display=swap">
 <style>
 :root{--red:#d62828;--white:#f7f3ee;--black:#0a0a0a;--brown:#4a2c1a;--brown2:#2a1710;color-scheme:dark;
@@ -18,7 +21,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 h1,h2,h3{font-family:Anton,Impact,'Arial Narrow',sans-serif;font-weight:400;letter-spacing:.02em;margin:0}
 nav{position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;display:flex;justify-content:space-between;align-items:center;padding:14px clamp(16px,4vw,40px);z-index:5}
 .logo{font-family:Anton,Impact,sans-serif;font-size:1.5rem;color:var(--white);text-decoration:none}
-.logo span{color:var(--red)}
+.logo{display:block;line-height:0}.logo img{display:block;height:52px;width:auto}
 nav ul{display:flex;gap:6px;list-style:none;margin:0;padding:0}
 nav button{background:none;border:2px solid transparent;color:var(--white);font:600 .95rem 'Work Sans',sans-serif;padding:8px 14px;border-radius:999px;cursor:pointer}
 nav button:hover{border-color:var(--brown)}
@@ -65,7 +68,7 @@ background:#150b19 url(disco.png) center/100% 100% no-repeat;will-change:transfo
  .gone .player,.gone .hint{display:none}
  .panel{width:100%;padding:290px 18px 40px;transform:translateY(30px)}
  nav ul{gap:0}nav button{padding:8px 10px;font-size:.85rem}
- .logo{font-size:1.2rem}
+ .logo img{height:44px}
 }
 .ed{position:fixed;inset:0;z-index:20;background:var(--black);overflow:auto;padding:calc(env(safe-area-inset-top,0px) + 20px) 16px 40px}
 .edw{max-width:720px;margin:0 auto}
@@ -151,7 +154,7 @@ background:#150b19 url(disco.png) center/100% 100% no-repeat;will-change:transfo
 .bar{display:flex;gap:10px;align-items:center;margin-top:24px;flex-wrap:wrap}
 @media (max-width:760px){
  nav{flex-direction:row;justify-content:center;padding:10px 12px;background:rgba(10,10,10,.95);min-height:60px}
- .logo{font-size:clamp(1.05rem,5.2vw,1.5rem);text-align:center}
+ .logo img{height:40px}
  .player .vol{display:none}
  nav ul{position:fixed;left:0;right:0;bottom:0;z-index:6;gap:6px;justify-content:space-around;padding:6px 8px calc(6px + env(safe-area-inset-bottom,0px));background:var(--red);box-shadow:0 -4px 14px rgba(0,0,0,.45)}
  nav ul li{flex:1}
@@ -178,7 +181,7 @@ background:#150b19 url(disco.png) center/100% 100% no-repeat;will-change:transfo
  .panel{padding-top:calc(34px + var(--dsk)*.667)}
  .deck{top:calc(60px - var(--dsk)/3);width:calc(100vw - 20px);transform:translate(-50%,calc(0px - var(--sy,0px)))}
 }
-@media (max-width:400px){.logo{font-size:max(.95rem,4.6vw)}nav .mm{width:34px;height:34px;right:8px}}
+@media (max-width:400px){.logo img{height:38px}nav .mm{width:34px;height:34px;right:8px}}
 :root{--rc:clamp(300px,27vw,400px);--dw:min(40vh,calc(var(--rc)*.85),340px)}
 @media (min-width:761px){.deck{left:calc(100% - 3vw - var(--rc)/2);top:50%;width:var(--dw)}.player{width:var(--rc);max-width:none;margin-left:0;position:relative;left:50%;transform:translateX(-50%)}}
 .showcase{position:absolute;left:3vw;top:50%;transform:translateY(-50%);width:max(calc(var(--dw)*2.2),min(calc(100vw - var(--rc) - 6vw - 40px),70.4vw,1600px,calc((100vh - 250px)*2.35)));display:flex;flex-direction:column;gap:12px;transition:opacity .3s .15s}
@@ -234,7 +237,7 @@ background:#150b19 url(disco.png) center/100% 100% no-repeat;will-change:transfo
 <body>
 <canvas id="rain" aria-hidden="true"></canvas>
 <nav>
- <a class="logo" href="#" id="home">BAJÓN <span>DEL</span> BARRIO</a>
+ <a class="logo" href="#" id="home" aria-label="Bajón del Barrio, inicio"><img src="logo.svg" alt="Bajón del Barrio"></a>
  <button type="button" class="mm" id="mm" aria-label="Reproducir música"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M9 3v11.6A3.5 3.5 0 1 0 11 18V7.8l8-1.8v7.6A3.5 3.5 0 1 0 21 17V3z" transform="translate(-1 1) scale(.95)"/></svg></button>
  <ul>
   <li><button data-p="menu" aria-current="false">Menú</button></li>
