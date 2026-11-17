@@ -11,7 +11,7 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Work+Sans:wght@400;600&display=swap">
 <style>
-:root{--red:#d62828;--white:#f7f3ee;--black:#0a0a0a;--brown:#4a2c1a;--brown2:#2a1710;color-scheme:dark;
+:root{--red:#D80E21;--white:#f7f3ee;--black:#0a0a0a;--brown:#4a2c1a;--brown2:#2a1710;color-scheme:dark;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 *,*::before,*::after{box-sizing:inherit}
 html,body{height:100%;margin:0}
@@ -30,7 +30,7 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--white);outline-offs
 .stage{position:relative;height:100%}
 .deck{position:absolute;top:52%;left:50%;transform:translate(-50%,-50%);width:min(60vh,86vw,420px);transition:left .7s cubic-bezier(.7,0,.2,1),top .7s cubic-bezier(.7,0,.2,1),width .7s}
 .vinyl{position:relative;aspect-ratio:1;border-radius:50%;cursor:pointer;border:0;padding:0;display:block;width:100%;
-background:#150b19 url(disco.png) center/100% 100% no-repeat;will-change:transform;box-shadow:0 20px 60px rgba(0,0,0,.7),0 0 90px rgba(120,8,8,.6);touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab;container-type:inline-size}
+background:#150b19 url(disco.png) center/100% 100% no-repeat;will-change:transform;box-shadow:0 20px 60px rgba(0,0,0,.7),0 0 90px rgba(124,6,20,.6);touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab;container-type:inline-size}
 .vinyl.grabbing{cursor:grabbing}
 .label{position:absolute;inset:33.3%;border-radius:50%;display:none;align-items:flex-end;justify-content:center;padding-bottom:3.2%;text-align:center;font-family:Anton,Impact,sans-serif;font-size:clamp(.6rem,2.2vw,1rem);font-size:3.6cqw;line-height:1.1;color:var(--white)}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -142,8 +142,8 @@ background:#150b19 url(disco.png) center/100% 100% no-repeat;will-change:transfo
 .mm{display:none}
 @media (max-width:760px){nav .mm{display:grid;place-items:center;position:absolute;top:10px;right:12px;width:38px;height:38px;padding:0;border:2px solid var(--brown);border-radius:50%;background:rgba(10,10,10,.6);color:rgba(255,255,255,.8)}nav .mm.on{color:#fff;background:var(--red);border-color:var(--red)}nav .mm svg{width:20px;height:20px}}
 .vinyl{transition:box-shadow .35s ease,filter 1.1s ease-in-out}
-@media (hover:hover) and (pointer:fine){.vinyl:hover{box-shadow:0 20px 60px rgba(0,0,0,.7),0 0 140px 24px rgba(185,14,14,.85)}}
-@keyframes press{0%{scale:1}35%{scale:.92;box-shadow:0 20px 60px rgba(0,0,0,.7),0 0 160px 30px rgba(215,25,25,.95)}70%{scale:1.04}100%{scale:1}}
+@media (hover:hover) and (pointer:fine){.vinyl:hover{box-shadow:0 20px 60px rgba(0,0,0,.7),0 0 140px 24px rgba(216,14,33,.85)}}
+@keyframes press{0%{scale:1}35%{scale:.92;box-shadow:0 20px 60px rgba(0,0,0,.7),0 0 160px 30px rgba(216,14,33,.95)}70%{scale:1.04}100%{scale:1}}
 .vinyl.press{animation:press .38s ease-out}
 @media (prefers-reduced-motion:reduce){.vinyl.press{animation:none}}
 .ph{display:none;flex:none;width:104px;height:104px;border-radius:6px;background:#3a3a3a}
@@ -184,8 +184,8 @@ background:#150b19 url(disco.png) center/100% 100% no-repeat;will-change:transfo
 @media (max-width:400px){.logo img{height:38px}nav .mm{width:34px;height:34px;right:8px}}
 :root{--rc:clamp(300px,27vw,400px);--dw:min(40vh,calc(var(--rc)*.85),340px)}
 @media (min-width:761px){.deck{left:calc(100% - 3vw - var(--rc)/2);top:50%;width:var(--dw)}.player{width:var(--rc);max-width:none;margin-left:0;position:relative;left:50%;transform:translateX(-50%)}}
-.showcase{position:absolute;left:3vw;top:50%;transform:translateY(-50%);width:max(calc(var(--dw)*2.2),min(calc(100vw - var(--rc) - 6vw - 40px),70.4vw,1600px,calc((100vh - 250px)*2.35)));display:flex;flex-direction:column;gap:12px;transition:opacity .3s .15s}
-.slides{position:relative;width:100%;aspect-ratio:2.35/1;border:2px solid var(--red);border-radius:14px;overflow:hidden;background:#111;box-shadow:0 20px 60px rgba(0,0,0,.7),0 0 70px rgba(120,8,8,.4)}
+.showcase{position:absolute;left:3vw;top:50%;transform:translateY(-50%);width:max(calc(var(--dw)*2.2),min(calc(100vw - var(--rc) - 6vw - 40px),70.4vw,1600px,calc((100vh - 310px)*2.35)));display:flex;flex-direction:column;gap:12px;transition:opacity .3s .15s}
+.slides{position:relative;width:100%;aspect-ratio:2.35/1;border:2px solid var(--red);border-radius:14px;overflow:hidden;background:#111;box-shadow:0 20px 60px rgba(0,0,0,.7),0 0 70px rgba(124,6,20,.4)}
 .open .showcase{opacity:0;pointer-events:none}
 @keyframes ldspin{to{transform:rotate(360deg)}}
 .spin{display:block;width:34px;height:34px;border:4px solid rgba(255,255,255,.18);border-top-color:var(--red);border-radius:50%;animation:ldspin .8s linear infinite}
@@ -202,16 +202,16 @@ background:#150b19 url(disco.png) center/100% 100% no-repeat;will-change:transfo
 @media (prefers-reduced-motion:reduce){.spin{animation-duration:2s}}
 .tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
 .tile{position:relative;aspect-ratio:16/9;border:2px solid var(--brown);border-radius:10px;overflow:hidden;padding:0;cursor:pointer;color:#fff;background:linear-gradient(135deg,#4a2010,#140a06);display:grid;place-items:center;transition:transform .2s,border-color .2s}
-.tile:nth-child(even){background:linear-gradient(135deg,#7a1414,#2a0d0d)}
+.tile:nth-child(even){background:linear-gradient(135deg,#7c0813,#2a0d0d)}
 .tile:hover,.tile:focus-visible{transform:translateY(-3px);border-color:var(--red)}
 .tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .tile .em{font-size:clamp(1.6rem,3vw,2.6rem);line-height:1;filter:drop-shadow(0 4px 8px rgba(0,0,0,.5))}
 .tile .nm{position:absolute;left:0;right:0;bottom:0;padding:16px 8px 6px;background:linear-gradient(transparent,rgba(0,0,0,.85));font-family:Anton,Impact,sans-serif;font-size:clamp(.8rem,1.3vw,1.1rem);letter-spacing:.03em;text-align:center}
 .panel h3{scroll-margin-top:96px}
 .sl-track,.sl{position:absolute;inset:0}
-.sl{opacity:0;transition:opacity .8s ease;display:grid;place-items:center;background:linear-gradient(135deg,#7a1414,#2a0d0d)}
+.sl{opacity:0;transition:opacity .8s ease;display:grid;place-items:center;background:linear-gradient(135deg,#7c0813,#2a0d0d)}
 .sl:nth-child(3n+2){background:linear-gradient(135deg,#4a2010,#140a06)}
-.sl:nth-child(3n+3){background:linear-gradient(135deg,#a11818,#3b1010)}
+.sl:nth-child(3n+3){background:linear-gradient(135deg,#9c0a1a,#3b1010)}
 .sl.on{opacity:1}
 .sl img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .sl .em{font-size:clamp(3rem,6vw,6rem);line-height:1;margin-top:-26px;filter:drop-shadow(0 8px 14px rgba(0,0,0,.5))}
@@ -228,6 +228,7 @@ background:#150b19 url(disco.png) center/100% 100% no-repeat;will-change:transfo
 @keyframes segfill{from{transform:scaleX(0)}to{transform:scaleX(1)}}
 .sl-dots[hidden]{display:none}
 @media (min-width:761px) and (max-width:1000px){.player #thumb,.ph{width:80px;height:80px}}
+@media (min-width:961px){.showcase{top:calc(50% + 32px)}}
 @media (max-width:760px){.slides{aspect-ratio:16/9}.showcase{position:relative;left:auto;top:auto;transform:none;width:100%;margin-top:14px}.gone .showcase{display:none}.sl .em{font-size:3rem;margin-top:-34px}.sl .cap{padding:30px 14px 28px}.tiles{grid-template-columns:repeat(2,1fr)}.tile .em{font-size:2rem}.tile .nm{font-size:.85rem}.panel h3{scroll-margin-top:120px}}
 @media (prefers-reduced-motion:reduce){.sl{transition:none}}
 @media (min-width:761px) and (max-width:960px){.deck{display:none}.showcase{left:50%;transform:translate(-50%,-50%);width:max(320px,min(92vw,900px,calc((100vh - 380px)*2.35)))}.showcase .player{position:static;transform:none;width:100%;max-width:none;margin:0;order:-1}.showcase .player #thumb,.showcase .player .ph{width:88px;height:88px}.showcase .player{padding:14px 20px}.showcase .vpop{bottom:auto;top:100%;padding-bottom:0;padding-top:8px}body.menu-open nav .mm{display:grid;place-items:center;position:absolute;top:10px;right:12px;width:38px;height:38px;padding:0;border:2px solid var(--brown);border-radius:50%;background:rgba(10,10,10,.6);color:rgba(255,255,255,.8)}body.menu-open nav .mm.on{color:#fff;background:var(--red);border-color:var(--red)}}
@@ -249,7 +250,7 @@ background:#150b19 url(disco.png) center/100% 100% no-repeat;will-change:transfo
 <main class="stage" id="stage">
  <div class="deck">
   <div class="disc"><button class="vinyl" id="vinyl" aria-label="Pausar o reanudar el giro del disco"><span class="label">BAJÓN DEL<br>BARRIO</span></button>
-   <svg class="rapper" id="rapper" viewBox="0 0 100 150" aria-hidden="true"><g class="bd"><rect x="44" y="72" width="12" height="20" fill="#a0643c"></rect><path d="M20 150Q22 92 50 88Q78 92 80 150Z" fill="#f7f3ee"></path><path d="M38 94Q50 114 62 94" fill="none" stroke="#e0b030" stroke-width="2.5"></path><circle cx="50" cy="109" r="4.5" fill="#e0b030"></circle><g class="hd"><circle cx="50" cy="56" r="21" fill="#a0643c"></circle><path d="M29 52Q29 30 50 30Q71 30 71 52Z" fill="#d62828"></path><path d="M60 50L90 54Q92 58 88 59L60 57Z" fill="#8f1a1a"></path><rect x="33" y="53" width="15" height="9" rx="3" fill="#0a0a0a"></rect><rect x="52" y="53" width="15" height="9" rx="3" fill="#0a0a0a"></rect><line x1="48" y1="57" x2="52" y2="57" stroke="#0a0a0a" stroke-width="2"></line><path d="M44 70Q50 74 56 70" fill="none" stroke="#4a2c1a" stroke-width="2" stroke-linecap="round"></path></g><g class="ar al"><line x1="28" y1="100" x2="14" y2="128" stroke="#f7f3ee" stroke-width="11" stroke-linecap="round"></line><circle cx="14" cy="130" r="5.5" fill="#a0643c"></circle><g class="ut"><line x1="14" y1="132" x2="7" y2="146" stroke="#ccc" stroke-width="2.5" stroke-linecap="round"></line><path d="M3.4 144.2L10.6 147.8M3.4 144.2l-3 6M7 146l-3 6M10.6 147.8l-3 6" fill="none" stroke="#ccc" stroke-width="2" stroke-linecap="round"></path></g></g><g class="ar arr"><line x1="72" y1="100" x2="86" y2="128" stroke="#f7f3ee" stroke-width="11" stroke-linecap="round"></line><circle cx="86" cy="130" r="5.5" fill="#a0643c"></circle><g class="ut"><line x1="86" y1="132" x2="90" y2="140" stroke="#333" stroke-width="3" stroke-linecap="round"></line><path d="M89 139L98 153L92 154L88 142Z" fill="#ddd"></path></g></g></g></svg>
+   <svg class="rapper" id="rapper" viewBox="0 0 100 150" aria-hidden="true"><g class="bd"><rect x="44" y="72" width="12" height="20" fill="#a0643c"></rect><path d="M20 150Q22 92 50 88Q78 92 80 150Z" fill="#f7f3ee"></path><path d="M38 94Q50 114 62 94" fill="none" stroke="#e0b030" stroke-width="2.5"></path><circle cx="50" cy="109" r="4.5" fill="#e0b030"></circle><g class="hd"><circle cx="50" cy="56" r="21" fill="#a0643c"></circle><path d="M29 52Q29 30 50 30Q71 30 71 52Z" fill="#D80E21"></path><path d="M60 50L90 54Q92 58 88 59L60 57Z" fill="#9c0a1a"></path><rect x="33" y="53" width="15" height="9" rx="3" fill="#0a0a0a"></rect><rect x="52" y="53" width="15" height="9" rx="3" fill="#0a0a0a"></rect><line x1="48" y1="57" x2="52" y2="57" stroke="#0a0a0a" stroke-width="2"></line><path d="M44 70Q50 74 56 70" fill="none" stroke="#4a2c1a" stroke-width="2" stroke-linecap="round"></path></g><g class="ar al"><line x1="28" y1="100" x2="14" y2="128" stroke="#f7f3ee" stroke-width="11" stroke-linecap="round"></line><circle cx="14" cy="130" r="5.5" fill="#a0643c"></circle><g class="ut"><line x1="14" y1="132" x2="7" y2="146" stroke="#ccc" stroke-width="2.5" stroke-linecap="round"></line><path d="M3.4 144.2L10.6 147.8M3.4 144.2l-3 6M7 146l-3 6M10.6 147.8l-3 6" fill="none" stroke="#ccc" stroke-width="2" stroke-linecap="round"></path></g></g><g class="ar arr"><line x1="72" y1="100" x2="86" y2="128" stroke="#f7f3ee" stroke-width="11" stroke-linecap="round"></line><circle cx="86" cy="130" r="5.5" fill="#a0643c"></circle><g class="ut"><line x1="86" y1="132" x2="90" y2="140" stroke="#333" stroke-width="3" stroke-linecap="round"></line><path d="M89 139L98 153L92 154L88 142Z" fill="#ddd"></path></g></g></g></svg>
   </div>
   <div class="player" id="player"><img id="thumb" alt="" hidden><div class="ph" id="ph" aria-hidden="true"></div><div class="pi"><span id="tt">---</span><span id="ar">---</span><div class="rt"><div class="ctl"><button type="button" id="prev" aria-label="Canción anterior"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M6 5h2.5v14H6zM20 5v14L9.5 12z"/></svg></button><button type="button" id="pp" aria-label="Reproducir"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button><button type="button" id="next" aria-label="Canción siguiente"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M15.5 5H18v14h-2.5zM4 5v14l10.5-7z"/></svg></button><div class="vol" id="vol"><button type="button" id="vb" aria-label="Volumen"><svg id="vi" viewBox="0 0 24 24" aria-hidden="true"></svg></button><div class="vpop"><div class="vbox"><input type="range" id="vr" min="0" max="100" step="1" value="50" aria-label="Volumen"></div></div></div></div><a id="sp" href="#" target="_blank" rel="noopener" aria-label="Escuchar en Spotify" hidden><svg class="spi" viewBox="0 0 24 24" aria-hidden="true"><path fill="#1ED760" d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg><span class="spt">Escuchar en Spotify</span></a></div></div><audio id="au" preload="none"></audio></div><script type="application/json" id="tracks">[{"t": "F.Y.K.M.", "a": "f-y-k-m.mp3", "i": "f-y-k-m.png", "s": ""}, {"t": "Sirena", "a": "sirena.mp3", "i": "sirena.png", "s": "", "r": "UweMe, Ghoret, Themas"}]</script>
   <p class="hint">Arrastra el disco para hacer scratch. Tócalo para pausar o reanudar.</p>
