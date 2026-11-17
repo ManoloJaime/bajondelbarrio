@@ -59,7 +59,8 @@ background:#150b19 url(disco.png) center/100% 100% no-repeat;will-change:transfo
  .player,.hint{transition:opacity .35s}
  .open .player,.open .hint{opacity:0;pointer-events:none}
  .stage.open{overflow:clip}
- .stage::before{content:"";position:fixed;inset:0;background:rgba(74,44,26,.38);opacity:0;pointer-events:none;transition:opacity .35s}
+ .vinyl{transition:box-shadow .35s ease,filter .35s}
+ .open .vinyl{filter:brightness(.42) sepia(.55) saturate(.9)}
  .stage.open::before{opacity:1}
  .gone .player,.gone .hint{display:none}
  .panel{width:100%;padding:290px 18px 40px;transform:translateY(30px)}
