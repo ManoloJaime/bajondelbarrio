@@ -50,6 +50,7 @@ background:#150b19 url(disco.png) center/100% 100% no-repeat;will-change:transfo
 .promo{background:var(--brown);border-left:6px solid var(--red);padding:14px 16px;margin-bottom:12px;border-radius:4px}
 .promo b{font-family:Anton,Impact,sans-serif;font-weight:400;font-size:1.3rem}
 .promo p{margin:4px 0 0;font-size:.92rem}
+.promo.pq{display:flex;justify-content:space-between;align-items:center;gap:16px}.promo.pq .tx{min-width:0}
 .contact p{margin:0 0 14px;font-size:1.05rem}
 .contact span{display:block;font-size:.8rem;opacity:.6}
 .contact a{color:var(--white)}
@@ -158,7 +159,7 @@ background:#150b19 url(disco.png) center/100% 100% no-repeat;will-change:transfo
  .player .vol{display:none}
  nav ul{position:fixed;left:0;right:0;bottom:0;z-index:6;gap:6px;justify-content:space-around;padding:6px 8px calc(6px + env(safe-area-inset-bottom,0px));background:var(--red);box-shadow:0 -4px 14px rgba(0,0,0,.45)}
  nav ul li{flex:1}
- nav ul button{width:100%;padding:8px 6px;font-size:.95rem;border-radius:12px;color:#fff}
+ nav ul button{width:100%;padding:8px 4px;font-size:.85rem;border-radius:12px;color:#fff}
  nav ul button:hover{border-color:transparent}
  nav ul button[aria-current="true"]{background:var(--black);border-color:var(--black)}
  .panel{padding-bottom:calc(100px + env(safe-area-inset-bottom,0px))}
@@ -243,6 +244,7 @@ background:#150b19 url(disco.png) center/100% 100% no-repeat;will-change:transfo
  <ul>
   <li><button data-p="menu" aria-current="false">Menú</button></li>
   <li><button data-p="promos" aria-current="false">Promociones</button></li>
+  <li><button data-p="paquetes" aria-current="false">Paquetes</button></li>
   <li><button data-p="contacto" aria-current="false">Contacto</button></li>
  </ul>
 </nav>
@@ -261,6 +263,8 @@ background:#150b19 url(disco.png) center/100% 100% no-repeat;will-change:transfo
  <section class="panel" id="menu" aria-label="Menú"><h2>Menú</h2><p class="sub">Carne al carbón, pan tostado en mantequilla y salsa de la casa.</p><h3>Especiales</h3><div class="item"><div><b>Combo Bajón</b><p>Hamburguesa de la casa, papas y refresco.</p></div><span class="price">$165</span></div><h3>Hamburguesas</h3><p class="cdesc">Carne al carbón, pan tostado en mantequilla y salsa de la casa.</p><div class="item"><div><b>Doble Rima</b><p>Doble carne, cheddar, tocino crujiente, cebolla caramelizada y salsa BBQ.</p></div><span class="price">$145</span></div><div class="item"><div><b>Brava 808</b><p>Carne, queso pepper jack, jalapeño, aderezo chipotle y cebolla morada.</p></div><span class="price">$135</span></div><div class="item"><div><b>Flow Clásica</b><p>Carne de res, queso americano, lechuga, jitomate y mayonesa de la casa.</p></div><span class="price">$110</span></div><h3>Boneless</h3><div class="item"><div><b>Boneless BBQ</b><p>10 piezas con aderezo a elegir.</p></div><span class="price">$120</span></div><h3>Hot dogs</h3><p class="cdesc">Salchicha asada con todo el sabor de la calle.</p><div class="item"><div><b>Street Dog</b><p>Salchicha, tocino, cebolla caramelizada, mostaza y catsup.</p></div><span class="price">$75</span></div><div class="item"><div><b>El Freestyle</b><p>Salchicha, chili con carne, queso fundido y jalapeños.</p></div><span class="price">$85</span></div></section>
 
  <section class="panel" id="promos" aria-label="Promociones"><h2>Promociones</h2><p class="sub">Aprovecha antes de que cambie el track.</p><div class="promo"><b>Combo Mic Drop</b><p>Doble Rima + papas + refresco por $185.</p></div><div class="promo"><b>Martes 2x1 en hot dogs</b><p>Pide un Street Dog o un Freestyle y llévate otro gratis.</p></div><div class="promo"><b>Jueves de Brava</b><p>Brava 808 con papas a $120.</p></div></section>
+
+ <section class="panel" id="paquetes" aria-label="Paquetes"><h2>Paquetes</h2><p class="sub">Para compartir con la banda.</p><div class="promo pq"><div class="tx"><b>Paquete Dúo</b><p>2 hamburguesas, papas grandes y 2 refrescos.</p></div><span class="price">$290</span></div><div class="promo pq"><div class="tx"><b>Paquete Banda</b><p>4 hamburguesas, 2 hot dogs, papas para compartir y 4 refrescos.</p></div><span class="price">$590</span></div><div class="promo pq"><div class="tx"><b>Paquete Cypher</b><p>6 hamburguesas, 4 hot dogs, boneless y 6 refrescos.</p></div><span class="price">$890</span></div></section>
 
  <section class="panel" id="contacto" aria-label="Contacto"><h2>Contacto</h2><p class="sub">Ven a comer, pide para llevar o escríbenos.</p><p><span>Dirección</span>Calle Ejemplo 123, Zapopan, Jalisco</p><p><span>Teléfono</span><a href="tel:+523300000000">33 0000 0000</a></p><p><span>Horario</span>Martes a domingo, 1:00 p. m. a 11:00 p. m.</p><p><span>Instagram</span>@beatandbun</p></section>
 </main>
@@ -391,7 +395,7 @@ background:#150b19 url(disco.png) center/100% 100% no-repeat;will-change:transfo
   function tab(name){return tabS(name).then(function(d){return d||tabG(name)})}
   function has(t){for(var i=1;i<arguments.length;i++)if(t.H.indexOf(arguments[i])<0)return false;return true}
   function fill(id,sub,html){var el=document.getElementById(id);if(!el)return;var s=el.querySelector('.sub');if(s&&sub)s.innerHTML=sub;while(el.lastChild&&!(el.lastChild.matches&&el.lastChild.matches('h2,.sub')))el.removeChild(el.lastChild);el.insertAdjacentHTML('beforeend',html)}
-  Promise.all([tab('MENÚ'),tab('PROMOCIONES'),tab('CONTACTO'),tab('MÚSICA'),tab('SLIDES'),tab('BOTONES'),tab('AJUSTES')]).then(function(x){
+  Promise.all([tab('MENÚ'),tab('PROMOCIONES'),tab('CONTACTO'),tab('MÚSICA'),tab('SLIDES'),tab('BOTONES'),tab('AJUSTES'),tab('PAQUETES')]).then(function(x){
    var M=x[0],P=x[1],C=x[2],S=x[3],sub='';
    if(M&&has(M,'categoria','nombre','precio')){var menu=[],byG={};sub='';
     M.rows.forEach(function(r){if(norm(r.categoria)==='subtitulo'){sub=rt(r,'descripcion');return}var g=r.categoria||'Menú';if(!r.nombre){if(r.descripcion){if(!byG[g]){byG[g]={t:g,i:[]};menu.push(byG[g])}byG[g].d=rt(r,'descripcion')}return}if(!byG[g]){byG[g]={t:g,i:[]};menu.push(byG[g])}byG[g].i.push(r)});
@@ -399,6 +403,9 @@ background:#150b19 url(disco.png) center/100% 100% no-repeat;will-change:transfo
    if(P&&has(P,'nombre','descripcion')&&P.H.indexOf('precio')<0&&P.H.indexOf('categoria')<0){var pr=[];sub='';
     P.rows.forEach(function(r){if(norm(r.nombre)==='subtitulo'){sub=rt(r,'descripcion');return}if(r.nombre)pr.push(r)});
     if(pr.length)fill('promos',sub,pr.map(function(i){return '<div class="promo"><b>'+rt(i,'nombre')+'</b><p>'+rt(i,'descripcion')+'</p></div>'}).join(''))}
+   var Q=x[7];if(Q&&has(Q,'nombre','descripcion')){var pq=[];sub='';
+    Q.rows.forEach(function(r){if(norm(r.nombre)==='subtitulo'){sub=rt(r,'descripcion');return}if(r.nombre)pq.push(r)});
+    if(pq.length)fill('paquetes',sub,pq.map(function(i){return '<div class="promo pq"><div class="tx"><b>'+rt(i,'nombre')+'</b><p>'+rt(i,'descripcion')+'</p></div>'+(i.precio?'<span class="price">'+rt(i,'precio')+'</span>':'')+'</div>'}).join(''))}
    if(C&&has(C,'dato','valor')){var ct=[];sub='';
     C.rows.forEach(function(r){if(norm(r.dato)==='subtitulo'){sub=rt(r,'valor');return}if(r.dato)ct.push(r)});
     if(ct.length)fill('contacto',sub,ct.map(function(i){return norm(i.dato)==='telefono'?'<p><span>'+esc(i.dato)+'</span><a href="tel:+52'+i.valor.replace(/\D/g,'')+'">'+rt(i,'valor')+'</a></p>':'<p><span>'+esc(i.dato)+'</span>'+rt(i,'valor')+'</p>'}).join(''))}
@@ -447,9 +454,9 @@ background:#150b19 url(disco.png) center/100% 100% no-repeat;will-change:transfo
    b.addEventListener('click',function(){if(window.__openMenu)window.__openMenu(s.c||s.n)});tiles.appendChild(b)})}
   window.__setTiles=function(l){if(l&&l.length){tlOK=true;rtiles(l)}};
   window.__fallbackShowcase=function(){if(!slOK){slOK=true;render(DEF);if(ld)ld.classList.add('off')}if(!tlOK){tlOK=true;rtiles(TD)}}})();
-  /* Abrir una sección directo desde la dirección: #menu, #promociones o #contacto (también ?s=menu) */
+  /* Abrir una sección directo desde la dirección: #menu, #promociones, #paquetes o #contacto (también ?s=menu) */
  (function(){var h='';try{h=decodeURIComponent(location.hash.replace('#',''))||new URLSearchParams(location.search).get('s')||''}catch(e){}
-  h=h.toLowerCase();var m={menu:'menu','menú':'menu',promos:'promos',promo:'promos',promociones:'promos',contacto:'contacto'};
+  h=h.toLowerCase();var m={menu:'menu','menú':'menu',promos:'promos',promo:'promos',promociones:'promos',paquetes:'paquetes',paquete:'paquetes',contacto:'contacto'};
   if(m[h])setTimeout(function(){show(m[h])},450)})();
 })();
 </script>

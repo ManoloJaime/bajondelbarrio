@@ -9,7 +9,7 @@
 <link rel="alternate icon" type="image/png" sizes="32x32" href="favicon-32.png">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Work+Sans:wght@400;600&display=swap">
 <style>
-:root{--red:#d62828;--black:#0a0a0a;--brown:#5c2a14;--brown2:#2a140c;--white:#f7f3ee;--card:#171210;--line:#3a2418}
+:root{--red:#D80E21;--black:#0a0a0a;--brown:#5c2a14;--brown2:#2a140c;--white:#f7f3ee;--card:#171210;--line:#3a2418}
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--black);color:var(--white);font-family:'Work Sans',system-ui,sans-serif}
 body{min-height:100vh;background:radial-gradient(ellipse at 20% 0%,var(--brown2),var(--black) 60%)}
@@ -98,6 +98,7 @@ label.f{display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.
  var HOJAS=[
   {n:'MENÚ',t:'Menú',h:'Cada fila es un platillo. En "categoria" escribe el grupo (Hamburguesas, Hot dogs, Boneless, Especiales…). La descripción gris de cada categoría se edita en el recuadro "Descripción de cada categoría" de arriba. Para el texto de abajo del título "Menú", crea una fila con la categoria "subtitulo" y ponlo en la descripción. Puedes usar **negritas** y *cursivas* con asteriscos. En "imagen" puedes subir una foto pequeña del platillo (opcional; se guarda como PNG, con su transparencia, y se muestra como miniatura a la izquierda).'},
   {n:'PROMOCIONES',t:'Promociones',h:'Cada fila es una promoción. Para el subtítulo de la sección, usa una fila con el nombre "subtitulo".'},
+  {n:'PAQUETES',t:'Paquetes',h:'Cada fila es un paquete: nombre, descripción (qué incluye) y precio. Para el subtítulo de la sección, usa una fila con el nombre "subtitulo".'},
   {n:'CONTACTO',t:'Contacto',h:'Cada fila es un dato (Dirección, Teléfono, Horario, Instagram…). Para el subtítulo de la sección, usa una fila con "subtitulo" en "dato".'},
   {n:'MÚSICA',t:'Música',h:'Lista de canciones, en el orden en que suenan. En "archivo" puedes escribir el nombre de un mp3 que subiste a GitHub o pulsar "Subir mp3" para subir la canción desde aquí (máx. 20 MB). "miniatura" puede ser un nombre de archivo de GitHub o una imagen que subas desde aquí. "spotify" es opcional.'},
   {n:'SLIDES',t:'Carrusel',h:'Imágenes que pasan cada 5 segundos en el inicio. Lo ideal son fotos horizontales 16:9 (por ejemplo 1600×900). Si dejas la imagen vacía se muestra el emoji.'},
@@ -107,7 +108,7 @@ label.f{display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.
  var IMG={imagen:1,miniatura:1};
  var WIDE={descripcion:1,valor:1};
  var pass='',data={},cur=0,dirty={},busy=false,missing={};
- var DEFENC0=0;var DEFENC={'MENÚ':['categoria','nombre','descripcion','precio','imagen'],'PROMOCIONES':['nombre','descripcion'],'CONTACTO':['dato','valor'],'MÚSICA':['titulo','archivo','miniatura','spotify','artista'],'SLIDES':['imagen','titulo','descripcion','emoji'],'BOTONES':['nombre','imagen','emoji','categoria'],'AJUSTES':['clave','valor']};
+ var DEFENC0=0;var DEFENC={'MENÚ':['categoria','nombre','descripcion','precio','imagen'],'PROMOCIONES':['nombre','descripcion'],'PAQUETES':['nombre','descripcion','precio'],'CONTACTO':['dato','valor'],'MÚSICA':['titulo','archivo','miniatura','spotify','artista'],'SLIDES':['imagen','titulo','descripcion','emoji'],'BOTONES':['nombre','imagen','emoji','categoria'],'AJUSTES':['clave','valor']};
  var $=function(id){return document.getElementById(id)};
  function el(tag,cls,txt){var e=document.createElement(tag);if(cls)e.className=cls;if(txt!==undefined)e.textContent=txt;return e}
 
