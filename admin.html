@@ -23,6 +23,7 @@ a.btn{color:inherit;display:inline-block}
 .btn:disabled{opacity:.4;cursor:default}
 /* acceso */
 #login{max-width:380px;margin:14vh auto 0;padding:28px 24px;background:var(--card);border:2px solid var(--red);border-radius:16px;text-align:center}
+#login .lg{display:block;height:110px;width:auto;margin:0 auto 14px}
 #login h1{font-size:2rem;margin-bottom:6px}
 #login p{margin:0 0 18px;opacity:.7;font-size:.95rem}
 #login input{width:100%;padding:12px 14px;border-radius:10px;border:2px solid var(--line);background:#0e0a09;color:var(--white);font-size:1rem;margin-bottom:12px}
@@ -69,6 +70,7 @@ label.f{display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.
 <body>
 
 <div id="login">
+ <img class="lg" src="logo-bn.svg" alt="Bajón del Barrio">
  <h1>Bajón del Barrio</h1>
  <p>Panel de edición. Escribe tu clave para entrar.</p>
  <form id="lf"><input type="password" id="pw" placeholder="Clave" autocomplete="current-password" aria-label="Clave"><button class="btn" id="lb" type="submit" style="width:100%">Entrar</button></form>
@@ -96,14 +98,14 @@ label.f{display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.
  /* Misma dirección del Apps Script que usa la página */
  var SCRIPT_URL='https://script.google.com/macros/s/AKfycbxKURFSbE0L3fuYYyKHwK7_n-WP4JOEbmmwfGamytGOC8iC_u_S-46yCaYk3POH2zrXag/exec';
  var HOJAS=[
+  {n:'SLIDES',t:'Carrusel',h:'Imágenes que pasan cada 5 segundos en el inicio. Lo ideal son fotos horizontales 16:9 (por ejemplo 1600×900). Si dejas la imagen vacía se muestra el emoji.'},
+  {n:'BOTONES',t:'Botones',h:'Los 4 botones bajo el carrusel. En "categoria" elige a qué sección del menú lleva cada botón: al tocarlo se abre el menú con solo esa categoría desplegada y las demás plegadas. Si la dejas vacía, se usa el "nombre" del botón.'},
   {n:'MENÚ',t:'Menú',h:'Cada fila es un platillo. En "categoria" escribe el grupo (Hamburguesas, Hot dogs, Boneless, Especiales…). La descripción gris de cada categoría se edita en el recuadro "Descripción de cada categoría" de arriba. Para el texto de abajo del título "Menú", crea una fila con la categoria "subtitulo" y ponlo en la descripción. Puedes usar **negritas** y *cursivas* con asteriscos. En "imagen" puedes subir una foto pequeña del platillo (opcional; se guarda como PNG, con su transparencia, y se muestra como miniatura a la izquierda).'},
   {n:'PROMOCIONES',t:'Promociones',h:'Cada fila es una promoción. Para el subtítulo de la sección, usa una fila con el nombre "subtitulo".'},
   {n:'PAQUETES',t:'Paquetes',h:'Cada fila es un paquete: nombre, descripción (qué incluye) y precio. Para el subtítulo de la sección, usa una fila con el nombre "subtitulo".'},
   {n:'CONTACTO',t:'Contacto',h:'Cada fila es un dato (Dirección, Teléfono, Horario, Instagram…). Para el subtítulo de la sección, usa una fila con "subtitulo" en "dato".'},
   {n:'MÚSICA',t:'Música',h:'Lista de canciones, en el orden en que suenan. En "archivo" puedes escribir el nombre de un mp3 que subiste a GitHub o pulsar "Subir mp3" para subir la canción desde aquí (máx. 20 MB). "miniatura" puede ser un nombre de archivo de GitHub o una imagen que subas desde aquí. "spotify" es opcional.'},
-  {n:'SLIDES',t:'Carrusel',h:'Imágenes que pasan cada 5 segundos en el inicio. Lo ideal son fotos horizontales 16:9 (por ejemplo 1600×900). Si dejas la imagen vacía se muestra el emoji.'},
-  {n:'AJUSTES',t:'Apariencia',special:1,h:'Cambia la imagen de fondo de toda la página y el icono que se ve en la pestaña del navegador. Para el fondo funcionan mejor imágenes oscuras (se ve detrás de todo el contenido). El icono se recorta cuadrado, y conviene una imagen sencilla que se reconozca pequeña. Si quitas una imagen, la página vuelve a su diseño original.'},
-  {n:'BOTONES',t:'Botones',h:'Los 4 botones bajo el carrusel. En "categoria" elige a qué sección del menú lleva cada botón: al tocarlo se abre el menú con solo esa categoría desplegada y las demás plegadas. Si la dejas vacía, se usa el "nombre" del botón.'}
+  {n:'AJUSTES',t:'Apariencia',special:1,h:'Cambia la imagen de fondo de toda la página y el icono que se ve en la pestaña del navegador. Para el fondo funcionan mejor imágenes oscuras (se ve detrás de todo el contenido). El icono se recorta cuadrado, y conviene una imagen sencilla que se reconozca pequeña. Si quitas una imagen, la página vuelve a su diseño original.'}
  ];
  var IMG={imagen:1,miniatura:1};
  var WIDE={descripcion:1,valor:1};
