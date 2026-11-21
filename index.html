@@ -93,6 +93,7 @@ background:#150b19 url(disco.png) center/100% 100% no-repeat;will-change:transfo
 @keyframes hop{0%,100%{transform:translateY(0)}50%{transform:translateY(2px)}}
 @media (max-width:760px){.rapper{width:max(40.8%,101px)}}
 .player{padding:12px;overflow:visible}
+#contacto p span{display:block;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;opacity:.6;margin-bottom:2px}
 .ctl{position:relative}
 .vol{position:relative;flex:none}
 .ctl .vol button{flex:none;width:42px;padding:9px 0;display:grid;place-items:center;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;touch-action:manipulation}
@@ -276,7 +277,7 @@ background:#150b19 url(disco.png) center/100% 100% no-repeat;will-change:transfo
   document.body.classList.toggle('menu-open',!!id);
   panels.forEach(function(p){p.classList.toggle('on',p.id===id)});
   btns.forEach(function(b){b.setAttribute('aria-current',String(b.dataset.p===id))});
-  if(window.__chef)window.__chef.menu(id==='menu');
+  if(window.__chef){window.__chef.menu(id==='menu');window.__chef.contacto(id==='contacto')}
   if(id==='menu')[].forEach.call(document.querySelectorAll('#menu h3.shut'),function(h){h.click()});
   panels.forEach(function(p){p.scrollTop=0});var dk=document.querySelector('.deck');if(dk)dk.style.setProperty('--sy','0px');
  }
