@@ -163,8 +163,8 @@ background:#150b19 url(disco.png) center/100% 100% no-repeat;will-change:transfo
  .disc{position:absolute;top:0;left:calc(50% - var(--dsk)/2);width:var(--dsk);transition:left .7s cubic-bezier(.7,0,.2,1),top .7s cubic-bezier(.7,0,.2,1),width .7s cubic-bezier(.7,0,.2,1)}
  .open .disc{top:calc(30vh - 60px - var(--dsk)*.517);left:calc(78vw - 10px - var(--dsk)*.85);width:calc(var(--dsk)*1.7)}
  .vinyl{transition:box-shadow .35s ease,filter 1.1s ease-in-out}
- .rapper{left:calc(var(--dsk)*-.04);top:calc(var(--dsk)*.526 - 26px);bottom:auto;width:max(calc(var(--dsk)*.396),101px);transition:left .7s cubic-bezier(.7,0,.2,1),top .7s cubic-bezier(.7,0,.2,1)}
- .open .rapper{left:calc(var(--dsk)*.745 - 28vw);top:calc(88px - 30vh + var(--dsk)*.766);translate:0 calc(0px - var(--sy,0px))}
+ .rapper{left:calc(var(--dsk)*-.04);top:calc(var(--dsk)*.526 - 10px);bottom:auto;width:max(calc(var(--dsk)*.396),101px);transition:left .7s cubic-bezier(.7,0,.2,1),top .7s cubic-bezier(.7,0,.2,1)}
+ .open .rapper{left:calc(var(--dsk)*.85 - 28vw - max(calc(var(--dsk)*.396),101px)/2);top:calc(88px - 30vh + var(--dsk)*.766);translate:0 calc(0px - var(--sy,0px))}
  .deck>.player{width:100%;margin:14px 0 0;position:relative}
  #sp{position:static;margin:0;transform:none;width:30px;height:30px;padding:0;display:block;flex:none;text-decoration:none}
  #sp[hidden]{display:none}
