@@ -382,7 +382,7 @@ background:#150b19 url(disco.png) center/100% 100% no-repeat;will-change:transfo
   function rich(c){if(!Array.isArray(c))return esc(plain(c)).replace(/\n/g,'<br>');
    return c.map(function(x){var t=esc(x[0]).replace(/\n/g,'<br>');if(x[1])t='<strong>'+t+'</strong>';if(x[2])t='<em>'+t+'</em>';return t}).join('')}
   function build(head,rows){var H=head.map(function(c){return norm(plain(c))});
-   return {H:H,rows:rows.map(function(r){var o={},h={};H.forEach(function(k,i){var c=r[i];o[k]=plain(c).trim();h[k]=rich(c).trim()});o.__h=h;return o})}}
+   var vi=H.indexOf('visible');return {H:H,rows:rows.filter(function(r){return vi<0||['no','oculto','0','false','n'].indexOf(norm(plain(r[vi])))<0}).map(function(r){var o={},h={};H.forEach(function(k,i){var c=r[i];o[k]=plain(c).trim();h[k]=rich(c).trim()});o.__h=h;return o})}}
   function mimg(v){v=(v||'').trim();if(!/^([\w\-. ]+\.(png|jpe?g|webp|gif)|https:\/\/\S+)$/i.test(v))return '';var u=/^https:/i.test(v)?v:encodeURI(v);return '<img class="ti" alt="" loading="lazy" decoding="async" src="'+u.replace(/"/g,'%22')+'" onerror="this.remove()">'}
   function rt(r,k){return r.__h&&r.__h[k]!==undefined?r.__h[k]:esc(r[k]||'')}
   var SC=null;
@@ -398,7 +398,7 @@ background:#150b19 url(disco.png) center/100% 100% no-repeat;will-change:transfo
    var M=x[0],P=x[1],C=x[2],S=x[3],sub='';
    if(M&&has(M,'categoria','nombre','precio')){var menu=[],byG={};sub='';
     M.rows.forEach(function(r){if(norm(r.categoria)==='subtitulo'){sub=rt(r,'descripcion');return}var g=r.categoria||'Menú';if(!r.nombre){if(r.descripcion){if(!byG[g]){byG[g]={t:g,i:[]};menu.push(byG[g])}byG[g].d=rt(r,'descripcion')}return}if(!byG[g]){byG[g]={t:g,i:[]};menu.push(byG[g])}byG[g].i.push(r)});
-    if(menu.length)fill('menu',sub,menu.map(function(g){return '<h3>'+esc(g.t)+'</h3>'+(g.d?'<p class="cdesc">'+g.d+'</p>':'')+g.i.map(function(i){return '<div class="item">'+mimg(i.imagen)+'<div class="tx"><b>'+rt(i,'nombre')+'</b><p>'+rt(i,'descripcion')+'</p></div><span class="price">'+rt(i,'precio')+'</span></div>'}).join('')}).join(''))}
+    menu=menu.filter(function(g){return g.i.length});if(menu.length)fill('menu',sub,menu.map(function(g){return '<h3>'+esc(g.t)+'</h3>'+(g.d?'<p class="cdesc">'+g.d+'</p>':'')+g.i.map(function(i){return '<div class="item">'+mimg(i.imagen)+'<div class="tx"><b>'+rt(i,'nombre')+'</b><p>'+rt(i,'descripcion')+'</p></div><span class="price">'+rt(i,'precio')+'</span></div>'}).join('')}).join(''))}
    if(P&&has(P,'nombre','descripcion')&&P.H.indexOf('precio')<0&&P.H.indexOf('categoria')<0){var pr=[];sub='';
     P.rows.forEach(function(r){if(norm(r.nombre)==='subtitulo'){sub=rt(r,'descripcion');return}if(r.nombre)pr.push(r)});
     if(pr.length)fill('promos',sub,pr.map(function(i){return '<div class="promo"><b>'+rt(i,'nombre')+'</b><p>'+rt(i,'descripcion')+'</p></div>'}).join(''))}

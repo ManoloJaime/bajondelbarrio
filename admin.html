@@ -51,6 +51,10 @@ label.f{display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.
 .acts button:hover:not(:disabled){border-color:var(--red)}
 .acts button:disabled{opacity:.25;cursor:default}
 .acts .del:hover:not(:disabled){background:var(--red)}
+.acts .eye{display:grid;place-items:center;padding:0}
+.acts .eye.is-off{color:#E0A3A3;border-color:var(--red)}
+.row.off .fields{opacity:.4}
+.row.off{border-style:dashed}
 .img{display:flex;gap:10px;align-items:center}
 .img .pv{flex:none;width:96px;height:54px;border-radius:6px;background:#2a1a14 center/cover no-repeat;border:2px solid var(--line);display:grid;place-items:center;font-size:.7rem;opacity:.95;color:#999;text-align:center}
 .img .col{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}
@@ -100,17 +104,19 @@ label.f{display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.
  var HOJAS=[
   {n:'SLIDES',t:'Carrusel',h:'Imágenes que pasan cada 5 segundos en el inicio. Lo ideal son fotos horizontales 16:9 (por ejemplo 1600×900). Si dejas la imagen vacía se muestra el emoji.'},
   {n:'BOTONES',t:'Botones',h:'Los 4 botones bajo el carrusel. En "categoria" elige a qué sección del menú lleva cada botón: al tocarlo se abre el menú con solo esa categoría desplegada y las demás plegadas. Si la dejas vacía, se usa el "nombre" del botón.'},
-  {n:'MENÚ',t:'Menú',h:'Cada fila es un platillo. En "categoria" escribe el grupo (Hamburguesas, Hot dogs, Boneless, Especiales…). La descripción gris de cada categoría se edita en el recuadro "Descripción de cada categoría" de arriba. Para el texto de abajo del título "Menú", crea una fila con la categoria "subtitulo" y ponlo en la descripción. Puedes usar **negritas** y *cursivas* con asteriscos. En "imagen" puedes subir una foto pequeña del platillo (opcional; se guarda como PNG, con su transparencia, y se muestra como miniatura a la izquierda).'},
+  {n:'MENÚ',t:'Menú',h:'Cada fila es un platillo. El ojo de la derecha oculta el platillo en la página sin borrarlo (ojo tachado = oculto). En "categoria" escribe el grupo (Hamburguesas, Hot dogs, Boneless, Especiales…). La descripción gris de cada categoría se edita en el recuadro "Descripción de cada categoría" de arriba. Para el texto de abajo del título "Menú", crea una fila con la categoria "subtitulo" y ponlo en la descripción. Puedes usar **negritas** y *cursivas* con asteriscos. En "imagen" puedes subir una foto pequeña del platillo (opcional; se guarda como PNG, con su transparencia, y se muestra como miniatura a la izquierda).'},
   {n:'PROMOCIONES',t:'Promociones',h:'Cada fila es una promoción. Para el subtítulo de la sección, usa una fila con el nombre "subtitulo".'},
   {n:'PAQUETES',t:'Paquetes',h:'Cada fila es un paquete: nombre, descripción (qué incluye) y precio. Para el subtítulo de la sección, usa una fila con el nombre "subtitulo".'},
   {n:'CONTACTO',t:'Contacto',h:'Cada fila es un dato (Dirección, Teléfono, Horario, Instagram…). Para el subtítulo de la sección, usa una fila con "subtitulo" en "dato".'},
   {n:'MÚSICA',t:'Música',h:'Lista de canciones, en el orden en que suenan. En "archivo" puedes escribir el nombre de un mp3 que subiste a GitHub o pulsar "Subir mp3" para subir la canción desde aquí (máx. 20 MB). "miniatura" puede ser un nombre de archivo de GitHub o una imagen que subas desde aquí. "spotify" es opcional.'},
   {n:'AJUSTES',t:'Apariencia',special:1,h:'Cambia la imagen de fondo de toda la página y el icono que se ve en la pestaña del navegador. Para el fondo funcionan mejor imágenes oscuras (se ve detrás de todo el contenido). El icono se recorta cuadrado, y conviene una imagen sencilla que se reconozca pequeña. Si quitas una imagen, la página vuelve a su diseño original.'}
  ];
+ var EYE_ON='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1.5 12S5.5 5 12 5s10.5 7 10.5 7-4 7-10.5 7S1.5 12 1.5 12z"/><circle cx="12" cy="12" r="3"/></svg>';
+ var EYE_OFF='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1.5 12S5.5 5 12 5s10.5 7 10.5 7-4 7-10.5 7S1.5 12 1.5 12z"/><circle cx="12" cy="12" r="3"/><path d="M3 3l18 18"/></svg>';
  var IMG={imagen:1,miniatura:1};
  var WIDE={descripcion:1,valor:1};
  var pass='',data={},cur=0,dirty={},busy=false,missing={};
- var DEFENC0=0;var DEFENC={'MENÚ':['categoria','nombre','descripcion','precio','imagen'],'PROMOCIONES':['nombre','descripcion'],'PAQUETES':['nombre','descripcion','precio'],'CONTACTO':['dato','valor'],'MÚSICA':['titulo','archivo','miniatura','spotify','artista'],'SLIDES':['imagen','titulo','descripcion','emoji'],'BOTONES':['nombre','imagen','emoji','categoria'],'AJUSTES':['clave','valor']};
+ var DEFENC0=0;var DEFENC={'MENÚ':['categoria','nombre','descripcion','precio','imagen','visible'],'PROMOCIONES':['nombre','descripcion','visible'],'PAQUETES':['nombre','descripcion','precio','visible'],'CONTACTO':['dato','valor'],'MÚSICA':['titulo','archivo','miniatura','spotify','artista'],'SLIDES':['imagen','titulo','descripcion','emoji','visible'],'BOTONES':['nombre','imagen','emoji','categoria'],'AJUSTES':['clave','valor']};
  var $=function(id){return document.getElementById(id)};
  function el(tag,cls,txt){var e=document.createElement(tag);if(cls)e.className=cls;if(txt!==undefined)e.textContent=txt;return e}
 
@@ -127,7 +133,7 @@ label.f{display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.
    $('lb').disabled=false;
    if(!r||!r.ok){pass='';$('le').textContent=r&&r.error==='clave'?'Clave incorrecta.':'No se pudo entrar: '+(r&&r.error||'sin respuesta');try{sessionStorage.removeItem('bdb')}catch(e){}return}
    try{sessionStorage.setItem('bdb',p)}catch(e){}
-   data={};missing={};HOJAS.forEach(function(h){if(!r.hojas[h.n])missing[h.n]=1;var x=r.hojas[h.n]||{encabezados:DEFENC[h.n],filas:[]};if(!x.encabezados||!x.encabezados.length)x.encabezados=DEFENC[h.n];if(h.n==='BOTONES'&&x.encabezados.indexOf('categoria')<0)x.encabezados=x.encabezados.concat(['categoria']);if(h.n==='MENÚ'&&x.encabezados.indexOf('imagen')<0)x.encabezados=x.encabezados.concat(['imagen']);data[h.n]={enc:x.encabezados,filas:x.filas.map(function(f){var o=f.slice();while(o.length<x.encabezados.length)o.push('');return o})}});
+   data={};missing={};HOJAS.forEach(function(h){if(!r.hojas[h.n])missing[h.n]=1;var x=r.hojas[h.n]||{encabezados:DEFENC[h.n],filas:[]};if(!x.encabezados||!x.encabezados.length)x.encabezados=DEFENC[h.n];if(h.n==='BOTONES'&&x.encabezados.indexOf('categoria')<0)x.encabezados=x.encabezados.concat(['categoria']);if(h.n==='MENÚ'&&x.encabezados.indexOf('imagen')<0)x.encabezados=x.encabezados.concat(['imagen']);if(DEFENC[h.n].indexOf('visible')>=0&&x.encabezados.map(function(e){return String(e).toLowerCase()}).indexOf('visible')<0)x.encabezados=x.encabezados.concat(['visible']);data[h.n]={enc:x.encabezados,filas:x.filas.map(function(f){var o=f.slice();while(o.length<x.encabezados.length)o.push('');return o})}});
    $('login').style.display='none';$('app').style.display='block';$('sb').style.display='flex';dirty={};tabs();draw();upd();
   }).catch(function(){$('lb').disabled=false;pass='';$('le').textContent='No hay conexión con el servidor. Revisa tu internet y que el Apps Script esté desplegado.'});
  }
@@ -155,7 +161,7 @@ label.f{display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.
    if(dix&&dix.c>=0&&dix.n>=0&&dix.d>=0&&isDesc(f,dix))return;
    var row=el('div','row'),fl=el('div','fields');
    d.enc.forEach(function(col,c){
-    var key=col.toLowerCase(),w=el('div',(WIDE[key]||IMG[key])?'wide':'');
+    if(col.toLowerCase()==='visible')return;var key=col.toLowerCase(),w=el('div',(WIDE[key]||IMG[key])?'wide':'');
     var lab=el('label','f',col);w.appendChild(lab);
     if(h.n==='MÚSICA'&&key==='archivo')w.appendChild(audioField(f,c,lab));
     else if(IMG[key])w.appendChild(imgField(f,c,lab,(h.n==='MENÚ'&&key==='imagen')?'thumb':undefined));
@@ -164,6 +170,10 @@ label.f{display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.
     else{var inp=document.createElement('input');inp.type='text';inp.value=f[c]||'';inp.setAttribute('aria-label',col);if(h.n==='MENÚ'&&key==='categoria'){inp.setAttribute('list','cats')}inp.addEventListener('input',function(){f[c]=inp.value;mark()});w.appendChild(inp)}
     fl.appendChild(w)});
    var ac=el('div','acts');
+   var vc=d.enc.map(function(e){return String(e).toLowerCase()}).indexOf('visible');
+   if(vc>=0){var hid=['no','oculto','0','false','n'].indexOf(String(f[vc]||'').trim().toLowerCase())>=0;if(hid)row.classList.add('off');
+    var eb=el('button','eye'+(hid?' is-off':''));eb.type='button';eb.title=hid?'Oculto: pulsa para mostrar':'Visible: pulsa para ocultar';eb.setAttribute('aria-label',hid?'Mostrar en la página':'Ocultar en la página');eb.setAttribute('aria-pressed',String(hid));
+    eb.innerHTML=hid?EYE_OFF:EYE_ON;eb.addEventListener('click',function(){f[vc]=hid?'':'no';mark();draw()});ac.appendChild(eb)}
    [['↑','Subir',function(){mv(i,-1)},i===0,''],['↓','Bajar',function(){mv(i,1)},i===d.filas.length-1,''],['✕','Eliminar',function(){if(confirm('¿Eliminar esta fila?')){d.filas.splice(i,1);mark();draw()}},false,'del']].forEach(function(x){var b=el('button',x[4],x[0]);b.type='button';b.title=x[1];b.setAttribute('aria-label',x[1]);b.disabled=x[3];b.addEventListener('click',x[2]);ac.appendChild(b)});
    row.appendChild(fl);row.appendChild(ac);box.appendChild(row)});
   if(h.n==='MENÚ'){var dl=document.getElementById('cats');if(!dl){dl=document.createElement('datalist');dl.id='cats';document.body.appendChild(dl)}dl.innerHTML='';cats.concat(['subtitulo']).forEach(function(c){var o=document.createElement('option');o.value=c;dl.appendChild(o)})}
